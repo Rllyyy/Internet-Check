@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
@@ -44,7 +37,6 @@ namespace Internet_Check
                         {
                             Properties.Settings.Default.SettingInterval = Int16.Parse(this.textBoxInterval.Text);
                             Properties.Settings.Default.Save();
-
 
                         }
                         catch
@@ -147,7 +139,16 @@ namespace Internet_Check
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            Process.Start("Internetabbrüche.txt");
+            if (File.Exists("Internetabbrüche.txt"))
+            {
+                Process.Start("Internetabbrüche.txt"); 
+
+            } else
+            {
+                File.CreateText("Internetabbrüche.txt");
+                Process.Start("Internetabbrüche.txt");
+            }
+            
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
