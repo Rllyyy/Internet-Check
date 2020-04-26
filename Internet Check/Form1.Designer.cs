@@ -40,8 +40,10 @@
             this.button1 = new System.Windows.Forms.Button();
             this.panelError = new System.Windows.Forms.Panel();
             this.labelErrormessage = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             this.panelError.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -96,9 +98,9 @@
             this.buttonOpen.FlatAppearance.BorderSize = 0;
             this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpen.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOpen.Location = new System.Drawing.Point(9, 38);
+            this.buttonOpen.Location = new System.Drawing.Point(6, 38);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(299, 32);
+            this.buttonOpen.Size = new System.Drawing.Size(302, 32);
             this.buttonOpen.TabIndex = 7;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
@@ -109,9 +111,9 @@
             this.buttonClear.FlatAppearance.BorderSize = 0;
             this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClear.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClear.Location = new System.Drawing.Point(9, 75);
+            this.buttonClear.Location = new System.Drawing.Point(6, 76);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(299, 32);
+            this.buttonClear.Size = new System.Drawing.Size(302, 32);
             this.buttonClear.TabIndex = 6;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
@@ -129,9 +131,9 @@
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(9, 0);
+            this.button1.Location = new System.Drawing.Point(6, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(299, 32);
+            this.button1.Size = new System.Drawing.Size(302, 32);
             this.button1.TabIndex = 5;
             this.button1.Text = "Start/Stop";
             this.button1.UseVisualStyleBackColor = true;
@@ -140,7 +142,7 @@
             // panelError
             // 
             this.panelError.Controls.Add(this.labelErrormessage);
-            this.panelError.Location = new System.Drawing.Point(0, 0);
+            this.panelError.Location = new System.Drawing.Point(3, 3);
             this.panelError.Name = "panelError";
             this.panelError.Size = new System.Drawing.Size(314, 110);
             this.panelError.TabIndex = 8;
@@ -157,21 +159,30 @@
             this.labelErrormessage.Text = "Errormessage";
             this.labelErrormessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.panelError);
+            this.panel2.Controls.Add(this.buttonOpen);
+            this.panel2.Controls.Add(this.buttonClear);
+            this.panel2.Controls.Add(this.button1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(316, 135);
+            this.panel2.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(316, 135);
-            this.Controls.Add(this.panelError);
-            this.Controls.Add(this.buttonOpen);
-            this.Controls.Add(this.buttonClear);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.panel2);
             this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(332, 174);
+            this.MaximumSize = new System.Drawing.Size(1000, 230);
             this.MinimumSize = new System.Drawing.Size(332, 174);
             this.Name = "Form1";
             this.ShowInTaskbar = false;
@@ -181,6 +192,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panelError.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -197,6 +209,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panelError;
         private System.Windows.Forms.Label labelErrormessage;
+        private System.Windows.Forms.Panel panel2;
     }
 }
 

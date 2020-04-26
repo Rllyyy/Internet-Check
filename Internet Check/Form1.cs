@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace Internet_Check
 {
@@ -16,7 +17,11 @@ namespace Internet_Check
             notifyIcon1.Visible = true;
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
+            /*
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
+            int DPI = Int32.Parse((string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ThemeManager", "LastLoadedDPI", "96"));
+            MessageBox.Show(DPI.ToString());
+            */
         }
         public static int countclick = 0;
         private System.Threading.Timer timer;
