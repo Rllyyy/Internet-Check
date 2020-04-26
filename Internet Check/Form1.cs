@@ -13,7 +13,10 @@ namespace Internet_Check
         {
             InitializeComponent();
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
-            //this.textBoxInterval.TabStop = false; to disable the highlight in textBoxInterval
+            notifyIcon1.Visible = true;
+            //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
+            textBoxInterval.SelectionStart = 0;
+            textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
         }
         public static int countclick = 0;
         private System.Threading.Timer timer;
@@ -28,7 +31,17 @@ namespace Internet_Check
 
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        MessageBox.Show("Please enter only positve numbers that are smaller than 32767 but bigger than 4");
+                        //MessageBox.Show("Please enter only positve numbers that are smaller than 32767 but bigger than 4");
+                        this.panelError.BringToFront();
+                        new Thread(() =>
+                        {
+                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that are smaller than 32767 but bigger than 4."; ; });
+                            this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = true; ; });
+                            Thread.Sleep(5000);
+                            Thread.CurrentThread.IsBackground = true;
+                            this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = false; ; });
+
+                        }).Start();
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -41,7 +54,7 @@ namespace Internet_Check
                         }
                         catch
                         {
-                            //MessageBox.Show("Interval can't be accepted");
+                            
                         }
                         countclick++;
                         tTimer();
@@ -55,9 +68,26 @@ namespace Internet_Check
             }
             else
             {
-                MessageBox.Show("Enter an intervall.", "Interval Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show("Enter an intervall.", "Interval Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+
+                //this.labelErrormessage.Text = "Please enter an intervall.";
+                //this.panelError.Visible = true;
+                
+                this.panelError.BringToFront();
+                new Thread(() =>
+                {
+                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter an intervall." ; ; });
+                    this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = true; ; });
+                    Thread.Sleep(2700);
+                    Thread.CurrentThread.IsBackground = true;
+                    this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = false; ; });
+
+                }).Start();
+                
             }
-        }
+            
+        }   
 
         private void tTimer()
         {
@@ -164,9 +194,22 @@ namespace Internet_Check
                 }
                 catch
                 {
-
                 }
 
+            }
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+            Show();
+            WindowState = FormWindowState.Normal;
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Hide();
             }
         }
     }
