@@ -5,27 +5,52 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Threading;
 using Microsoft.Win32;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace Internet_Check
 {
     public partial class Form1 : Form
     {
         public Form1()
+        {   
+            var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
+            if (MultipleInstances)
+            {
+                Run();
+                Application.Exit();
+                //MessageBox.Show("Exit");
+            } 
+            else
+            {
+                formStart();
+            }
+              
+        }
+        private void formStart ()
         {
             InitializeComponent();
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             notifyIcon1.Visible = true;
+
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
-            /*
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
-            int DPI = Int32.Parse((string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ThemeManager", "LastLoadedDPI", "96"));
-            MessageBox.Show(DPI.ToString());
-            */
+            bool Darkmode = false;
+            if (Darkmode)
+            {
+                DarkmodeForm();
+            }
+
         }
         public static int countclick = 0;
         private System.Threading.Timer timer;
         private void button1_Click(object sender, EventArgs e)
+        {
+            ClickEvent();
+        }
+        private void ClickEvent()
         {
             if (!string.IsNullOrEmpty(this.textBoxInterval.Text))
             {
@@ -55,11 +80,9 @@ namespace Internet_Check
                         {
                             Properties.Settings.Default.SettingInterval = Int16.Parse(this.textBoxInterval.Text);
                             Properties.Settings.Default.Save();
-
                         }
                         catch
                         {
-                            
                         }
                         countclick++;
                         tTimer();
@@ -73,27 +96,18 @@ namespace Internet_Check
             }
             else
             {
-                //MessageBox.Show("Enter an intervall.", "Interval Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                
-
-                //this.labelErrormessage.Text = "Please enter an intervall.";
-                //this.panelError.Visible = true;
-                
                 this.panelError.BringToFront();
                 new Thread(() =>
                 {
-                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter an intervall." ; ; });
+                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter an intervall."; ; });
                     this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = true; ; });
                     Thread.Sleep(2700);
                     Thread.CurrentThread.IsBackground = true;
                     this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = false; ; });
 
                 }).Start();
-                
             }
-            
-        }   
-
+        }
         private void tTimer()
         {
             DateTime jetzt = DateTime.Now;
@@ -182,6 +196,7 @@ namespace Internet_Check
             {
                 File.CreateText("Internetabbrüche.txt");
                 Process.Start("Internetabbrüche.txt");
+
             }
             
         }
@@ -206,16 +221,62 @@ namespace Internet_Check
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
+            this.TopMost = true;
             Show();
             WindowState = FormWindowState.Normal;
+            this.TopMost = false;
         }
 
         private void Form1_Resize(object sender, EventArgs e)
         {
+            /*
             if (WindowState == FormWindowState.Minimized)
             {
                 Hide();
             }
+            */
+            
         }
+        /*
+        private void textBoxInterval_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == (char)Keys.Enter)
+            {
+                //ClickEvent();
+            }
+            else
+            {
+
+            }
+        }
+        */
+
+
+        
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        //private const int SwShowmaximized = 10; //funktioniert nur wenn in Taskbar
+        private const int ShowWindowFuntion = 3;
+        private void Run()
+        {
+            Process[] processlist = Process.GetProcesses();
+
+            foreach (Process process in processlist.Where(process => process.ProcessName == "Internet Check"))
+            {
+                //MessageBox.Show("Gefunden");
+                this.Close();
+                ShowWindow(Process.GetProcessById(process.Id).MainWindowHandle, ShowWindowFuntion); //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+            }
+        }
+
+        private void DarkmodeForm()
+        {
+           
+            this.BackColor = Color.FromArgb(56, 55, 55);
+
+        }
+        
+
     }
 }

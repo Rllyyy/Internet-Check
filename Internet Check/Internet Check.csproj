@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Internet256.ico</ApplicationIcon>
+    <ApplicationIcon>InternetSymbolPNG.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -103,8 +103,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Internet256.ico" />
-    <Content Include="internet256_lfm_icon.ico" />
+    <Content Include="InternetSymbolPNG.ico" />
     <None Include="Properties\icons\Error32.jpeg" />
     <None Include="Properties\icons\windows10-error-icon.png" />
     <None Include="Properties\icons\Error.png" />

@@ -48,7 +48,7 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.Black;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.panel1.Controls.Add(this.labelRunning);
             this.panel1.Controls.Add(this.textBoxInterval);
             this.panel1.Controls.Add(this.labelInterval);
@@ -62,8 +62,8 @@
             // 
             this.labelRunning.AutoSize = true;
             this.labelRunning.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelRunning.ForeColor = System.Drawing.Color.White;
-            this.labelRunning.Location = new System.Drawing.Point(226, 3);
+            this.labelRunning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(233)))), ((int)(((byte)(233)))), ((int)(((byte)(233)))));
+            this.labelRunning.Location = new System.Drawing.Point(229, 3);
             this.labelRunning.Name = "labelRunning";
             this.labelRunning.Size = new System.Drawing.Size(82, 17);
             this.labelRunning.TabIndex = 0;
@@ -72,21 +72,21 @@
             // 
             // textBoxInterval
             // 
-            this.textBoxInterval.BackColor = System.Drawing.Color.Black;
+            this.textBoxInterval.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.textBoxInterval.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxInterval.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxInterval.ForeColor = System.Drawing.Color.White;
             this.textBoxInterval.Location = new System.Drawing.Point(97, 3);
             this.textBoxInterval.MaxLength = 5;
             this.textBoxInterval.Name = "textBoxInterval";
-            this.textBoxInterval.Size = new System.Drawing.Size(81, 16);
+            this.textBoxInterval.Size = new System.Drawing.Size(53, 16);
             this.textBoxInterval.TabIndex = 1;
             // 
             // labelInterval
             // 
             this.labelInterval.AutoSize = true;
             this.labelInterval.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInterval.ForeColor = System.Drawing.Color.White;
+            this.labelInterval.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(233)))), ((int)(((byte)(233)))), ((int)(((byte)(233)))));
             this.labelInterval.Location = new System.Drawing.Point(3, 3);
             this.labelInterval.Name = "labelInterval";
             this.labelInterval.Size = new System.Drawing.Size(94, 17);
@@ -175,6 +175,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(316, 135);
             this.Controls.Add(this.panel1);
@@ -183,10 +184,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1000, 230);
-            this.MinimumSize = new System.Drawing.Size(332, 174);
+            this.MinimumSize = new System.Drawing.Size(331, 174);
             this.Name = "Form1";
-            this.ShowInTaskbar = false;
-            this.Text = "Internet Check";
+            this.Text = "Internet Check - v1.3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
