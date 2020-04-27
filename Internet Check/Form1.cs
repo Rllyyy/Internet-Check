@@ -251,7 +251,6 @@ namespace Internet_Check
         }
         */
 
-
         
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
