@@ -81,6 +81,7 @@
             this.textBoxInterval.Name = "textBoxInterval";
             this.textBoxInterval.Size = new System.Drawing.Size(53, 16);
             this.textBoxInterval.TabIndex = 1;
+            //this.textBoxInterval.TextChanged += new System.EventHandler(this.textBoxInterval_TextChanged);
             // 
             // labelInterval
             // 

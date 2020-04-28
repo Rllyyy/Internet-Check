@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Threading;
-using Microsoft.Win32;
+using System.Threading;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Drawing;
@@ -20,7 +20,6 @@ namespace Internet_Check
             {
                 Run();
                 Application.Exit();
-                //MessageBox.Show("Exit");
             } 
             else
             {
@@ -33,11 +32,12 @@ namespace Internet_Check
             InitializeComponent();
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             notifyIcon1.Visible = true;
+            this.button1.Text = "Start";
 
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
-            bool Darkmode = false;
+            bool Darkmode = true;
             if (Darkmode)
             {
                 DarkmodeForm();
@@ -104,21 +104,21 @@ namespace Internet_Check
                     Thread.Sleep(2700);
                     Thread.CurrentThread.IsBackground = true;
                     this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = false; ; });
-
                 }).Start();
             }
         }
         private void tTimer()
         {
-            DateTime jetzt = DateTime.Now;
+            DateTime now = DateTime.Now;
             if (countclick % 2 == 1)
             {
+                this.button1.Text = "Stop";
                 this.textBoxInterval.Enabled = false;
                 this.buttonClear.Enabled = false;
-                jetzt = DateTime.Now;
+                now = DateTime.Now;
                 var startTimeSpan = TimeSpan.Zero;
                 var periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-                File.AppendAllText("Internetabbrüche.txt", "########### Program started at " + jetzt.ToString() + " ###########" + Environment.NewLine);
+                File.AppendAllText("Internetabbrüche.txt", "########### Program started at " + now.ToString() + " ###########" + Environment.NewLine);
                 this.labelRunning.Text = "Running . . .";
                 timer = new System.Threading.Timer((d) =>
                 {
@@ -127,8 +127,9 @@ namespace Internet_Check
             }
             else
             {
+                this.button1.Text = "Start";
                 timer.Dispose();
-                File.AppendAllText("Internetabbrüche.txt", "########### Program stopped at " + jetzt.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText("Internetabbrüche.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
                 this.textBoxInterval.Enabled = true;
                 this.buttonClear.Enabled = true;
                 this.labelRunning.Text = "Waiting . . .";
@@ -144,9 +145,9 @@ namespace Internet_Check
             }
             else
             {
+                //Activate this if every ping should be written into the file
                 //File.AppendAllText("Internetabbrüche.txt", jetzt.ToString() + " " + "Internet ist da" + Environment.NewLine);
             }
-
         }
         public bool ping()
         {
@@ -191,14 +192,11 @@ namespace Internet_Check
             if (File.Exists("Internetabbrüche.txt"))
             {
                 Process.Start("Internetabbrüche.txt"); 
-
             } else
             {
                 File.CreateText("Internetabbrüche.txt");
                 Process.Start("Internetabbrüche.txt");
-
-            }
-            
+            } 
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -215,7 +213,6 @@ namespace Internet_Check
                 catch
                 {
                 }
-
             }
         }
 
@@ -237,12 +234,61 @@ namespace Internet_Check
             */
             
         }
+       //Author unknown
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private const int ShowWindowFuntion = 9;
+        private void Run()
+        {
+            Process[] processlist = Process.GetProcesses();
+
+            foreach (Process process in processlist.Where(process => process.ProcessName == "Internet Check"))
+            {
+                ShowWindow(Process.GetProcessById(process.Id).MainWindowHandle, ShowWindowFuntion); //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+                WindowHelper.BringProcessToFront(process);
+                this.Close();
+            }
+        }
+
+        private void DarkmodeForm()
+        {     
+            this.BackColor = Color.FromArgb(56, 55, 55);
+            this.button1.ForeColor = Color.FromArgb(233, 233, 233);
+            this.buttonOpen.ForeColor = Color.FromArgb(233, 233, 233);
+            this.buttonClear.ForeColor = Color.FromArgb(233, 233, 233);
+            this.labelErrormessage.ForeColor = Color.FromArgb(233, 233, 233);
+        }
+
+        public static class WindowHelper
+        {
+            //https://stackoverflow.com/questions/2636721/bring-another-processes-window-to-foreground-when-it-has-showintaskbar-false
+            public static void BringProcessToFront(Process process)
+            {
+                IntPtr handle = process.MainWindowHandle;
+                if (IsIconic(handle))
+                {
+                    ShowWindow(handle, SW_RESTORE);
+                }
+
+                SetForegroundWindow(handle);
+            }
+
+            const int SW_RESTORE = 9;
+
+            [System.Runtime.InteropServices.DllImport("User32.dll")]
+            private static extern bool SetForegroundWindow(IntPtr handle);
+            [System.Runtime.InteropServices.DllImport("User32.dll")]
+            private static extern bool ShowWindow(IntPtr handle, int nCmdShow);
+            [System.Runtime.InteropServices.DllImport("User32.dll")]
+            private static extern bool IsIconic(IntPtr handle);
+        }
         /*
-        private void textBoxInterval_KeyDown(object sender, KeyEventArgs e)
+        private void textBoxInterval_TextChanged(object sender, EventArgs e)
         {
             if (e.KeyValue == (char)Keys.Enter)
             {
-                //ClickEvent();
+                ClickEvent();
             }
             else
             {
@@ -250,32 +296,6 @@ namespace Internet_Check
             }
         }
         */
-
-        
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        //private const int SwShowmaximized = 10; //funktioniert nur wenn in Taskbar
-        private const int ShowWindowFuntion = 3;
-        private void Run()
-        {
-            Process[] processlist = Process.GetProcesses();
-
-            foreach (Process process in processlist.Where(process => process.ProcessName == "Internet Check"))
-            {
-                //MessageBox.Show("Gefunden");
-                this.Close();
-                ShowWindow(Process.GetProcessById(process.Id).MainWindowHandle, ShowWindowFuntion); //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
-            }
-        }
-
-        private void DarkmodeForm()
-        {
-           
-            this.BackColor = Color.FromArgb(56, 55, 55);
-
-        }
-        
-
     }
 }
+
