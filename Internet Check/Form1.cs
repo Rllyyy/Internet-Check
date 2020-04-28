@@ -37,7 +37,7 @@ namespace Internet_Check
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
-            bool Darkmode = true;
+            bool Darkmode = false;
             if (Darkmode)
             {
                 DarkmodeForm();
@@ -55,7 +55,6 @@ namespace Internet_Check
             if (!string.IsNullOrEmpty(this.textBoxInterval.Text))
             {
 
-
                 if (this.textBoxInterval.Text != Properties.Settings.Default.SettingInterval.ToString())
                 {
 
@@ -65,7 +64,7 @@ namespace Internet_Check
                         this.panelError.BringToFront();
                         new Thread(() =>
                         {
-                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that are smaller than 32767 but bigger than 4."; ; });
+                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that inbetween 4 and 32766"; ; });
                             this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = true; ; });
                             Thread.Sleep(5000);
                             Thread.CurrentThread.IsBackground = true;

@@ -104,10 +104,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="InternetSymbolPNG.ico" />
-    <None Include="Properties\icons\Error32.jpeg" />
-    <None Include="Properties\icons\windows10-error-icon.png" />
-    <None Include="Properties\icons\Error.png" />
-    <None Include="Properties\icons\25231.png" />
     <None Include="Properties\icons\InternetSymbol.png" />
   </ItemGroup>
   <ItemGroup>
