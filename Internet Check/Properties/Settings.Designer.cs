@@ -34,5 +34,17 @@ namespace Internet_Check.Properties {
                 this["SettingInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingDarkmode {
+            get {
+                return ((bool)(this["SettingDarkmode"]));
+            }
+            set {
+                this["SettingDarkmode"] = value;
+            }
+        }
     }
 }

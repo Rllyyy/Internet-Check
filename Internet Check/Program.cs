@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Internet_Check
@@ -17,17 +13,6 @@ namespace Internet_Check
         [STAThread]
         static void Main()
         {
-            /* https://odetocode.com/blogs/scott/archive/2004/08/20/the-misunderstood-mutex.aspx
-            using (Mutex mutex = new Mutex(false, "Global\\" + appGuid))
-            {
-                if (!mutex.WaitOne(0, false))
-                {   
-                    MessageBox.Show("There is already one instance of this application running. Please take a look into the Systemtray.","Instance already running", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    //Form1.Show();
-
-                    return;
-                } 
-                */
             { 
                 if (Environment.OSVersion.Version.Major >= 6) SetProcessDPIAware();
                 Application.EnableVisualStyles();

@@ -41,6 +41,8 @@
             this.panelError = new System.Windows.Forms.Panel();
             this.labelErrormessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.userSettings1 = new Internet_Check.UserSettings();
             this.panel1.SuspendLayout();
             this.panelError.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -53,9 +55,9 @@
             this.panel1.Controls.Add(this.textBoxInterval);
             this.panel1.Controls.Add(this.labelInterval);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 111);
+            this.panel1.Location = new System.Drawing.Point(0, 129);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(316, 24);
+            this.panel1.Size = new System.Drawing.Size(360, 24);
             this.panel1.TabIndex = 2;
             // 
             // labelRunning
@@ -63,7 +65,7 @@
             this.labelRunning.AutoSize = true;
             this.labelRunning.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelRunning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(233)))), ((int)(((byte)(233)))), ((int)(((byte)(233)))));
-            this.labelRunning.Location = new System.Drawing.Point(229, 3);
+            this.labelRunning.Location = new System.Drawing.Point(274, 3);
             this.labelRunning.Name = "labelRunning";
             this.labelRunning.Size = new System.Drawing.Size(82, 17);
             this.labelRunning.TabIndex = 0;
@@ -81,7 +83,7 @@
             this.textBoxInterval.Name = "textBoxInterval";
             this.textBoxInterval.Size = new System.Drawing.Size(53, 16);
             this.textBoxInterval.TabIndex = 1;
-            //this.textBoxInterval.TextChanged += new System.EventHandler(this.textBoxInterval_TextChanged);
+            this.textBoxInterval.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxInterval_KeyDown);
             // 
             // labelInterval
             // 
@@ -96,12 +98,13 @@
             // 
             // buttonOpen
             // 
+            this.buttonOpen.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.buttonOpen.FlatAppearance.BorderSize = 0;
             this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpen.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOpen.Location = new System.Drawing.Point(6, 38);
+            this.buttonOpen.Location = new System.Drawing.Point(6, 32);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(302, 32);
+            this.buttonOpen.Size = new System.Drawing.Size(348, 30);
             this.buttonOpen.TabIndex = 7;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
@@ -109,12 +112,13 @@
             // 
             // buttonClear
             // 
+            this.buttonClear.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.buttonClear.FlatAppearance.BorderSize = 0;
             this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClear.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClear.Location = new System.Drawing.Point(6, 76);
+            this.buttonClear.Location = new System.Drawing.Point(6, 64);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(302, 32);
+            this.buttonClear.Size = new System.Drawing.Size(348, 30);
             this.buttonClear.TabIndex = 6;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
@@ -129,12 +133,13 @@
             // 
             // button1
             // 
+            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(6, 3);
+            this.button1.Location = new System.Drawing.Point(6, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(302, 32);
+            this.button1.Size = new System.Drawing.Size(348, 30);
             this.button1.TabIndex = 5;
             this.button1.Text = "Start/Stop";
             this.button1.UseVisualStyleBackColor = true;
@@ -143,9 +148,9 @@
             // panelError
             // 
             this.panelError.Controls.Add(this.labelErrormessage);
-            this.panelError.Location = new System.Drawing.Point(3, 3);
+            this.panelError.Location = new System.Drawing.Point(0, 0);
             this.panelError.Name = "panelError";
-            this.panelError.Size = new System.Drawing.Size(314, 110);
+            this.panelError.Size = new System.Drawing.Size(376, 123);
             this.panelError.TabIndex = 8;
             this.panelError.Visible = false;
             // 
@@ -155,7 +160,7 @@
             this.labelErrormessage.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelErrormessage.Location = new System.Drawing.Point(0, 0);
             this.labelErrormessage.Name = "labelErrormessage";
-            this.labelErrormessage.Size = new System.Drawing.Size(314, 110);
+            this.labelErrormessage.Size = new System.Drawing.Size(376, 123);
             this.labelErrormessage.TabIndex = 1;
             this.labelErrormessage.Text = "Errormessage";
             this.labelErrormessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -163,14 +168,40 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.panelError);
+            this.panel2.Controls.Add(this.userSettings1);
+            this.panel2.Controls.Add(this.button1);
+            this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.buttonOpen);
             this.panel2.Controls.Add(this.buttonClear);
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(316, 135);
+            this.panel2.Size = new System.Drawing.Size(376, 129);
             this.panel2.TabIndex = 9;
+            // 
+            // button2
+            // 
+            this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(6, 96);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(348, 30);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "Settings";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // userSettings1
+            // 
+            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userSettings1.BackColor = System.Drawing.Color.White;
+            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userSettings1.Location = new System.Drawing.Point(0, 0);
+            this.userSettings1.Name = "userSettings1";
+            this.userSettings1.Size = new System.Drawing.Size(376, 129);
+            this.userSettings1.TabIndex = 10;
+            this.userSettings1.Visible = false;
             // 
             // Form1
             // 
@@ -178,16 +209,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(316, 135);
+            this.ClientSize = new System.Drawing.Size(360, 153);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
             this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1000, 230);
-            this.MinimumSize = new System.Drawing.Size(331, 174);
+            this.MinimumSize = new System.Drawing.Size(376, 174);
             this.Name = "Form1";
-            this.Text = "Internet Check - v1.3";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Internet Check - v1.4";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
@@ -211,6 +243,8 @@
         private System.Windows.Forms.Panel panelError;
         private System.Windows.Forms.Label labelErrormessage;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button button2;
+        private UserSettings userSettings1;
     }
 }
 
