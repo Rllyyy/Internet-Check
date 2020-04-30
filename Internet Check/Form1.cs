@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.NetworkInformation;
 using System.Threading;
-using System.Threading;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Drawing;
@@ -24,8 +23,7 @@ namespace Internet_Check
             else
             {
                 formStart();
-            }
-              
+            }       
         }
         private void formStart ()
         {
@@ -37,12 +35,10 @@ namespace Internet_Check
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
-            bool Darkmode = false;
-            if (Darkmode)
+            if (Properties.Settings.Default.SettingDarkmode == true)
             {
                 DarkmodeForm();
             }
-
         }
         public static int countclick = 0;
         private System.Threading.Timer timer;
@@ -60,7 +56,6 @@ namespace Internet_Check
 
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        //MessageBox.Show("Please enter only positve numbers that are smaller than 32767 but bigger than 4");
                         this.panelError.BringToFront();
                         new Thread(() =>
                         {
@@ -117,7 +112,7 @@ namespace Internet_Check
                 now = DateTime.Now;
                 var startTimeSpan = TimeSpan.Zero;
                 var periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-                File.AppendAllText("Internetabbrüche.txt", "########### Program started at " + now.ToString() + " ###########" + Environment.NewLine);
+                File.AppendAllText("connection issues.txt", "########### Program started at " + now.ToString() + " ###########" + Environment.NewLine);
                 this.labelRunning.Text = "Running . . .";
                 timer = new System.Threading.Timer((d) =>
                 {
@@ -127,8 +122,8 @@ namespace Internet_Check
             else
             {
                 this.button1.Text = "Start";
-                timer.Dispose();
-                File.AppendAllText("Internetabbrüche.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                timer.Dispose(); //needed???
+                File.AppendAllText("connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
                 this.textBoxInterval.Enabled = true;
                 this.buttonClear.Enabled = true;
                 this.labelRunning.Text = "Waiting . . .";
@@ -140,17 +135,16 @@ namespace Internet_Check
             DateTime jetzt = DateTime.Now;
             if (ping() == false)
             {
-                File.AppendAllText("Internetabbrüche.txt", jetzt.ToString() + " " + "Google DNS-Server (8.8.8.8) could not be reached" + Environment.NewLine);
+                File.AppendAllText("connection issues.txt", jetzt.ToString() + " " + "Google DNS-Server (8.8.8.8) could not be reached" + Environment.NewLine);
             }
             else
             {
                 //Activate this if every ping should be written into the file
-                //File.AppendAllText("Internetabbrüche.txt", jetzt.ToString() + " " + "Internet ist da" + Environment.NewLine);
+                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " " + "Internet ist da" + Environment.NewLine);
             }
         }
         public bool ping()
         {
-
             try
             {
                 //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
@@ -161,40 +155,35 @@ namespace Internet_Check
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
                 return (reply.Status == IPStatus.Success);
-
             }
             catch (Exception)
             {
                 return false;
             }
-
         }
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
             string originalText = this.labelRunning.Text;
-
-
             new Thread(() =>
             {
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
                 Thread.Sleep(1100);
                 Thread.CurrentThread.IsBackground = true;
-                File.WriteAllText(("Internetabbrüche.txt"), String.Empty);
+                File.WriteAllText(("connection issues.txt"), String.Empty);
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
-
             }).Start();
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            if (File.Exists("Internetabbrüche.txt"))
+            if (File.Exists("connection issues.txt"))
             {
-                Process.Start("Internetabbrüche.txt"); 
+                Process.Start("connection issues.txt"); 
             } else
             {
-                File.CreateText("Internetabbrüche.txt");
-                Process.Start("Internetabbrüche.txt");
+                File.CreateText("connection issues.txt");
+                Process.Start("connection issues.txt");
             } 
         }
 
@@ -204,7 +193,7 @@ namespace Internet_Check
 
             if (this.labelRunning.Text == "Running . . .")
             {
-                File.AppendAllText("Internetabbrüche.txt", "########### Program stopped at " + jetzt.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText("connection issues.txt", "########### Program stopped at " + jetzt.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
                 try
                 {
                     timer.Dispose();
@@ -225,12 +214,15 @@ namespace Internet_Check
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            /*
-            if (WindowState == FormWindowState.Minimized)
+            if (Properties.Settings.Default.SettingHideWhenMin == true)
             {
-                Hide();
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    Hide();
+                }
             }
-            */
+
+            
             
         }
        //Author unknown
@@ -250,13 +242,26 @@ namespace Internet_Check
             }
         }
 
-        private void DarkmodeForm()
+        public void DarkmodeForm()
         {     
             this.BackColor = Color.FromArgb(56, 55, 55);
             this.button1.ForeColor = Color.FromArgb(233, 233, 233);
             this.buttonOpen.ForeColor = Color.FromArgb(233, 233, 233);
             this.buttonClear.ForeColor = Color.FromArgb(233, 233, 233);
             this.labelErrormessage.ForeColor = Color.FromArgb(233, 233, 233);
+            this.button2.ForeColor = Color.FromArgb(233, 233, 233);
+            this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);   
+        }
+
+        public void LightmodeForm()
+        {
+            this.BackColor = Color.White;
+            this.button1.ForeColor = Color.Black;
+            this.buttonOpen.ForeColor = Color.Black;
+            this.buttonClear.ForeColor = Color.Black;
+            this.labelErrormessage.ForeColor = Color.Black;
+            this.button2.ForeColor = Color.Black;
+            this.userSettings1.BackColor = Color.White;
         }
 
         public static class WindowHelper
@@ -269,7 +274,6 @@ namespace Internet_Check
                 {
                     ShowWindow(handle, SW_RESTORE);
                 }
-
                 SetForegroundWindow(handle);
             }
 
@@ -282,19 +286,27 @@ namespace Internet_Check
             [System.Runtime.InteropServices.DllImport("User32.dll")]
             private static extern bool IsIconic(IntPtr handle);
         }
-        /*
-        private void textBoxInterval_TextChanged(object sender, EventArgs e)
+        
+        private void textBoxInterval_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyValue == (char)Keys.Enter)
+            if (e.KeyValue == (char)Keys.Enter) 
             {
                 ClickEvent();
             }
             else
             {
-
             }
         }
-        */
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.userSettings1.BringToFront();
+            this.userSettings1.Visible = true;
+            this.userSettings1.Show();
+
+            userSettings1.setForm1(this);
+            //this.button1.Enabled = false; //button was active behinde the userform
+        }
     }
 }
 
