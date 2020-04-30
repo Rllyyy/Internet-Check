@@ -41,8 +41,8 @@
             this.panelError = new System.Windows.Forms.Panel();
             this.labelErrormessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.userSettings1 = new Internet_Check.UserSettings();
+            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panelError.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -150,7 +150,7 @@
             this.panelError.Controls.Add(this.labelErrormessage);
             this.panelError.Location = new System.Drawing.Point(0, 0);
             this.panelError.Name = "panelError";
-            this.panelError.Size = new System.Drawing.Size(376, 123);
+            this.panelError.Size = new System.Drawing.Size(360, 123);
             this.panelError.TabIndex = 8;
             this.panelError.Visible = false;
             // 
@@ -160,7 +160,7 @@
             this.labelErrormessage.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelErrormessage.Location = new System.Drawing.Point(0, 0);
             this.labelErrormessage.Name = "labelErrormessage";
-            this.labelErrormessage.Size = new System.Drawing.Size(376, 123);
+            this.labelErrormessage.Size = new System.Drawing.Size(360, 123);
             this.labelErrormessage.TabIndex = 1;
             this.labelErrormessage.Text = "Errormessage";
             this.labelErrormessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -178,6 +178,17 @@
             this.panel2.Size = new System.Drawing.Size(376, 129);
             this.panel2.TabIndex = 9;
             // 
+            // userSettings1
+            // 
+            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userSettings1.BackColor = System.Drawing.Color.White;
+            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userSettings1.Location = new System.Drawing.Point(0, 0);
+            this.userSettings1.Name = "userSettings1";
+            this.userSettings1.Size = new System.Drawing.Size(376, 129);
+            this.userSettings1.TabIndex = 10;
+            this.userSettings1.Visible = false;
+            // 
             // button2
             // 
             this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -191,17 +202,6 @@
             this.button2.Text = "Settings";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // userSettings1
-            // 
-            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.userSettings1.BackColor = System.Drawing.Color.White;
-            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userSettings1.Location = new System.Drawing.Point(0, 0);
-            this.userSettings1.Name = "userSettings1";
-            this.userSettings1.Size = new System.Drawing.Size(376, 129);
-            this.userSettings1.TabIndex = 10;
-            this.userSettings1.Visible = false;
             // 
             // Form1
             // 

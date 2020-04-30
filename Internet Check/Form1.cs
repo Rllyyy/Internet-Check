@@ -214,11 +214,14 @@ namespace Internet_Check
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            
-            if (WindowState == FormWindowState.Minimized)
+            if (Properties.Settings.Default.SettingHideWhenMin == true)
             {
-                Hide();
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    Hide();
+                }
             }
+
             
             
         }
@@ -239,7 +242,7 @@ namespace Internet_Check
             }
         }
 
-        private void DarkmodeForm()
+        public void DarkmodeForm()
         {     
             this.BackColor = Color.FromArgb(56, 55, 55);
             this.button1.ForeColor = Color.FromArgb(233, 233, 233);
@@ -247,8 +250,18 @@ namespace Internet_Check
             this.buttonClear.ForeColor = Color.FromArgb(233, 233, 233);
             this.labelErrormessage.ForeColor = Color.FromArgb(233, 233, 233);
             this.button2.ForeColor = Color.FromArgb(233, 233, 233);
-            this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);
-            
+            this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);   
+        }
+
+        public void LightmodeForm()
+        {
+            this.BackColor = Color.White;
+            this.button1.ForeColor = Color.Black;
+            this.buttonOpen.ForeColor = Color.Black;
+            this.buttonClear.ForeColor = Color.Black;
+            this.labelErrormessage.ForeColor = Color.Black;
+            this.button2.ForeColor = Color.Black;
+            this.userSettings1.BackColor = Color.White;
         }
 
         public static class WindowHelper
@@ -279,11 +292,9 @@ namespace Internet_Check
             if (e.KeyValue == (char)Keys.Enter) 
             {
                 ClickEvent();
-                MessageBox.Show(this.labelRunning.Text);
             }
             else
             {
-                
             }
         }
 
@@ -292,39 +303,10 @@ namespace Internet_Check
             this.userSettings1.BringToFront();
             this.userSettings1.Visible = true;
             this.userSettings1.Show();
+
+            userSettings1.setForm1(this);
             //this.button1.Enabled = false; //button was active behinde the userform
         }
-
-
-
-        /*
-private void Form1_KeyPress(object sender, KeyPressEventArgs d)
-{
-   if (d.KeyValue == (char)Keys.Enter)
-   {
-       ClickEvent();
-       MessageBox.Show("Hallo");
-   }
-   else
-   {
-
-   }
-}
-*/
-
-        /*
-        private void textBoxInterval_TextChanged(object sender, EventArgs e)
-        {
-            if (e.KeyValue == (char)Keys.Enter)
-            {
-                ClickEvent();
-            }
-            else
-            {
-
-            }
-        }
-        */
     }
 }
 

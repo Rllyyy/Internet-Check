@@ -46,5 +46,29 @@ namespace Internet_Check.Properties {
                 this["SettingDarkmode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingWindowsStart {
+            get {
+                return ((bool)(this["SettingWindowsStart"]));
+            }
+            set {
+                this["SettingWindowsStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingHideWhenMin {
+            get {
+                return ((bool)(this["SettingHideWhenMin"]));
+            }
+            set {
+                this["SettingHideWhenMin"] = value;
+            }
+        }
     }
 }

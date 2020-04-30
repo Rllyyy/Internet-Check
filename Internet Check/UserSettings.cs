@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Internet_Check
 {
     public partial class UserSettings : UserControl
     {
+        Form1 form1;
         public UserSettings()
         {
             InitializeComponent();
             this.checkBoxDarkmode.Checked = Properties.Settings.Default.SettingDarkmode;
+            this.checkBoxHideWhenMin.Checked = Properties.Settings.Default.SettingHideWhenMin;
             if (Properties.Settings.Default.SettingDarkmode == true)
             {
-                DarkmodeForm();
+                UserSettingsDarkmodeForm();
             }
         }
 
@@ -28,11 +24,28 @@ namespace Internet_Check
             {
                 Properties.Settings.Default.SettingDarkmode = true;
                 Properties.Settings.Default.Save();
+                try
+                {
+                    form1.DarkmodeForm();
+                    UserSettingsDarkmodeForm();
+                }
+                catch
+                {
+                }
+
             }
             else
             {
                 Properties.Settings.Default.SettingDarkmode = false;
                 Properties.Settings.Default.Save();
+                try
+                {
+                    form1.LightmodeForm();
+                    UserSettingsLightmodeForm();
+                }
+                catch
+                {
+                }   
             }
         }
         private void checkBoxStartWithWindows_CheckedChanged(object sender, EventArgs e)
@@ -43,20 +56,29 @@ namespace Internet_Check
         {
             if (this.checkBoxHideWhenMin.Checked == true)
             {
-
+                Properties.Settings.Default.SettingHideWhenMin = true;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                Properties.Settings.Default.SettingHideWhenMin = false;
+                Properties.Settings.Default.Save();
             }
         }
 
-        private void DarkmodeForm()
+        private void UserSettingsDarkmodeForm()
         {
-            //this.BackColor = Color.FromArgb(56, 55, 55);
-            //this.checkBoxDarkmode.ForeColor = Color.FromArgb(233, 233, 233);
-
             this.checkBoxDarkmode.ForeColor = Color.FromArgb(233, 233, 233);
             this.checkBoxStartWithWindows.ForeColor = Color.FromArgb(233, 233, 233);
             this.checkBoxHideWhenMin.ForeColor = Color.FromArgb(233, 233, 233);
             this.buttonBack.ForeColor = Color.FromArgb(233, 233, 233);
-
+        }
+        private void UserSettingsLightmodeForm()
+        {
+            this.checkBoxDarkmode.ForeColor = Color.Black;
+            this.checkBoxStartWithWindows.ForeColor = Color.Black;
+            this.checkBoxHideWhenMin.ForeColor = Color.Black;
+            this.buttonBack.ForeColor = Color.Black;
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
@@ -66,6 +88,15 @@ namespace Internet_Check
             this.Visible = false;
         }
 
-
+        ////Kollege -Ole regelt
+        public void setForm1 (Form1 f)
+        {
+            form1 = f;
+        }
+        private void doInForm1 ()
+        {
+            form1.DarkmodeForm();
+        }
+        ////
     }
 }

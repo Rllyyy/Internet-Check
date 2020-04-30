@@ -39,11 +39,11 @@
             this.checkBoxDarkmode.AutoSize = true;
             this.checkBoxDarkmode.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
             this.checkBoxDarkmode.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDarkmode.Location = new System.Drawing.Point(64, 8);
+            this.checkBoxDarkmode.Location = new System.Drawing.Point(106, 8);
             this.checkBoxDarkmode.Name = "checkBoxDarkmode";
-            this.checkBoxDarkmode.Size = new System.Drawing.Size(225, 21);
+            this.checkBoxDarkmode.Size = new System.Drawing.Size(119, 21);
             this.checkBoxDarkmode.TabIndex = 0;
-            this.checkBoxDarkmode.Text = "Use DarkMode (requires restart)";
+            this.checkBoxDarkmode.Text = "Use DarkMode";
             this.checkBoxDarkmode.UseVisualStyleBackColor = true;
             this.checkBoxDarkmode.CheckedChanged += new System.EventHandler(this.checkBoxDarkmode_CheckedChanged);
             // 
@@ -51,7 +51,7 @@
             // 
             this.checkBoxStartWithWindows.AutoSize = true;
             this.checkBoxStartWithWindows.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxStartWithWindows.Location = new System.Drawing.Point(64, 39);
+            this.checkBoxStartWithWindows.Location = new System.Drawing.Point(106, 39);
             this.checkBoxStartWithWindows.Name = "checkBoxStartWithWindows";
             this.checkBoxStartWithWindows.Size = new System.Drawing.Size(151, 21);
             this.checkBoxStartWithWindows.TabIndex = 1;
@@ -63,11 +63,11 @@
             // 
             this.checkBoxHideWhenMin.AutoSize = true;
             this.checkBoxHideWhenMin.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(64, 70);
+            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(106, 70);
             this.checkBoxHideWhenMin.Name = "checkBoxHideWhenMin";
-            this.checkBoxHideWhenMin.Size = new System.Drawing.Size(272, 21);
+            this.checkBoxHideWhenMin.Size = new System.Drawing.Size(178, 21);
             this.checkBoxHideWhenMin.TabIndex = 2;
-            this.checkBoxHideWhenMin.Text = "Hide when minimized (requires restart)";
+            this.checkBoxHideWhenMin.Text = "Show only in Systemtray";
             this.checkBoxHideWhenMin.UseVisualStyleBackColor = true;
             this.checkBoxHideWhenMin.CheckedChanged += new System.EventHandler(this.checkBoxHideWhenMin_CheckedChanged);
             // 
@@ -76,9 +76,9 @@
             this.buttonBack.FlatAppearance.BorderSize = 0;
             this.buttonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonBack.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonBack.Location = new System.Drawing.Point(3, 96);
+            this.buttonBack.Location = new System.Drawing.Point(6, 96);
             this.buttonBack.Name = "buttonBack";
-            this.buttonBack.Size = new System.Drawing.Size(351, 30);
+            this.buttonBack.Size = new System.Drawing.Size(348, 30);
             this.buttonBack.TabIndex = 3;
             this.buttonBack.Text = "Back";
             this.buttonBack.UseVisualStyleBackColor = true;
