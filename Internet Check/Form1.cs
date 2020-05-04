@@ -31,6 +31,7 @@ namespace Internet_Check
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             notifyIcon1.Visible = true;
             this.button1.Text = "Start";
+            this.panelSeetings.SendToBack();
 
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
@@ -56,14 +57,15 @@ namespace Internet_Check
 
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        this.panelError.BringToFront();
+                        this.labelErrormessage.BringToFront();
+                        ButtonsInvisible();
                         new Thread(() =>
                         {
                             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that inbetween 4 and 32766"; ; });
-                            this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = true; ; });
+                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
                             Thread.Sleep(5000);
                             Thread.CurrentThread.IsBackground = true;
-                            this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = false; ; });
+                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
 
                         }).Start();
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
@@ -90,14 +92,13 @@ namespace Internet_Check
             }
             else
             {
-                this.panelError.BringToFront();
                 new Thread(() =>
                 {
                     this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter an intervall."; ; });
-                    this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = true; ; });
+                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
                     Thread.Sleep(2700);
                     Thread.CurrentThread.IsBackground = true;
-                    this.panelError.BeginInvoke((MethodInvoker)delegate () { this.panelError.Visible = false; ; });
+                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
                 }).Start();
             }
         }
@@ -221,9 +222,6 @@ namespace Internet_Check
                     Hide();
                 }
             }
-
-            
-            
         }
        //Author unknown
         [DllImport("user32.dll")]
@@ -303,9 +301,27 @@ namespace Internet_Check
             this.userSettings1.BringToFront();
             this.userSettings1.Visible = true;
             this.userSettings1.Show();
-
+            this.panelSeetings.Show();
+            this.panelSeetings.Visible = true;
+            this.panelSeetings.BringToFront();
             userSettings1.setForm1(this);
-            //this.button1.Enabled = false; //button was active behinde the userform
+        }
+
+        public void PanelSettings_Hide()
+        {
+            this.panel2.BringToFront();
+            this.panel2.Visible = true;
+            this.panel2.Show();
+            this.panelSeetings.SendToBack();
+
+        }
+
+        public void ButtonsInvisible()
+        {
+            this.button1.SendToBack();
+            this.button2.SendToBack();
+            this.buttonClear.SendToBack();
+            this.buttonOpen.SendToBack();
         }
     }
 }
