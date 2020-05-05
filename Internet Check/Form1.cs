@@ -58,11 +58,12 @@ namespace Internet_Check
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
                         this.labelErrormessage.BringToFront();
-                        ButtonsInvisible();
+                        //ButtonsInvisible();
                         new Thread(() =>
                         {
                             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that inbetween 4 and 32766"; ; });
                             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
+                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
                             Thread.Sleep(5000);
                             Thread.CurrentThread.IsBackground = true;
                             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
@@ -96,6 +97,7 @@ namespace Internet_Check
                 {
                     this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter an intervall."; ; });
                     this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
+                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
                     Thread.Sleep(2700);
                     Thread.CurrentThread.IsBackground = true;
                     this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
@@ -316,6 +318,7 @@ namespace Internet_Check
 
         }
 
+        /*
         public void ButtonsInvisible()
         {
             this.button1.SendToBack();
@@ -323,6 +326,7 @@ namespace Internet_Check
             this.buttonClear.SendToBack();
             this.buttonOpen.SendToBack();
         }
+        */
     }
 }
 
