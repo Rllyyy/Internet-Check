@@ -70,5 +70,17 @@ namespace Internet_Check.Properties {
                 this["SettingHideWhenMin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SettingTask {
+            get {
+                return ((string)(this["SettingTask"]));
+            }
+            set {
+                this["SettingTask"] = value;
+            }
+        }
     }
 }

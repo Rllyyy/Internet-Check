@@ -7,6 +7,7 @@ using System.Threading;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using Microsoft.Win32.TaskScheduler;
 
 namespace Internet_Check
 {
@@ -317,6 +318,19 @@ namespace Internet_Check
             this.panelSeetings.SendToBack();
 
         }
+
+        public void ErrorAdminRights()
+        {
+            new Thread(() =>
+            {
+            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please restart the app with admin rights"; ; });
+            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
+            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
+            Thread.Sleep(2700);
+            Thread.CurrentThread.IsBackground = true;
+            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
+        }).Start();
+    }
 
         /*
         public void ButtonsInvisible()
