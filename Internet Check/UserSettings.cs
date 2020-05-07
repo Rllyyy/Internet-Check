@@ -178,7 +178,6 @@ namespace Internet_Check
                             }
                             catch
                             {
-                                //Form1 noch nicht initialisiert
                             }
                         }
 

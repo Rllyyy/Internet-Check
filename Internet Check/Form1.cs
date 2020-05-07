@@ -7,7 +7,6 @@ using System.Threading;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Drawing;
-using Microsoft.Win32.TaskScheduler;
 
 namespace Internet_Check
 {
@@ -62,7 +61,7 @@ namespace Internet_Check
                         //ButtonsInvisible();
                         new Thread(() =>
                         {
-                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that inbetween 4 and 32766"; ; });
+                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that are inbetween 4 and 32766"; ; });
                             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
                             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
                             Thread.Sleep(5000);
@@ -143,7 +142,7 @@ namespace Internet_Check
             }
             else
             {
-                //Activate this if every ping should be written into the file
+                //Uncomment this if every ping should be written into the file
                 //File.AppendAllText("connection issues.txt", jetzt.ToString() + " " + "Internet ist da" + Environment.NewLine);
             }
         }
@@ -323,10 +322,10 @@ namespace Internet_Check
         {
             new Thread(() =>
             {
-            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please restart the app with admin rights"; ; });
+            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please restart the app with admin rights. \n Settings were not applied"; ; });
             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
-            Thread.Sleep(2700);
+            Thread.Sleep(3500);
             Thread.CurrentThread.IsBackground = true;
             this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
         }).Start();
