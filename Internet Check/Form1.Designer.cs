@@ -57,7 +57,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 130);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(360, 24);
+            this.panel1.Size = new System.Drawing.Size(356, 22);
             this.panel1.TabIndex = 2;
             // 
             // labelRunning
@@ -66,7 +66,7 @@
             this.labelRunning.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelRunning.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelRunning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(233)))), ((int)(((byte)(233)))), ((int)(((byte)(233)))));
-            this.labelRunning.Location = new System.Drawing.Point(278, 0);
+            this.labelRunning.Location = new System.Drawing.Point(274, 0);
             this.labelRunning.Name = "labelRunning";
             this.labelRunning.Size = new System.Drawing.Size(82, 17);
             this.labelRunning.TabIndex = 0;
@@ -83,7 +83,7 @@
             this.textBoxInterval.Location = new System.Drawing.Point(94, 0);
             this.textBoxInterval.MaxLength = 5;
             this.textBoxInterval.Name = "textBoxInterval";
-            this.textBoxInterval.Size = new System.Drawing.Size(266, 16);
+            this.textBoxInterval.Size = new System.Drawing.Size(262, 16);
             this.textBoxInterval.TabIndex = 1;
             this.textBoxInterval.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxInterval_KeyDown);
             // 
@@ -156,7 +156,7 @@
             this.labelErrormessage.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelErrormessage.Location = new System.Drawing.Point(0, 0);
             this.labelErrormessage.Name = "labelErrormessage";
-            this.labelErrormessage.Size = new System.Drawing.Size(360, 129);
+            this.labelErrormessage.Size = new System.Drawing.Size(355, 126);
             this.labelErrormessage.TabIndex = 1;
             this.labelErrormessage.Text = "Errormessage";
             this.labelErrormessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -169,7 +169,7 @@
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.buttonClear);
-            this.panel2.Location = new System.Drawing.Point(7, 0);
+            this.panel2.Location = new System.Drawing.Point(5, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(360, 129);
             this.panel2.TabIndex = 9;
@@ -217,7 +217,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(360, 154);
+            this.ClientSize = new System.Drawing.Size(356, 152);
             this.Controls.Add(this.labelErrormessage);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -226,7 +226,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1000, 1000);
-            this.MinimumSize = new System.Drawing.Size(376, 174);
+            this.MinimumSize = new System.Drawing.Size(370, 174);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Internet Check - v1.4";

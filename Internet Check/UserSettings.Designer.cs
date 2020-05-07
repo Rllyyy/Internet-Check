@@ -63,7 +63,7 @@
             // 
             this.checkBoxHideWhenMin.AutoSize = true;
             this.checkBoxHideWhenMin.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(106, 70);
+            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(106, 69);
             this.checkBoxHideWhenMin.Name = "checkBoxHideWhenMin";
             this.checkBoxHideWhenMin.Size = new System.Drawing.Size(178, 21);
             this.checkBoxHideWhenMin.TabIndex = 2;

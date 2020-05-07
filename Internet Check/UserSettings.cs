@@ -8,6 +8,7 @@ namespace Internet_Check
     public partial class UserSettings : UserControl
     {
         Form1 form1;
+
         public UserSettings()
         {
             InitializeComponent();
@@ -47,45 +48,12 @@ namespace Internet_Check
                 }
                 catch
                 {
-                }   
+                }
             }
         }
         private void checkBoxStartWithWindows_CheckedChanged(object sender, EventArgs e)
         {
-            /*private void createScheduleTask()
-           {
-               using (TaskService ts = new TaskService())
-               {
-                   TaskDefinition td = ts.NewTask();
-                   td.RegistrationInfo.Description = "launches OBS Supporter with logon";
-                   td.Triggers.Add(new LogonTrigger());
-                   td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, "c:\\test.log", null));
-                   td.Principal.RunLevel = TaskRunLevel.Highest;
-                   ts.RootFolder.RegisterTaskDefinition(@"OBS Supporter", td);
-               }
-               Properties.Settings.Default.savedTaskPath = "OBS Supporter";
-               Properties.Settings.Default.Save();
-           }
-
-           private void removeScheduleTask()
-           {
-               string taskPath = Properties.Settings.Default.savedTaskPath;
-               if (taskPath != "")
-               {
-                   try
-                   {
-                       using (TaskService ts = new TaskService())
-                       {
-                           ts.RootFolder.DeleteTask(taskPath);
-                       }
-                       Properties.Settings.Default.savedTaskPath = "";
-                       Properties.Settings.Default.Save();
-                   }
-                   catch { }
-               }
-           }
-             */
-
+            /*
             if (this.checkBoxStartWithWindows.Checked == true)
             {
                 using (TaskService ts = new TaskService())
@@ -144,6 +112,7 @@ namespace Internet_Check
                     }
                 }
             }
+            */
         }
         private void checkBoxHideWhenMin_CheckedChanged(object sender, EventArgs e)
         {
@@ -180,8 +149,75 @@ namespace Internet_Check
             this.SendToBack();
             this.Visible = false;
             form1.PanelSettings_Hide();
-        }
 
+            if (this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
+            {
+                if (this.checkBoxStartWithWindows.Checked == true)
+                {
+                    using (TaskService ts = new TaskService())
+                    {
+                        //try catch hier
+                        try
+                        {
+                            TaskDefinition td = ts.NewTask();
+                            td.RegistrationInfo.Description = "Launches Internet-Check with logon";
+                            td.Triggers.Add(new LogonTrigger());
+                            td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
+                            td.Principal.RunLevel = TaskRunLevel.Highest;
+                            ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
+                            Properties.Settings.Default.SettingWindowsStart = true;
+                            Properties.Settings.Default.SettingTask = "Internet-Check";
+                            Properties.Settings.Default.Save();
+                        }
+                        catch
+                        {
+                            try
+                            {
+                                form1.ErrorAdminRights();
+                                this.checkBoxStartWithWindows.Checked = false;
+                            }
+                            catch
+                            {
+                                //Form1 noch nicht initialisiert
+                            }
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    Properties.Settings.Default.SettingWindowsStart = false;
+                    Properties.Settings.Default.Save();
+                    // Remove the task we just created
+                    try
+                    {
+                        using (TaskService ts = new TaskService())
+                        {
+                            ts.RootFolder.DeleteTask(Properties.Settings.Default.SettingTask);
+                        }
+                        Properties.Settings.Default.SettingTask = "";
+                        Properties.Settings.Default.Save();
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            form1.ErrorAdminRights();
+                            this.checkBoxStartWithWindows.Checked = true;
+                        }
+                        catch
+                        {
+                            //Form1 noch nicht initialisiert
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Weitermachen
+            }
+        } 
         ////Kollege -Ole regelt
         public void setForm1 (Form1 f)
         {
