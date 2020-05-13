@@ -41,8 +41,8 @@
             this.labelErrormessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelSeetings = new System.Windows.Forms.Panel();
-            this.userSettings1 = new Internet_Check.UserSettings();
             this.button2 = new System.Windows.Forms.Button();
+            this.userSettings1 = new Internet_Check.UserSettings();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panelSeetings.SuspendLayout();
@@ -106,9 +106,9 @@
             this.buttonOpen.FlatAppearance.BorderSize = 0;
             this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpen.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOpen.Location = new System.Drawing.Point(-2, 32);
+            this.buttonOpen.Location = new System.Drawing.Point(0, 32);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(348, 30);
+            this.buttonOpen.Size = new System.Drawing.Size(346, 30);
             this.buttonOpen.TabIndex = 7;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
@@ -121,9 +121,9 @@
             this.buttonClear.FlatAppearance.BorderSize = 0;
             this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClear.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClear.Location = new System.Drawing.Point(-2, 64);
+            this.buttonClear.Location = new System.Drawing.Point(0, 64);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(348, 30);
+            this.buttonClear.Size = new System.Drawing.Size(346, 30);
             this.buttonClear.TabIndex = 6;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
@@ -143,9 +143,9 @@
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(-2, 0);
+            this.button1.Location = new System.Drawing.Point(0, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(348, 30);
+            this.button1.Size = new System.Drawing.Size(346, 30);
             this.button1.TabIndex = 5;
             this.button1.Text = "Start/Stop";
             this.button1.UseVisualStyleBackColor = true;
@@ -185,6 +185,21 @@
             this.panelSeetings.TabIndex = 9;
             this.panelSeetings.Visible = false;
             // 
+            // button2
+            // 
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Location = new System.Drawing.Point(0, 96);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(346, 30);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "Settings";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // userSettings1
             // 
             this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -195,21 +210,6 @@
             this.userSettings1.Name = "userSettings1";
             this.userSettings1.Size = new System.Drawing.Size(360, 129);
             this.userSettings1.TabIndex = 10;
-            // 
-            // button2
-            // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(-2, 96);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(348, 30);
-            this.button2.TabIndex = 8;
-            this.button2.Text = "Settings";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 

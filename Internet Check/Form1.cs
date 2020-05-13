@@ -322,24 +322,14 @@ namespace Internet_Check
         {
             new Thread(() =>
             {
-            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please restart the app with admin rights. \n Settings were not applied"; ; });
-            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
-            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
-            Thread.Sleep(3500);
-            Thread.CurrentThread.IsBackground = true;
-            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
-        }).Start();
-    }
-
-        /*
-        public void ButtonsInvisible()
-        {
-            this.button1.SendToBack();
-            this.button2.SendToBack();
-            this.buttonClear.SendToBack();
-            this.buttonOpen.SendToBack();
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please restart the app with admin rights. \n Settings were not applied!"; ; });
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
+                Thread.Sleep(3500);
+                Thread.CurrentThread.IsBackground = true;
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
+            }).Start();
         }
-        */
     }
 }
 
