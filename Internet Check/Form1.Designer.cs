@@ -41,8 +41,8 @@
             this.labelErrormessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelSeetings = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.userSettings1 = new Internet_Check.UserSettings();
+            this.button2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panelSeetings.SuspendLayout();
@@ -185,6 +185,17 @@
             this.panelSeetings.TabIndex = 9;
             this.panelSeetings.Visible = false;
             // 
+            // userSettings1
+            // 
+            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userSettings1.BackColor = System.Drawing.Color.White;
+            this.userSettings1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userSettings1.Location = new System.Drawing.Point(0, 0);
+            this.userSettings1.Name = "userSettings1";
+            this.userSettings1.Size = new System.Drawing.Size(360, 129);
+            this.userSettings1.TabIndex = 10;
+            // 
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -199,17 +210,6 @@
             this.button2.Text = "Settings";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // userSettings1
-            // 
-            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.userSettings1.BackColor = System.Drawing.Color.White;
-            this.userSettings1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userSettings1.Location = new System.Drawing.Point(0, 0);
-            this.userSettings1.Name = "userSettings1";
-            this.userSettings1.Size = new System.Drawing.Size(360, 129);
-            this.userSettings1.TabIndex = 10;
             // 
             // Form1
             // 
