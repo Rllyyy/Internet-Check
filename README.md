@@ -1,11 +1,28 @@
-# Internet-Check
-![GitHub All Releases](https://img.shields.io/github/downloads/Rllyyy/Internet-Check/total?color=%232C974B&label=Downloads&style=flat-square)
-![GitHub top language](https://img.shields.io/github/languages/top/Rllyyy/Internet-Check?color=%232C974B&style=flat-square)
-![GitHub](https://img.shields.io/github/license/rllyyy/Internet-Check?color=%232C974B&label=License&style=flat-square)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square)
+<div class="Head">
+<p>  
+     <h1 align="center"> Internet-Check </h1>
+</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Rllyyy/DIT42/master/InternetSymbolPNG.png" height="100">
+</p>
+</div>
+<div class="Badges">
+  <p align="center">
+      <a href="https://github.com/Rllyyy/Internet-Check/releases">
+          <img src="https://img.shields.io/github/downloads/Rllyyy/Internet-Check/total?color=%232C974B&label=Downloads&style=flat-square" alt="GitHub All Releases"></a>
+      <a href="https://github.com/Rllyyy/Internet-Check/releases">
+          <img src="https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square" alt="GitHub All Releases"></a>
+      <img src="https://img.shields.io/github/languages/top/Rllyyy/Internet-Check?color=%232C974B&style=flat-square" alt="GitHub top language"></a>
+      <img src="https://img.shields.io/github/license/rllyyy/Internet-Check?color=%232C974B&label=License&style=flat-square" alt="GitHub License"></a>
+      <a href="https://github.com/Rllyyy/Internet-Check/issues">
+          <img src="https://img.shields.io/github/issues-raw/rllyyy/Internet-Check?label=Open%20Issues%2FFeature%20Requests&style=flat-square" alt="GitHub issues"></a>
+      <a href="https://github.com/Rllyyy/Internet-Check/issues?q=is%3Aissue+is%3Aclosed">
+          <img src="https://img.shields.io/github/issues-closed-raw/Rllyyy/Internet-Check?color=%232C974B&label=Closed%20Issues%2FImplemented%20Features&style=flat-square"                 alt="GitHub issues"></a>      
+   </p>
+</div>
+
 
 This program periodically checks if the computer is connected to the internet and saves offline time. 
-
 
 **Guide:**
 - After opening the program set an interval in which the Internet should be checked. (Default is 30 seconds)
