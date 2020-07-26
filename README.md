@@ -1,12 +1,13 @@
 # Internet-Check
+![GitHub All Releases](https://img.shields.io/github/downloads/Rllyyy/Internet-Check/total?color=%232C974B&label=Downloads&style=flat-square)
+![GitHub top language](https://img.shields.io/github/languages/top/Rllyyy/Internet-Check?color=%232C974B&style=flat-square)
+![GitHub](https://img.shields.io/github/license/rllyyy/Internet-Check?color=%232C974B&label=License&style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square)
+
 This program periodically checks if the computer is connected to the internet and saves offline time. 
 
-___Leagl Note:___
-- Using the MIT Licence (open the "Licence" file to read more)
-- Although this program uses just 32 Bytes to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS or Slow Loris attack by the server. We therefore advise the user to put in an interval that is bigger than 30 seconds and only ping servers that are used to higher traffic (Googles DNS Server 8.8.8.8 or www.google.com). For any programmers we advice against increasing the buffer size in the ping method.
-  - We also implemented a feature that prevents multiple instances of the application running even if the program is opened more than once
 
-**Using Guide:**
+**Guide:**
 - After opening the program set an interval in which the Internet should be checked. (Default is 30 seconds)
 - Click on Start
 - To Stop the programm click on Stop
@@ -19,8 +20,8 @@ ___Leagl Note:___
 2. Start InternetCheck.exe
 
 **DarkMode:**
-1. Tick the Checkbox "Use DarkMode". The UI now switches to Darkmode
-  - Note: The color of the title background may still apear white. This is because of the Windows settings. You need to adjust those manually
+1. Tick the Checkbox "Use DarkMode". The UI now switches to Darkmode.
+  - Note: The color of the title background may still apear white. These Windows settings can only be changed by the user.
 
 **Start Application on Windows Start-Up:**
 - Tick the Checkbox "Start with Windows" in the settings menu.
@@ -29,11 +30,15 @@ ___Leagl Note:___
 **Only show in Systemtray:**
 - Tick the "Show only in Systemtray" Checkbox if you want to hide the application when minimized. The program will continue to run in the background regardless
 
-**Libraries and other external Software**
+**Libraries and other external Software:** (no need to download them)
 - TaskScheduler from https://github.com/dahall/TaskScheduler
 
 **Errors:**
-- Error messages are implemented into the program itself. Please read them
-
+- Error messages are implemented into the program itself. Please read them.
 
       Errors or feature request can be submitted to GitHub under the "Issues" tab.
+      
+___Leagl Note:___
+- Using the MIT Licence (open the "Licence" file to read more)
+- Although this program uses just 32 Bytes to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS or Slow Loris attack by the server. We therefore advise the user to put in an interval that is bigger than 30 seconds and only ping servers that are used to higher traffic (Googles DNS Server 8.8.8.8 or www.google.com). For any programmers we advice against increasing the buffer size in the ping method.
+  - We also implemented a feature that prevents multiple instances of the application running even if the program is opened more than once.
