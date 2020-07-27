@@ -42,6 +42,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelSeetings = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
+            this.userControlClearConfirm1 = new Internet_Check.UserControlClearConfirm();
             this.userSettings1 = new Internet_Check.UserSettings();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -200,6 +201,16 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // userControlClearConfirm1
+            // 
+            this.userControlClearConfirm1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userControlClearConfirm1.BackColor = System.Drawing.Color.White;
+            this.userControlClearConfirm1.Font = new System.Drawing.Font("Century Gothic", 12F);
+            this.userControlClearConfirm1.Location = new System.Drawing.Point(0, 0);
+            this.userControlClearConfirm1.Name = "userControlClearConfirm1";
+            this.userControlClearConfirm1.Size = new System.Drawing.Size(376, 129);
+            this.userControlClearConfirm1.TabIndex = 10;
+            // 
             // userSettings1
             // 
             this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -218,6 +229,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(356, 152);
+            this.Controls.Add(this.userControlClearConfirm1);
             this.Controls.Add(this.labelErrormessage);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
@@ -229,7 +241,7 @@
             this.MinimumSize = new System.Drawing.Size(370, 174);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Internet Check - v1.4";
+            this.Text = "Internet Check - v1.5";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
@@ -243,7 +255,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label labelRunning;
         private System.Windows.Forms.TextBox textBoxInterval;
         private System.Windows.Forms.Label labelInterval;
         private System.Windows.Forms.Button buttonOpen;
@@ -255,6 +266,8 @@
         private System.Windows.Forms.Button button2;
         private UserSettings userSettings1;
         private System.Windows.Forms.Panel panelSeetings;
+        private UserControlClearConfirm userControlClearConfirm1;
+        public System.Windows.Forms.Label labelRunning;
     }
 }
 

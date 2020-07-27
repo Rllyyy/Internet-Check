@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Win32.TaskScheduler;
 
@@ -8,6 +9,7 @@ namespace Internet_Check
     public partial class UserSettings : UserControl
     {
         Form1 form1;
+        
 
         public UserSettings()
         {
@@ -27,10 +29,12 @@ namespace Internet_Check
             {
                 Properties.Settings.Default.SettingDarkmode = true;
                 Properties.Settings.Default.Save();
+               
                 try
                 {
                     form1.DarkmodeForm();
                     UserSettingsDarkmodeForm();
+                    
                 }
                 catch
                 {
@@ -45,6 +49,7 @@ namespace Internet_Check
                 {
                     form1.LightmodeForm();
                     UserSettingsLightmodeForm();
+                    
                 }
                 catch
                 {
@@ -166,6 +171,7 @@ namespace Internet_Check
         {
             form1.DarkmodeForm();
         }
+
         ////
     }
 }
