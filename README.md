@@ -3,7 +3,7 @@
      <h1 align="center"> Internet-Check </h1>
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Rllyyy/DIT42/master/InternetSymbolPNG.png" height="100">
+  <img src="https://raw.githubusercontent.com/Rllyyy/Internet-Check/master/Internet%20Check/icons/InternetSymbolPNG.png" height="100">
 </p>
 </div>
 <div class="Badges">
