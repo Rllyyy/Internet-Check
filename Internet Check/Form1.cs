@@ -32,6 +32,8 @@ namespace Internet_Check
             notifyIcon1.Visible = true;
             this.button1.Text = "Start";
             this.panelSeetings.SendToBack();
+            this.userControlClearConfirm1.SendToBack();
+            this.userControlClearConfirm1.Visible = false;
 
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
@@ -143,7 +145,7 @@ namespace Internet_Check
             else
             {
                 //Uncomment this if every ping should be written into the file
-                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " " + "Internet ist da" + Environment.NewLine);
+                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " " + "Internet is working fine" + Environment.NewLine);
             }
         }
         public bool ping()
@@ -167,11 +169,22 @@ namespace Internet_Check
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
+            this.userControlClearConfirm1.BringToFront();
+            this.userControlClearConfirm1.Visible = true;
+            userControlClearConfirm1.setForm1(this);
+            //pass the labelRunning text here
+            /*
+
+            */
+        }
+
+        public void ClearEverything()
+        {
             string originalText = this.labelRunning.Text;
             new Thread(() =>
             {
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
-                Thread.Sleep(1100);
+                Thread.Sleep(2500);
                 Thread.CurrentThread.IsBackground = true;
                 File.WriteAllText(("connection issues.txt"), String.Empty);
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
@@ -180,6 +193,7 @@ namespace Internet_Check
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
+            this.userControlClearConfirm1.UserControlClearConfirmDarkmodeForm();
             if (File.Exists("connection issues.txt"))
             {
                 Process.Start("connection issues.txt"); 
@@ -250,7 +264,8 @@ namespace Internet_Check
             this.buttonClear.ForeColor = Color.FromArgb(233, 233, 233);
             this.labelErrormessage.ForeColor = Color.FromArgb(233, 233, 233);
             this.button2.ForeColor = Color.FromArgb(233, 233, 233);
-            this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);   
+            this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);
+            this.userControlClearConfirm1.UserControlClearConfirmDarkmodeForm();
         }
 
         public void LightmodeForm()
@@ -262,6 +277,8 @@ namespace Internet_Check
             this.labelErrormessage.ForeColor = Color.Black;
             this.button2.ForeColor = Color.Black;
             this.userSettings1.BackColor = Color.White;
+            this.userControlClearConfirm1.BackColor = Color.White;
+            this.userControlClearConfirm1.UserControlClearConfirmLightmodeForm();
         }
 
         public static class WindowHelper
@@ -300,6 +317,7 @@ namespace Internet_Check
 
         private void button2_Click(object sender, EventArgs e)
         {
+            
             this.userSettings1.BringToFront();
             this.userSettings1.Visible = true;
             this.userSettings1.Show();
@@ -330,6 +348,7 @@ namespace Internet_Check
                 this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
             }).Start();
         }
+
     }
 }
 

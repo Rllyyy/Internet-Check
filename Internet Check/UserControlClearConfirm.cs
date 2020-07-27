@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
+using System.IO;
 
 namespace Internet_Check
 {
@@ -18,25 +20,62 @@ namespace Internet_Check
             InitializeComponent();
             if (Properties.Settings.Default.SettingDarkmode == true)
             {
-                UserControlClearConnfirmDarkmodeForm();
+                UserControlClearConfirmDarkmodeForm();
+            } else
+            {
+                UserControlClearConfirmLightmodeForm();
             }
 
+
         }
-        private void UserControlClearConnfirmDarkmodeForm()
+        public void UserControlClearConfirmDarkmodeForm()
         {
-            this.buttonNo.ForeColor = Color.FromArgb(233, 233, 233);
-            this.buttonYes.ForeColor = Color.FromArgb(233, 233, 233);
-            this.LabelSure.ForeColor = Color.FromArgb(233, 233, 233);
+            this.buttonReturn.ForeColor = Color.FromArgb(233, 233, 233);
+            this.buttonClearOnlyIrrelevant.ForeColor = Color.FromArgb(233, 233, 233);
+            this.buttonClearEverything.ForeColor = Color.FromArgb(233, 233, 233);
+            this.BackColor = Color.FromArgb(56, 55, 55);
+            
         }
 
-        private void buttonYes_Click(object sender, EventArgs e)
+        public void UserControlClearConfirmLightmodeForm()
         {
-            //Code when all clear
+            this.buttonReturn.ForeColor = Color.Black;
+            this.buttonClearOnlyIrrelevant.ForeColor = Color.Black;
+            this.buttonClearEverything.ForeColor = Color.Black;
+            this.BackColor = Color.White;
         }
 
-        private void buttonNo_Click(object sender, EventArgs e)
+
+
+        public void setForm1(Form1 f)
         {
-            //Code when No
+            form1 = f;
         }
+
+        private void buttonClearEverything_Click(object sender, EventArgs e)
+        {
+            form1.ClearEverything();
+            this.Hide();
+            this.SendToBack();
+            this.Visible = false;
+
+
+        }
+
+        private void buttonClearOnlyIrrelevant_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void buttonReturn_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            this.SendToBack();
+            this.Visible = false;
+        }
+
+
+
     }
 }
