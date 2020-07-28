@@ -7,6 +7,7 @@ using System.Threading;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace Internet_Check
 {
@@ -14,6 +15,7 @@ namespace Internet_Check
     {
         public Form1()
         {   
+            //Get the ammount of instances running and exit if the count is greater than 1
             var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
             if (MultipleInstances)
             {
@@ -28,6 +30,8 @@ namespace Internet_Check
         private void formStart ()
         {
             InitializeComponent();
+
+            //Prepare UI Elements
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             notifyIcon1.Visible = true;
             this.button1.Text = "Start";
@@ -35,14 +39,18 @@ namespace Internet_Check
             this.userControlClearConfirm1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
 
+            //Higlighting the Intervall Box
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
             textBoxInterval.SelectionStart = 0;
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
+
+            //Initialise DarkMode
             if (Properties.Settings.Default.SettingDarkmode == true)
             {
                 DarkmodeForm();
             }
         }
+
         public static int countclick = 0;
         private System.Threading.Timer timer;
         private void button1_Click(object sender, EventArgs e)
@@ -135,26 +143,35 @@ namespace Internet_Check
             }
         }
 
+        int i = 0;
         private void Checker()
         {
             DateTime jetzt = DateTime.Now;
+
             if (ping() == false)
             {
-                File.AppendAllText("connection issues.txt", jetzt.ToString() + " " + "Google DNS-Server (8.8.8.8) could not be reached" + Environment.NewLine);
+                File.AppendAllText("connection issues.txt", jetzt.ToString() +" The server ("+ GetHost() + ")could not be reached. Your internetconnection might be down." + i + Environment.NewLine);
             }
             else
             {
                 //Uncomment this if every ping should be written into the file
-                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " " + "Internet is working fine" + Environment.NewLine);
+                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " The server (" + GetHost() +") is responing. Internet is up."+ Environment.NewLine);
+            }
+            
+            i++;
+            if (i >= listServer.Count())
+            {
+                i = i - listServer.Count();
             }
         }
+        
         public bool ping()
         {
             try
             {
                 //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
                 Ping myPing = new Ping();
-                String host = "8.8.8.8";
+                String host = GetHost();
                 byte[] buffer = new byte[32];
                 int timeout = 2000;
                 PingOptions pingOptions = new PingOptions();
@@ -171,29 +188,35 @@ namespace Internet_Check
         {
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
+            
+            //Pass Form1 to ClearConfirm
             userControlClearConfirm1.setForm1(this);
-            //pass the labelRunning text here
-            /*
+        }
+        
+        List<string> listServer = new List<string>() { "8.8.8.8", "www.GitHub.com", "www.google.de" };
+        private string GetHost()
+        {
+            string name = listServer[i]; // Index is 0-based
 
-            */
+            return name;
         }
 
         public void ClearEverything()
-        {
+        {   
+            //Triggered by UsercontrolClearConfirm
             string originalText = this.labelRunning.Text;
             new Thread(() =>
             {
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
-                Thread.Sleep(2500);
                 Thread.CurrentThread.IsBackground = true;
                 File.WriteAllText(("connection issues.txt"), String.Empty);
+                Thread.Sleep(2500);
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
             }).Start();
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            this.userControlClearConfirm1.UserControlClearConfirmDarkmodeForm();
             if (File.Exists("connection issues.txt"))
             {
                 Process.Start("connection issues.txt"); 
@@ -239,6 +262,7 @@ namespace Internet_Check
                 }
             }
         }
+
        //Author unknown
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
@@ -333,7 +357,6 @@ namespace Internet_Check
             this.panel2.Visible = true;
             this.panel2.Show();
             this.panelSeetings.SendToBack();
-
         }
 
         public void ErrorAdminRights()

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using System.Diagnostics;
 
 namespace Internet_Check
 {
@@ -25,7 +26,6 @@ namespace Internet_Check
             {
                 UserControlClearConfirmLightmodeForm();
             }
-
 
         }
         public void UserControlClearConfirmDarkmodeForm()
@@ -45,8 +45,6 @@ namespace Internet_Check
             this.BackColor = Color.White;
         }
 
-
-
         public void setForm1(Form1 f)
         {
             form1 = f;
@@ -58,15 +56,34 @@ namespace Internet_Check
             this.Hide();
             this.SendToBack();
             this.Visible = false;
-
-
         }
 
         private void buttonClearOnlyIrrelevant_Click(object sender, EventArgs e)
         {
+            //https://stackoverflow.com/questions/7276158/skip-lines-that-contain-semi-colon-in-text-file
+
+
+            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt"))
+            {
+                while (!reader.EndOfStream)
+                {
+                    //https://stackoverflow.com/questions/31338833/c-sharp-txt-file-reading-a-substring-in-next-line-if-previous-line-contains-x
+                    var line = reader.ReadLine();
+                    var nextLine = reader.ReadLine();
+
+                    if (line.StartsWith("#"))
+                        {
+                        if (nextLine.StartsWith("#"))
+                        {
+                            MessageBox.Show(line + nextLine);
+                        }
+                    }
+                }
+
+                reader.Close();
+            }
 
         }
-
 
         private void buttonReturn_Click(object sender, EventArgs e)
         {
@@ -74,8 +91,5 @@ namespace Internet_Check
             this.SendToBack();
             this.Visible = false;
         }
-
-
-
     }
 }
