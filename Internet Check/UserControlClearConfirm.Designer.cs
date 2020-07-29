@@ -55,7 +55,7 @@
             this.buttonClearOnlyIrrelevant.FlatAppearance.BorderSize = 0;
             this.buttonClearOnlyIrrelevant.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClearOnlyIrrelevant.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClearOnlyIrrelevant.Location = new System.Drawing.Point(5, 38);
+            this.buttonClearOnlyIrrelevant.Location = new System.Drawing.Point(5, 31);
             this.buttonClearOnlyIrrelevant.Name = "buttonClearOnlyIrrelevant";
             this.buttonClearOnlyIrrelevant.Size = new System.Drawing.Size(350, 30);
             this.buttonClearOnlyIrrelevant.TabIndex = 5;

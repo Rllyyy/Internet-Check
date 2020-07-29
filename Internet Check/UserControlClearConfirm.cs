@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
 using System.IO;
-using System.Diagnostics;
 
 namespace Internet_Check
 {
@@ -34,7 +27,6 @@ namespace Internet_Check
             this.buttonClearOnlyIrrelevant.ForeColor = Color.FromArgb(233, 233, 233);
             this.buttonClearEverything.ForeColor = Color.FromArgb(233, 233, 233);
             this.BackColor = Color.FromArgb(56, 55, 55);
-            
         }
 
         public void UserControlClearConfirmLightmodeForm()
@@ -52,7 +44,9 @@ namespace Internet_Check
 
         private void buttonClearEverything_Click(object sender, EventArgs e)
         {
+            //This needs to be done in Form1 to have acess to the variables and UI Thread
             form1.ClearEverything();
+            //Returns back to Form1
             this.Hide();
             this.SendToBack();
             this.Visible = false;
@@ -60,28 +54,16 @@ namespace Internet_Check
 
         private void buttonClearOnlyIrrelevant_Click(object sender, EventArgs e)
         {
-            //https://stackoverflow.com/questions/7276158/skip-lines-that-contain-semi-colon-in-text-file
+            //This needs to be done in Form1 to have acess to the variables and UI Thread
+            //TODO: This own Thread??
+            form1.ClearOnlyIrrelevant();
 
 
-            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt"))
-            {
-                while (!reader.EndOfStream)
-                {
-                    //https://stackoverflow.com/questions/31338833/c-sharp-txt-file-reading-a-substring-in-next-line-if-previous-line-contains-x
-                    var line = reader.ReadLine();
-                    var nextLine = reader.ReadLine();
 
-                    if (line.StartsWith("#"))
-                        {
-                        if (nextLine.StartsWith("#"))
-                        {
-                            MessageBox.Show(line + nextLine);
-                        }
-                    }
-                }
+            this.Hide();
+            this.SendToBack();
+            this.Visible = false;
 
-                reader.Close();
-            }
 
         }
 

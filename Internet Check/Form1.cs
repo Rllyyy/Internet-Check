@@ -372,6 +372,79 @@ namespace Internet_Check
             }).Start();
         }
 
+        public void ClearOnlyIrrelevant()
+        {
+
+
+            string originalText = this.labelRunning.Text;
+            new Thread(() =>
+            {
+                this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
+                this.button1.BeginInvoke((MethodInvoker)delegate () { this.button1.Enabled = false; ; });
+                this.buttonOpen.BeginInvoke((MethodInvoker)delegate () { this.buttonOpen.Enabled = false; ; });
+                Thread.CurrentThread.IsBackground = true;
+                WriteDataToNewFile();
+                Thread.Sleep(2000);
+                this.button1.BeginInvoke((MethodInvoker)delegate () { this.button1.Enabled = true; ; });
+                this.buttonOpen.BeginInvoke((MethodInvoker)delegate () { this.buttonOpen.Enabled = true; ; });
+                this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
+            }).Start();
+        }
+        private void WriteDataToNewFile() 
+        {
+            //Copies lines starting with a number to backup file
+            //https://stackoverflow.com/questions/7276158/skip-lines-that-contain-semi-colon-in-text-file
+            //https://stackoverflow.com/questions/1245243/delete-specific-line-from-a-text-file#:~:text=The%20best%20way%20to%20do,line%20you%20want%20to%20delete.
+            //https://stackoverflow.com/questions/6480058/remove-blank-lines-in-a-text-file
+            //https://asp-net-example.blogspot.com/2013/10/c-example-string-starts-with-number.html
+
+            //Original file
+            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt"))
+            //Temporary new file, Could also be a string or array
+            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues - copy.txt"))
+            
+            {
+                    while (!reader.EndOfStream)
+                    {
+                        string line = reader.ReadLine();
+                        try
+                        {
+                            char stringFirstCharacter = line.ToCharArray().ElementAt(0);
+                            
+                            //better first number is not Hashtag and not empty
+                            if (char.IsNumber(stringFirstCharacter))
+                            {
+                                writer.WriteLine(line);
+                            }
+                        }
+                        catch
+                        {
+                        }
+                        //
+                    }
+                writer.Close();
+                reader.Close();
+            }
+
+            DeleteOldFile();
+            RenameOldFileToNew();
+        }
+        private void DeleteOldFile()
+        {
+            string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt";
+            File.Delete(FilepathToDelete);
+        }
+        private void RenameOldFileToNew()
+        {
+            //source: https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
+            string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\connection issues - copy.txt";
+            string newFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt";
+            
+            System.IO.File.Move(oldFilePath, newFilePath );
+        }
+
+
+
     }
 }
 
