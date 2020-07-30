@@ -1,6 +1,6 @@
 <div class="Head">
 <p>  
-     <h1 align="center"> Internet-Check </h1>
+     <h1 align="center"> <img src="https://github.com/Rllyyy/Internet-Check/blob/master/Internet%20Check/icons/Internet-Check-Logo.png?raw=true" height="40" alt="LogoText"> </h1>
 </p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/Rllyyy/Internet-Check/master/Internet%20Check/icons/InternetSymbolPNG.png" height="100">
@@ -17,23 +17,27 @@
       <a href="https://github.com/Rllyyy/Internet-Check/issues">
           <img src="https://img.shields.io/github/issues-raw/rllyyy/Internet-Check?label=Open%20Issues%2FFeature%20Requests&style=flat-square" alt="GitHub issues"></a>
       <a href="https://github.com/Rllyyy/Internet-Check/issues?q=is%3Aissue+is%3Aclosed">
-          <img src="https://img.shields.io/github/issues-closed-raw/Rllyyy/Internet-Check?color=%232C974B&label=Closed%20Issues%2FImplemented%20Features&style=flat-square"                 alt="GitHub issues"></a>      
+          <img src="https://img.shields.io/github/issues-closed-raw/Rllyyy/Internet-Check?color=%232C974B&label=Closed%20Issues%2FImplemented%20Features&style=flat-square"                 alt="GitHub issues"></a>   
+      <a href="https://github.com/Rllyyy/Internet-Check/commits/master">
+          <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/rllyyy/Internet-Check?color=%232C974B&label=Last%20Commit&style=flat-square"></a>
+      <a href="https://github.com/Rllyyy/Internet-Check/commits/master">
+          <img alt="GitHub commits since latest release (by date)" src="https://img.shields.io/github/commits-since/rllyyy/internet-check/latest?color=%232C974B&label=Commits%20Since%20Last%20Release&style=flat-square"></a>
    </p>
 </div>
 
 
-This program periodically checks if the computer is connected to the internet and saves offline time. 
+___This program periodically checks if the computer is connected to the internet and saves offline time.___
 
-**Guide:**
+**User Guide:**
 - After opening the program set an interval in which the Internet should be checked. (Default is 30 seconds)
 - Click on Start
 - To Stop the programm click on Stop
 - The current status of the application is displayed in the bottom right
 - Results can be viewed by clicking on Open
-- Results are cleared by pressing Clear. Note: this can not be undone
+- Results are cleared by pressing Clear and then either "Clear Everything" or "Clear Only Irrelevant Data". Note: this can not be undone
 
 **Install Guide:**
-1. Download and extract the zip or rar File
+1. [Download](https://github.com/Rllyyy/Internet-Check/releases/download/v1.4/Internet.Check.-.v1.4.zip) and extract the zip or rar File
 2. Start InternetCheck.exe
 
 **DarkMode:**
@@ -52,10 +56,15 @@ This program periodically checks if the computer is connected to the internet an
 
 **Errors:**
 - Error messages are implemented into the program itself. Please read them.
-
-      Errors or feature request can be submitted to GitHub under the "Issues" tab.
-      
+    
 ___Leagl Note:___
 - Using the MIT Licence (open the "Licence" file to read more)
 - Although this program uses just 32 Bytes to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS or Slow Loris attack by the server. We therefore advise the user to put in an interval that is bigger than 30 seconds and only ping servers that are used to higher traffic (Googles DNS Server 8.8.8.8 or www.google.com). For any programmers we advice against increasing the buffer size in the ping method.
   - We also implemented a feature that prevents multiple instances of the application running even if the program is opened more than once.
+
+
+
+
+          Errors or feature request can be submitted to GitHub under the "Issues" tab. 
+
+          
