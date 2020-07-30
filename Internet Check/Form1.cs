@@ -161,7 +161,7 @@ namespace Internet_Check
             i++;
             if (i >= listServer.Count())
             {
-                i = i - listServer.Count();
+                i -= listServer.Count();
             }
         }
         
@@ -176,6 +176,7 @@ namespace Internet_Check
                 int timeout = 2000;
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+                myPing.Dispose();
                 return (reply.Status == IPStatus.Success);
             }
             catch (Exception)
@@ -219,21 +220,25 @@ namespace Internet_Check
         {
             if (File.Exists("connection issues.txt"))
             {
+                //Opens the textfile
                 Process.Start("connection issues.txt"); 
             } else
-            {
-                File.CreateText("connection issues.txt");
+            {   
+                //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
+                File.CreateText("connection issues.txt").Dispose();
                 Process.Start("connection issues.txt");
+                
             } 
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DateTime jetzt = DateTime.Now;
+            //gets the Time of now 
+            DateTime now = DateTime.Now;
 
             if (this.labelRunning.Text == "Running . . .")
             {
-                File.AppendAllText("connection issues.txt", "########### Program stopped at " + jetzt.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText("connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
                 try
                 {
                     timer.Dispose();
@@ -328,6 +333,7 @@ namespace Internet_Check
             private static extern bool IsIconic(IntPtr handle);
         }
         
+        //Enter starts and stops the application
         private void textBoxInterval_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyValue == (char)Keys.Enter) 
@@ -341,7 +347,7 @@ namespace Internet_Check
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+            //Opens the settings
             this.userSettings1.BringToFront();
             this.userSettings1.Visible = true;
             this.userSettings1.Show();
