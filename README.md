@@ -57,14 +57,10 @@ ___This program periodically checks if the computer is connected to the internet
 **Errors:**
 - Error messages are implemented into the program itself. Please read them.
     
-___Leagl Note:___
+___Legal Note:___
 - Using the MIT Licence (open the "Licence" file to read more)
 - Although this program uses just 32 Bytes to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS or Slow Loris attack by the server. We therefore advise the user to put in an interval that is bigger than 30 seconds and only ping servers that are used to higher traffic (Googles DNS Server 8.8.8.8 or www.google.com). For any programmers we advice against increasing the buffer size in the ping method.
-  - We also implemented a feature that prevents multiple instances of the application running even if the program is opened more than once.
 
 
 
-
-          Errors or feature request can be submitted to GitHub under the "Issues" tab. 
-
-          
+          Errors or feature request can be submitted to GitHub under the "Issues" tab. Please use the template.
