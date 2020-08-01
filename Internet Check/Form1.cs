@@ -5,7 +5,6 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Collections.Generic;
 
@@ -19,11 +18,12 @@ namespace Internet_Check
             var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
             if (MultipleInstances)
             {
-                Run();
+                //Run();
                 Application.Exit();
             } 
             else
             {
+                watchFiles(AppDomain.CurrentDomain.BaseDirectory + @"\config.txt");
                 formStart();
             }       
         }
@@ -67,18 +67,7 @@ namespace Internet_Check
 
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        this.labelErrormessage.BringToFront();
-                        //ButtonsInvisible();
-                        new Thread(() =>
-                        {
-                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter only positve numbers that are inbetween 4 and 32766"; ; });
-                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
-                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
-                            Thread.Sleep(5000);
-                            Thread.CurrentThread.IsBackground = true;
-                            this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
-
-                        }).Start();
+                        UserErrorMessage("Please enter only positve numbers that are inbetween 4 and 32766",4700);
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -103,15 +92,7 @@ namespace Internet_Check
             }
             else
             {
-                new Thread(() =>
-                {
-                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please enter an intervall."; ; });
-                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
-                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
-                    Thread.Sleep(2700);
-                    Thread.CurrentThread.IsBackground = true;
-                    this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
-                }).Start();
+                UserErrorMessage("Please enter an intervall.", 2700);
             }
         }
         private void tTimer()
@@ -146,16 +127,16 @@ namespace Internet_Check
         int i = 0;
         private void Checker()
         {
-            DateTime jetzt = DateTime.Now;
+            DateTime now = DateTime.Now;
 
             if (ping() == false)
             {
-                File.AppendAllText("connection issues.txt", jetzt.ToString() +" The server ("+ GetHost() + ")could not be reached. Your internetconnection might be down." + i + Environment.NewLine);
+                File.AppendAllText("connection issues.txt", now.ToString() +" The server ("+ GetHost() + ")could not be reached. Your internetconnection might be down." + Environment.NewLine);
             }
             else
             {
                 //Uncomment this if every ping should be written into the file
-                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " The server (" + GetHost() +") is responing. Internet is up."+ Environment.NewLine);
+                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " The server (" + GetHost() +") is responing. Internet is up." + Environment.NewLine);
             }
             
             i++;
@@ -193,12 +174,12 @@ namespace Internet_Check
             //Pass Form1 to ClearConfirm
             userControlClearConfirm1.setForm1(this);
         }
-        
-        List<string> listServer = new List<string>() { "8.8.8.8", "www.GitHub.com", "www.google.de" };
+
+        //readonly list insted of just a list??
+        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.GitHub.com", "www.google.de" };
         private string GetHost()
         {
             string name = listServer[i]; // Index is 0-based
-
             return name;
         }
 
@@ -226,8 +207,7 @@ namespace Internet_Check
             {   
                 //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
                 File.CreateText("connection issues.txt").Dispose();
-                Process.Start("connection issues.txt");
-                
+                Process.Start("connection issues.txt");  
             } 
         }
 
@@ -263,28 +243,68 @@ namespace Internet_Check
             {
                 if (WindowState == FormWindowState.Minimized)
                 {
-                    Hide();
+                    //Hide();
+                    this.Visible = false;
                 }
             }
         }
 
-       //Author unknown
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        //https://stackoverflow.com/questions/721714/notification-when-a-file-changes
+        //https://docs.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?redirectedfrom=MSDN&view=netcore-3.1
 
-        private const int ShowWindowFuntion = 9;
-        private void Run()
+        private static FileSystemWatcher watcher;
+        public static void watchFiles(string path)
         {
-            Process[] processlist = Process.GetProcesses();
-
-            foreach (Process process in processlist.Where(process => process.ProcessName == "Internet Check"))
+            new Thread(() =>
             {
+                //this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
+                if (watcher != null)
+                {
+                    watcher.EnableRaisingEvents = false;
+                    watcher.Created -= new FileSystemEventHandler(OnChanged);
+                }
+                ///MessageBox.Show(path);
+                watcher = new FileSystemWatcher();
+                watcher.Path = Path.GetDirectoryName(path); 
+                watcher.Filter = Path.GetFileName(path);
+                watcher.Changed += new FileSystemEventHandler(OnChanged);
+                watcher.EnableRaisingEvents = true;
+            }).Start();
+
+        }
+
+        // Define the event handlers.
+        private static void OnChanged(object source, FileSystemEventArgs e)
+        {
+            // Specify what is done when a file is changed, created, or deleted.
+            MessageBox.Show(e + "File Changed");
+            
+        }
+
+        public void show()
+        {
+
+        }
+
+        //Author unknown
+        /*
+         [DllImport("user32.dll")]
+         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+         private const int ShowWindowFuntion = 9; //9
+         private void Run()
+         {
+             Process[] processlist = Process.GetProcesses();
+
+             foreach (Process process in processlist.Where(process => process.ProcessName == "Internet Check"))
+             {
                 ShowWindow(Process.GetProcessById(process.Id).MainWindowHandle, ShowWindowFuntion); //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
                 WindowHelper.BringProcessToFront(process);
                 this.Close();
-            }
-        }
 
+             }
+         }
+         */
         public void DarkmodeForm()
         {     
             this.BackColor = Color.FromArgb(56, 55, 55);
@@ -313,6 +333,8 @@ namespace Internet_Check
         public static class WindowHelper
         {
             //https://stackoverflow.com/questions/2636721/bring-another-processes-window-to-foreground-when-it-has-showintaskbar-false
+
+            const int SW_RESTORE = 9;
             public static void BringProcessToFront(Process process)
             {
                 IntPtr handle = process.MainWindowHandle;
@@ -323,7 +345,7 @@ namespace Internet_Check
                 SetForegroundWindow(handle);
             }
 
-            const int SW_RESTORE = 9;
+            
 
             [System.Runtime.InteropServices.DllImport("User32.dll")]
             private static extern bool SetForegroundWindow(IntPtr handle);
@@ -365,19 +387,6 @@ namespace Internet_Check
             this.panelSeetings.SendToBack();
         }
 
-        public void ErrorAdminRights()
-        {
-            new Thread(() =>
-            {
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = "Please restart the app with admin rights. \n Settings were not applied!"; ; });
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
-                Thread.Sleep(3500);
-                Thread.CurrentThread.IsBackground = true;
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
-            }).Start();
-        }
-
         public void ClearOnlyIrrelevant()
         {
 
@@ -406,28 +415,26 @@ namespace Internet_Check
 
             //Original file
             using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt"))
+
             //Temporary new file, Could also be a string or array
             using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues - copy.txt"))
             
             {
-                    while (!reader.EndOfStream)
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    try
                     {
-                        string line = reader.ReadLine();
-                        try
+                        //If the line does not start with a # and the line is not empty, the writer writes the line into a new file
+                        if(!line.StartsWith("#")&& !string.IsNullOrEmpty(line))
                         {
-                            char stringFirstCharacter = line.ToCharArray().ElementAt(0);
-                            
-                            //better first number is not Hashtag and not empty
-                            if (char.IsNumber(stringFirstCharacter))
-                            {
-                                writer.WriteLine(line);
-                            }
+                            writer.WriteLine(line);
                         }
-                        catch
-                        {
-                        }
-                        //
                     }
+                    catch
+                    {}
+                }
+
                 writer.Close();
                 reader.Close();
             }
@@ -449,7 +456,19 @@ namespace Internet_Check
             System.IO.File.Move(oldFilePath, newFilePath );
         }
 
+        public void UserErrorMessage(string ErrorText, int TimeErrorVisible)
+        {
+            new Thread(() =>
+            {
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = ErrorText; ; });
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
+                Thread.Sleep(TimeErrorVisible);
+                Thread.CurrentThread.IsBackground = true;
+                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
 
+            }).Start();
+        }
 
     }
 }

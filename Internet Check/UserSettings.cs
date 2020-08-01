@@ -101,7 +101,6 @@ namespace Internet_Check
                 {
                     using (TaskService ts = new TaskService())
                     {
-                        //try catch hier
                         try
                         {
                             TaskDefinition td = ts.NewTask();
@@ -118,7 +117,7 @@ namespace Internet_Check
                         {
                             try
                             {
-                                form1.ErrorAdminRights();
+                                form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
                                 this.checkBoxStartWithWindows.Checked = false;
                             }
                             catch
@@ -147,22 +146,18 @@ namespace Internet_Check
                     {
                         try
                         {
-                            form1.ErrorAdminRights();
+                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
                             this.checkBoxStartWithWindows.Checked = true;
                         }
                         catch
                         {
-                            //Form1 noch nicht initialisiert
+                            //Form1 not ininitialized
                         }
                     }
                 }
             }
-            else
-            {
-                //Weitermachen
-            }
         } 
-        ////Kollege -Ole regelt
+        //Kollege -Ole regelt
         public void setForm1 (Form1 f)
         {
             form1 = f;

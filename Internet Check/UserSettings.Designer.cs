@@ -38,10 +38,10 @@
             // 
             this.checkBoxDarkmode.AutoSize = true;
             this.checkBoxDarkmode.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
-            this.checkBoxDarkmode.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDarkmode.Location = new System.Drawing.Point(106, 8);
+            this.checkBoxDarkmode.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDarkmode.Location = new System.Drawing.Point(106, 5);
             this.checkBoxDarkmode.Name = "checkBoxDarkmode";
-            this.checkBoxDarkmode.Size = new System.Drawing.Size(119, 21);
+            this.checkBoxDarkmode.Size = new System.Drawing.Size(138, 24);
             this.checkBoxDarkmode.TabIndex = 0;
             this.checkBoxDarkmode.Text = "Use DarkMode";
             this.checkBoxDarkmode.UseVisualStyleBackColor = true;
@@ -50,10 +50,10 @@
             // checkBoxStartWithWindows
             // 
             this.checkBoxStartWithWindows.AutoSize = true;
-            this.checkBoxStartWithWindows.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxStartWithWindows.Location = new System.Drawing.Point(106, 39);
+            this.checkBoxStartWithWindows.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxStartWithWindows.Location = new System.Drawing.Point(106, 35);
             this.checkBoxStartWithWindows.Name = "checkBoxStartWithWindows";
-            this.checkBoxStartWithWindows.Size = new System.Drawing.Size(151, 21);
+            this.checkBoxStartWithWindows.Size = new System.Drawing.Size(166, 24);
             this.checkBoxStartWithWindows.TabIndex = 1;
             this.checkBoxStartWithWindows.Text = "Start with Windows";
             this.checkBoxStartWithWindows.UseVisualStyleBackColor = true;
@@ -62,10 +62,10 @@
             // checkBoxHideWhenMin
             // 
             this.checkBoxHideWhenMin.AutoSize = true;
-            this.checkBoxHideWhenMin.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(106, 69);
+            this.checkBoxHideWhenMin.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(106, 68);
             this.checkBoxHideWhenMin.Name = "checkBoxHideWhenMin";
-            this.checkBoxHideWhenMin.Size = new System.Drawing.Size(178, 21);
+            this.checkBoxHideWhenMin.Size = new System.Drawing.Size(199, 24);
             this.checkBoxHideWhenMin.TabIndex = 2;
             this.checkBoxHideWhenMin.Text = "Show only in Systemtray";
             this.checkBoxHideWhenMin.UseVisualStyleBackColor = true;
