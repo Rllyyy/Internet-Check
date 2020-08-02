@@ -18,8 +18,10 @@ namespace Internet_Check
             var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
             if (MultipleInstances)
             {
-                //Run();
+                ChangeConfig();
+                this.Close();
                 Application.Exit();
+                
             } 
             else
             {
@@ -239,72 +241,50 @@ namespace Internet_Check
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.SettingHideWhenMin == true)
+            if (Properties.Settings.Default.SettingHideWhenMin == true && WindowState == FormWindowState.Minimized)
             {
-                if (WindowState == FormWindowState.Minimized)
-                {
-                    //Hide();
-                    this.Visible = false;
-                }
+                this.Visible = false;
             }
         }
 
+        //Method watches config.txt and if changed by another process
         //https://stackoverflow.com/questions/721714/notification-when-a-file-changes
         //https://docs.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?redirectedfrom=MSDN&view=netcore-3.1
 
+        //declare the watcher out of the method to make it run all the time??
         private static FileSystemWatcher watcher;
-        public static void watchFiles(string path)
+        public void watchFiles(string path)
         {
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "config.txt"))
+            {
+                File.CreateText("config.txt").Dispose();
+            }
+
             new Thread(() =>
             {
-                //this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
                 if (watcher != null)
                 {
                     watcher.EnableRaisingEvents = false;
                     watcher.Created -= new FileSystemEventHandler(OnChanged);
                 }
-                ///MessageBox.Show(path);
                 watcher = new FileSystemWatcher();
                 watcher.Path = Path.GetDirectoryName(path); 
                 watcher.Filter = Path.GetFileName(path);
                 watcher.Changed += new FileSystemEventHandler(OnChanged);
                 watcher.EnableRaisingEvents = true;
             }).Start();
-
         }
 
-        // Define the event handlers.
-        private static void OnChanged(object source, FileSystemEventArgs e)
+        // OnChange eventhandler makes the already running Form1 visible again
+        private void OnChanged(object source, FileSystemEventArgs e)
         {
-            // Specify what is done when a file is changed, created, or deleted.
-            MessageBox.Show(e + "File Changed");
+            MethodInvoker Form1Visible = () => this.Visible = true;
+            MethodInvoker Form1WindowStateNormal = () => this.WindowState = FormWindowState.Normal;
             
+            this.BeginInvoke(Form1Visible);
+            this.BeginInvoke(Form1WindowStateNormal);
         }
 
-        public void show()
-        {
-
-        }
-
-        //Author unknown
-        /*
-         [DllImport("user32.dll")]
-         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-         private const int ShowWindowFuntion = 9; //9
-         private void Run()
-         {
-             Process[] processlist = Process.GetProcesses();
-
-             foreach (Process process in processlist.Where(process => process.ProcessName == "Internet Check"))
-             {
-                ShowWindow(Process.GetProcessById(process.Id).MainWindowHandle, ShowWindowFuntion); //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
-                WindowHelper.BringProcessToFront(process);
-                this.Close();
-
-             }
-         }
-         */
         public void DarkmodeForm()
         {     
             this.BackColor = Color.FromArgb(56, 55, 55);
@@ -328,31 +308,6 @@ namespace Internet_Check
             this.userSettings1.BackColor = Color.White;
             this.userControlClearConfirm1.BackColor = Color.White;
             this.userControlClearConfirm1.UserControlClearConfirmLightmodeForm();
-        }
-
-        public static class WindowHelper
-        {
-            //https://stackoverflow.com/questions/2636721/bring-another-processes-window-to-foreground-when-it-has-showintaskbar-false
-
-            const int SW_RESTORE = 9;
-            public static void BringProcessToFront(Process process)
-            {
-                IntPtr handle = process.MainWindowHandle;
-                if (IsIconic(handle))
-                {
-                    ShowWindow(handle, SW_RESTORE);
-                }
-                SetForegroundWindow(handle);
-            }
-
-            
-
-            [System.Runtime.InteropServices.DllImport("User32.dll")]
-            private static extern bool SetForegroundWindow(IntPtr handle);
-            [System.Runtime.InteropServices.DllImport("User32.dll")]
-            private static extern bool ShowWindow(IntPtr handle, int nCmdShow);
-            [System.Runtime.InteropServices.DllImport("User32.dll")]
-            private static extern bool IsIconic(IntPtr handle);
         }
         
         //Enter starts and stops the application
@@ -389,8 +344,6 @@ namespace Internet_Check
 
         public void ClearOnlyIrrelevant()
         {
-
-
             string originalText = this.labelRunning.Text;
             new Thread(() =>
             {
@@ -468,6 +421,12 @@ namespace Internet_Check
                 this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
 
             }).Start();
+        }
+
+        private void ChangeConfig()
+        {
+            DateTime now = DateTime.Now;
+            File.WriteAllText(("config.txt"), now.ToString());
         }
 
     }
