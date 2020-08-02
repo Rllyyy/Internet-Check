@@ -177,7 +177,7 @@ namespace Internet_Check
             userControlClearConfirm1.setForm1(this);
         }
 
-        //readonly list insted of just a list??
+        //readonly list insted of just a list?? Just add a string to the end of the list. Other methods do not need to be changed
         readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.GitHub.com", "www.google.de" };
         private string GetHost()
         {

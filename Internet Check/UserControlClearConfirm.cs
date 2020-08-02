@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using System.IO;
 
 namespace Internet_Check
 {
