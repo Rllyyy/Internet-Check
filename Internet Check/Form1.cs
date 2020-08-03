@@ -11,9 +11,9 @@ using System.Collections.Generic;
 namespace Internet_Check
 {
     public partial class Form1 : Form
-    {
+    {   
         public Form1()
-        {   
+        {
             //Get the ammount of instances running and exit if the count is greater than 1
             var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
             if (MultipleInstances)
@@ -27,9 +27,9 @@ namespace Internet_Check
             {
                 watchFiles(AppDomain.CurrentDomain.BaseDirectory + @"\config.txt");
                 formStart();
-            }       
+            }
         }
-        private void formStart ()
+    private void formStart ()
         {
             InitializeComponent();
 
