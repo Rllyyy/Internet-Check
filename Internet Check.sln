@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internet Check", "Internet Check\Internet Check.csproj", "{566A3805-CE8E-4E5F-9890-FB870E55EE70}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Internet-Check Setup", "Internet-Check Setup\Internet-Check Setup.vdproj", "{6FD58C6A-50A2-4936-A72C-6B36F7ACEF56}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Internet-Check Setup", "Internet-Check Setup\Internet-Check Setup.vdproj", "{0753135D-CDAB-4A57-90EB-335B682F92F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,8 +17,8 @@ Global
 		{566A3805-CE8E-4E5F-9890-FB870E55EE70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{566A3805-CE8E-4E5F-9890-FB870E55EE70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{566A3805-CE8E-4E5F-9890-FB870E55EE70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6FD58C6A-50A2-4936-A72C-6B36F7ACEF56}.Debug|Any CPU.ActiveCfg = Debug
-		{6FD58C6A-50A2-4936-A72C-6B36F7ACEF56}.Release|Any CPU.ActiveCfg = Release
+		{0753135D-CDAB-4A57-90EB-335B682F92F8}.Debug|Any CPU.ActiveCfg = Debug
+		{0753135D-CDAB-4A57-90EB-335B682F92F8}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

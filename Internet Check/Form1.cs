@@ -278,11 +278,21 @@ namespace Internet_Check
         // OnChange eventhandler makes the already running Form1 visible again
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            MethodInvoker Form1Visible = () => this.Visible = true;
             MethodInvoker Form1WindowStateNormal = () => this.WindowState = FormWindowState.Normal;
-            
+            MethodInvoker Form1topMostTrue = () => this.TopMost = true;
+            MethodInvoker Form1Visible = () => this.Visible = true;                                     //not needed?
+            MethodInvoker Form1toFront = () => this.BringToFront();                                     //not needed?
+            MethodInvoker Form1Show = () => this.Show();                                                //not needed?
+            MethodInvoker Form1Activate = () => this.Activate();                                        //Icon blinks in Taskbar
+            MethodInvoker Form1topMostFalse = () => this.TopMost = false;
+
             this.BeginInvoke(Form1Visible);
+            this.BeginInvoke(Form1topMostTrue);
             this.BeginInvoke(Form1WindowStateNormal);
+            this.BeginInvoke(Form1toFront);
+            this.BeginInvoke(Form1Show);
+            this.BeginInvoke(Form1topMostFalse);
+            this.BeginInvoke(Form1Activate);
         }
 
         public void DarkmodeForm()
