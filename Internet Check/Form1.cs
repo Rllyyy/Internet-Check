@@ -429,7 +429,6 @@ namespace Internet_Check
                 Thread.Sleep(TimeErrorVisible);
                 Thread.CurrentThread.IsBackground = true;
                 this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
-
             }).Start();
         }
 

@@ -241,7 +241,7 @@
             this.MinimumSize = new System.Drawing.Size(370, 174);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Internet Check - v1.5";
+            this.Text = "Internet Check - v1.6";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
