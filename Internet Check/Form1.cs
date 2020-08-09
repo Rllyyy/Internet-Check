@@ -21,7 +21,6 @@ namespace Internet_Check
                 ChangeConfig();
                 this.Close();
                 Application.Exit();
-                
             } 
             else
             {
@@ -80,8 +79,7 @@ namespace Internet_Check
                             Properties.Settings.Default.Save();
                         }
                         catch
-                        {
-                        }
+                        {}
                         countclick++;
                         tTimer();
                     }
@@ -213,6 +211,7 @@ namespace Internet_Check
             } 
         }
 
+        //Writes the end Date to the textfile if the programm is currently pinging and closed by the user. Also works if windows is shut down.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             //gets the Time of now 
@@ -231,6 +230,7 @@ namespace Internet_Check
             }
         }
 
+        //Maximizes the applicaiton if click on in the systemtray
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             this.TopMost = true;
@@ -239,6 +239,7 @@ namespace Internet_Check
             this.TopMost = false;
         }
 
+        //Sets the visibity to false if the user set visibilty to hidden in the settings menu and form is minimized
         private void Form1_Resize(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.SettingHideWhenMin == true && WindowState == FormWindowState.Minimized)
@@ -275,7 +276,7 @@ namespace Internet_Check
             }).Start();
         }
 
-        // OnChange eventhandler makes the already running Form1 visible again
+        // OnChange eventhandler makes the already running Form1 visible again. Called by watchFiles().
         private void OnChanged(object source, FileSystemEventArgs e)
         {
             MethodInvoker Form1WindowStateNormal = () => this.WindowState = FormWindowState.Normal;
@@ -295,6 +296,7 @@ namespace Internet_Check
             this.BeginInvoke(Form1Activate);
         }
 
+        //Makes UI-Elements Dark
         public void DarkmodeForm()
         {     
             this.BackColor = Color.FromArgb(56, 55, 55);
@@ -307,6 +309,7 @@ namespace Internet_Check
             this.userControlClearConfirm1.UserControlClearConfirmDarkmodeForm();
         }
 
+        //Makes UI Elements Light
         public void LightmodeForm()
         {
             this.BackColor = Color.White;
@@ -327,11 +330,9 @@ namespace Internet_Check
             {
                 ClickEvent();
             }
-            else
-            {
-            }
         }
 
+        //Opens the settings-form
         private void button2_Click(object sender, EventArgs e)
         {
             //Opens the settings
@@ -344,6 +345,7 @@ namespace Internet_Check
             userSettings1.setForm1(this);
         }
 
+        //Hides the Settings-Panel
         public void PanelSettings_Hide()
         {
             this.panel2.BringToFront();
@@ -352,6 +354,8 @@ namespace Internet_Check
             this.panelSeetings.SendToBack();
         }
 
+
+        //UI-Elements for ClearOnlyIrrelevant. Called from UserControlClearConfirm.cs
         public void ClearOnlyIrrelevant()
         {
             string originalText = this.labelRunning.Text;
@@ -368,6 +372,8 @@ namespace Internet_Check
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
             }).Start();
         }
+
+        //Writes Data to new file if Clear Only Irrelevant Data is selected. Caled from Form1.ClearOnlyIrrelevant()
         private void WriteDataToNewFile() 
         {
             //Copies lines starting with a number to backup file
@@ -405,11 +411,14 @@ namespace Internet_Check
             DeleteOldFile();
             RenameOldFileToNew();
         }
+        //Deletes the old file connection issues. Called by WriteDataToNewFile().
         private void DeleteOldFile()
         {
             string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt";
             File.Delete(FilepathToDelete);
         }
+
+        //Renames the new file from "connection issues - copy.txt" to "connection issues.txt". Called by WriteDataToNewFile().
         private void RenameOldFileToNew()
         {
             //source: https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
@@ -419,6 +428,7 @@ namespace Internet_Check
             System.IO.File.Move(oldFilePath, newFilePath );
         }
 
+        //UserErrorMessages. Method takes the ErrorText by string and time for how long the errormessage is visible by int (1000 = 1 sec)
         public void UserErrorMessage(string ErrorText, int TimeErrorVisible)
         {
             new Thread(() =>
@@ -432,6 +442,7 @@ namespace Internet_Check
             }).Start();
         }
 
+        //Writes current date to file if the User tries to open the applicaiton more than onece. The original application watches this file and if changes brings itself back to the front.
         private void ChangeConfig()
         {
             DateTime now = DateTime.Now;
