@@ -8,14 +8,16 @@ namespace Internet_Check
     public partial class UserSettings : UserControl
     {
         Form1 form1;
-        
 
         public UserSettings()
         {
             InitializeComponent();
+            //Set Checkboxes to the settings
             this.checkBoxDarkmode.Checked = Properties.Settings.Default.SettingDarkmode;
             this.checkBoxHideWhenMin.Checked = Properties.Settings.Default.SettingHideWhenMin;
             this.checkBoxStartWithWindows.Checked = Properties.Settings.Default.SettingWindowsStart;
+
+            //Start the Form in DarkMode
             if (Properties.Settings.Default.SettingDarkmode == true)
             {
                 UserSettingsDarkmodeForm();
@@ -32,13 +34,10 @@ namespace Internet_Check
                 try
                 {
                     form1.DarkmodeForm();
-                    UserSettingsDarkmodeForm();
-                    
+                    UserSettingsDarkmodeForm(); 
                 }
                 catch
-                {
-                }
-
+                {}
             }
             else
             {
@@ -47,16 +46,11 @@ namespace Internet_Check
                 try
                 {
                     form1.LightmodeForm();
-                    UserSettingsLightmodeForm();
-                    
+                    UserSettingsLightmodeForm();  
                 }
                 catch
-                {
-                }
+                {}
             }
-        }
-        private void checkBoxStartWithWindows_CheckedChanged(object sender, EventArgs e)
-        {
         }
         private void checkBoxHideWhenMin_CheckedChanged(object sender, EventArgs e)
         {
@@ -120,12 +114,9 @@ namespace Internet_Check
                                 this.checkBoxStartWithWindows.Checked = false;
                             }
                             catch
-                            {
-                            }
+                            {}
                         }
-
                     }
-
                 }
                 else
                 {
@@ -165,7 +156,5 @@ namespace Internet_Check
         {
             form1.DarkmodeForm();
         }
-
-        ////
     }
 }

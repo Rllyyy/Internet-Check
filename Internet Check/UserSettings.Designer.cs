@@ -57,7 +57,6 @@
             this.checkBoxStartWithWindows.TabIndex = 1;
             this.checkBoxStartWithWindows.Text = "Start with Windows";
             this.checkBoxStartWithWindows.UseVisualStyleBackColor = true;
-            this.checkBoxStartWithWindows.CheckedChanged += new System.EventHandler(this.checkBoxStartWithWindows_CheckedChanged);
             // 
             // checkBoxHideWhenMin
             // 

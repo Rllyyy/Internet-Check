@@ -439,7 +439,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Internet-Check Setup"
+        "ProductName" = "8:Internet-Check"
         "ProductCode" = "8:{A9846854-FA68-49EF-B1D1-57EB7FF7CAB9}"
         "PackageCode" = "8:{5CDBF153-55FF-437A-B206-FEB6942A4BFB}"
         "UpgradeCode" = "8:{F4B75A1B-C58D-4886-92C9-F43534BD0D70}"
@@ -449,7 +449,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.6"
-        "Manufacturer" = "8:5PointsStudios"
+        "Manufacturer" = "8:3 Point Studios"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:Internet-Check Setup"
