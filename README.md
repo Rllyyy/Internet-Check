@@ -1,6 +1,6 @@
 <div class="Head">
 <p>  
-     <h1 align="center"> <img src="https://github.com/Rllyyy/Internet-Check/blob/master/Internet%20Check/icons/Internet-Check-Logo.png?raw=true" height="40" alt="LogoText"> </h1>
+     <h1 align="center"> <img src="https://github.com/Rllyyy/Internet-Check/blob/master/Internet%20Check/icons/Internet-Check-Logo.png" height="35" alt="LogoText"> </h1>
 </p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/Rllyyy/Internet-Check/master/Internet%20Check/icons/InternetSymbolPNG.png" height="100">
@@ -25,41 +25,44 @@
    </p>
 </div>
 
-
 ___This program periodically checks if the computer is connected to the internet and saves offline time.___
 
 **User Guide:**
 - After opening the program set an interval in which the Internet should be checked. (Default is 30 seconds)
-- Click on Start
-- To Stop the programm click on Stop
-- The current status of the application is displayed in the bottom right
-- Results can be viewed by clicking on Open
-- Results are cleared by pressing Clear and then either "Clear Everything" or "Clear Only Irrelevant Data". Note: this can not be undone
+- Click on Start to start collecting data.
+- To stop the programm click on Stop.
+- The current status of the application is displayed in the bottom right.
+- Results can be viewed by clicking on Open.
+- By default the program will only show the offline time and not the time the computer is connected to the internet. 
+     - Programmers can change this by uncommenting the relevant lines in Form1.CheckAndWrite().
+- Results are cleared by pressing Clear and then either "Clear Everything" or "Clear Only Irrelevant Data". 
+     - Note: This can not be undone.
 
 **Install Guide:**
-1. [Download](https://github.com/Rllyyy/Internet-Check/releases/download/v1.4/Internet.Check.-.v1.4.zip) and extract the zip or rar File
+1. [Download](https://github.com/Rllyyy/Internet-Check/releases/download/v1.5/Internet.Check.-.v1.5.zip) and extract the zip-file.
 2. Start InternetCheck.exe
 
 **DarkMode:**
 1. Tick the Checkbox "Use DarkMode". The UI now switches to Darkmode.
-  - Note: The color of the title background may still apear white. These Windows settings can only be changed by the user.
+  - Note: The color of the title background may still apear white. These Windows settings can only be changed by the user. [Here](https://www.hellotech.com/guide/for/how-to-enable-dark-mode-in-windows-10) is how.
 
 **Start Application on Windows Start-Up:**
 - Tick the Checkbox "Start with Windows" in the settings menu.
   - Note: you still need to manually click on Start.
   
 **Only show in Systemtray:**
-- Tick the "Show only in Systemtray" Checkbox if you want to hide the application when minimized. The program will continue to run in the background regardless
-
-**Libraries and other external Software:** (no need to download them)
-- TaskScheduler from https://github.com/dahall/TaskScheduler
+- Tick the "Show only in Systemtray" Checkbox if you want to hide the application when minimized. The program will continue to run in the background regardless.
 
 **Errors:**
 - Error messages are implemented into the program itself. Please read them.
     
 ___Legal Note:___
-- Using the MIT Licence (open the "Licence" file to read more)
-- Although this program uses just 32 Bytes to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS or Slow Loris attack by the server. We therefore advise the user to put in an interval that is bigger than 30 seconds and only ping servers that are used to higher traffic (Googles DNS Server 8.8.8.8 or www.google.com). For any programmers we advice against increasing the buffer size in the ping method.
+- Although this program uses just 32 Bytes (0.000032 Megabytes) to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS. 
+     - We therefore advise the user to put in an interval that is bigger than 30 seconds.
+     - For any programmers we advice against increasing the buffer size in the ping method and to only ping servers that are used to higher traffic.
+
+**Libraries and other external Software:** (no need to download them)
+- TaskScheduler from https://github.com/dahall/TaskScheduler
 
 
 
