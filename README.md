@@ -39,7 +39,7 @@ ___This program periodically checks if the computer is connected to the internet
      - Note: This can not be undone.
 
 **Install Guide:**
-1. [Download](https://github.com/Rllyyy/Internet-Check/releases/download/v1.5/Internet.Check.-.v1.5.zip) and extract the zip-file.
+1. [Download](https://github.com/Rllyyy/Internet-Check/releases/download/v1.5/Internet.Check.-.v1.5.zip), extract the zip-file and start the setup.
 2. Start InternetCheck.exe
 
 **DarkMode:**
@@ -58,7 +58,7 @@ ___This program periodically checks if the computer is connected to the internet
     
 ___Legal Note:___
 - Although this program uses just 32 Bytes (0.000032 Megabytes) to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS. 
-     - We therefore advise the user to put in an interval that is bigger than 30 seconds.
+     - We therefore advise the user to put in an interval that is than bigger or equal to 30 seconds.
      - For any programmers we advice against increasing the buffer size in the ping method and to only ping servers that are used to higher traffic.
 
 **Libraries and other external Software:** (no need to download them)
@@ -66,4 +66,4 @@ ___Legal Note:___
 
 
 
-          Errors or feature request can be submitted to GitHub under the "Issues" tab. Please use the template.
+      Errors or feature request can be submitted to GitHub under the "Issues" tab. Please use the template.
