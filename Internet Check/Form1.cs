@@ -7,6 +7,7 @@ using System.Threading;
 using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Internet_Check
 {
@@ -15,7 +16,9 @@ namespace Internet_Check
         public Form1()
         {
             //Get the ammount of instances running and exit if the count is greater than 1
-            var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
+            //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
+            var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; 
+            
             if (MultipleInstances)
             {
                 ChangeConfig();
@@ -24,11 +27,16 @@ namespace Internet_Check
             } 
             else
             {
+                //begin to watch the config file, if it changes this programm will come to front again
                 watchFiles(AppDomain.CurrentDomain.BaseDirectory + @"\config.txt");
+
+                //start the form
                 formStart();
+                CheckIfStartedWithWindows();
             }
         }
-    private void formStart ()
+
+        private void formStart()
         {
             InitializeComponent();
 
@@ -49,6 +57,21 @@ namespace Internet_Check
             if (Properties.Settings.Default.SettingDarkmode == true)
             {
                 DarkmodeForm();
+            }
+        }
+        
+        //https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
+        [DllImport("kernel32")]
+        extern static UInt64 GetTickCount64();
+        private void CheckIfStartedWithWindows()
+        {
+            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 4 minutes. Windows update might interfier with this.
+            TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
+            TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
+
+            if (TimeSinceWindowsStart <= time && Properties.Settings.Default.SettingWindowsStart == true)
+            {
+                ClickEvent();
             }
         }
 
@@ -92,6 +115,7 @@ namespace Internet_Check
             }
             else
             {
+                //Give the User an error if he enters no intervall
                 UserErrorMessage("Please enter an intervall.", 2700);
             }
         }
@@ -110,13 +134,13 @@ namespace Internet_Check
                 this.labelRunning.Text = "Running . . .";
                 timer = new System.Threading.Timer((d) =>
                 {
-                    Checker();
+                    CheckAndWrite();
                 }, null, startTimeSpan, periodTimeSpan);
             }
             else
             {
                 this.button1.Text = "Start";
-                timer.Dispose(); //needed???
+                timer.Dispose(); //Disposing the timer needed???
                 File.AppendAllText("connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
                 this.textBoxInterval.Enabled = true;
                 this.buttonClear.Enabled = true;
@@ -125,13 +149,13 @@ namespace Internet_Check
         }
 
         int i = 0;
-        private void Checker()
+        private void CheckAndWrite()
         {
             DateTime now = DateTime.Now;
 
             if (ping() == false)
             {
-                File.AppendAllText("connection issues.txt", now.ToString() +" The server ("+ GetHost() + ")could not be reached. Your internetconnection might be down." + Environment.NewLine);
+                File.AppendAllText("connection issues.txt", now.ToString() +" The server ("+ GetHost() + ") could not be reached. Your internetconnection might be down." + Environment.NewLine);
             }
             else
             {
@@ -140,6 +164,8 @@ namespace Internet_Check
             }
             
             i++;
+
+            //If i is bigger than the amount of servers listet in the list listServer it is reset to the beginning of the list
             if (i >= listServer.Count())
             {
                 i -= listServer.Count();
@@ -153,7 +179,7 @@ namespace Internet_Check
                 //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
                 Ping myPing = new Ping();
                 String host = GetHost();
-                byte[] buffer = new byte[32];
+                byte[] buffer = new byte[1]; 
                 int timeout = 2000;
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
@@ -176,7 +202,8 @@ namespace Internet_Check
         }
 
         //readonly list insted of just a list?? Just add a string to the end of the list. Other methods do not need to be changed
-        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.GitHub.com", "www.google.de" };
+        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.google.com","www.yahoo.com" ,"www.microsoft.com", "8.8.4.4", "1.1.1.1", "www.example.com"};
+        //8.8.8.8 : Gooogle public dns-a; 8.8.4.4 : Google public dns-b; 1.1.1.1:Cloudflare
         private string GetHost()
         {
             string name = listServer[i]; // Index is 0-based

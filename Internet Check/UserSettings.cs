@@ -96,6 +96,7 @@ namespace Internet_Check
                     {
                         try
                         {
+                            //TaskSceduler by https://github.com/dahall/TaskScheduler
                             TaskDefinition td = ts.NewTask();
                             td.RegistrationInfo.Description = "Launches Internet-Check with logon";
                             td.Triggers.Add(new LogonTrigger());
@@ -109,7 +110,8 @@ namespace Internet_Check
                         catch
                         {
                             try
-                            {
+                            {   
+                                //Give the User an errormessage if the app is not startet with admin rights. Errormessages are stored in form1
                                 form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
                                 this.checkBoxStartWithWindows.Checked = false;
                             }
