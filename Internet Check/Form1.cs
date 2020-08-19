@@ -28,7 +28,7 @@ namespace Internet_Check
             else
             {
                 //begin to watch the config file, if it changes this programm will come to front again
-                watchFiles(AppDomain.CurrentDomain.BaseDirectory + @"\config.txt");
+                watchFiles(AppDomain.CurrentDomain.BaseDirectory + "config.txt");
 
                 //start the form
                 formStart();
@@ -65,12 +65,18 @@ namespace Internet_Check
         extern static UInt64 GetTickCount64();
         private void CheckIfStartedWithWindows()
         {
-            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 4 minutes. Windows update might interfier with this.
+            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 9 minutes. Windows update might interfier with this.
             TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
             TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
 
             if (TimeSinceWindowsStart <= time && Properties.Settings.Default.SettingWindowsStart == true)
             {
+                if (Properties.Settings.Default.SettingHideWhenMin == true)
+                {
+                    this.WindowState = FormWindowState.Minimized;
+                    this.ShowInTaskbar = false;
+                    this.Visible = false;
+                }
                 ClickEvent();
             }
         }
@@ -91,7 +97,7 @@ namespace Internet_Check
 
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        UserErrorMessage("Please enter only positve numbers that are inbetween 4 and 32766",4700);
+                        UserErrorMessage("Please enter only positve numbers that are inbetween 4 and 32766",4200);
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -130,7 +136,7 @@ namespace Internet_Check
                 now = DateTime.Now;
                 var startTimeSpan = TimeSpan.Zero;
                 var periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-                File.AppendAllText("connection issues.txt", "########### Program started at " + now.ToString() + " ###########" + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", "########### Program started at " + now.ToString() + " ###########" + Environment.NewLine);
                 this.labelRunning.Text = "Running . . .";
                 timer = new System.Threading.Timer((d) =>
                 {
@@ -141,7 +147,7 @@ namespace Internet_Check
             {
                 this.button1.Text = "Start";
                 timer.Dispose(); //Disposing the timer needed???
-                File.AppendAllText("connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
                 this.textBoxInterval.Enabled = true;
                 this.buttonClear.Enabled = true;
                 this.labelRunning.Text = "Waiting . . .";
@@ -155,14 +161,14 @@ namespace Internet_Check
 
             if (ping() == false)
             {
-                File.AppendAllText("connection issues.txt", now.ToString() +" The server ("+ GetHost() + ") could not be reached. Your internetconnection might be down." + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() +" The server ("+ GetHost() + ") could not be reached. Your internetconnection might be down." + Environment.NewLine);
             }
             else
             {
                 //Uncomment this if every ping should be written into the file
-                //File.AppendAllText("connection issues.txt", jetzt.ToString() + " The server (" + GetHost() +") is responing. Internet is up." + Environment.NewLine);
+                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", jetzt.ToString() + " The server (" + GetHost() +") is responing. Internet is up." + Environment.NewLine);
             }
-            
+
             i++;
 
             //If i is bigger than the amount of servers listet in the list listServer it is reset to the beginning of the list
@@ -202,8 +208,9 @@ namespace Internet_Check
         }
 
         //readonly list insted of just a list?? Just add a string to the end of the list. Other methods do not need to be changed
-        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.google.com","www.yahoo.com" ,"www.microsoft.com", "8.8.4.4", "1.1.1.1", "www.example.com"};
         //8.8.8.8 : Gooogle public dns-a; 8.8.4.4 : Google public dns-b; 1.1.1.1:Cloudflare
+        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.google.com","www.yahoo.com" ,"www.microsoft.com", "8.8.4.4", "1.1.1.1", "www.example.com"};
+
         private string GetHost()
         {
             string name = listServer[i]; // Index is 0-based
@@ -218,7 +225,7 @@ namespace Internet_Check
             {
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
                 Thread.CurrentThread.IsBackground = true;
-                File.WriteAllText(("connection issues.txt"), String.Empty);
+                File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"), String.Empty);
                 Thread.Sleep(2500);
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
             }).Start();
@@ -226,15 +233,15 @@ namespace Internet_Check
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            if (File.Exists("connection issues.txt"))
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
             {
                 //Opens the textfile
-                Process.Start("connection issues.txt"); 
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"); 
             } else
             {   
                 //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
-                File.CreateText("connection issues.txt").Dispose();
-                Process.Start("connection issues.txt");  
+                File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt").Dispose();
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");  
             } 
         }
 
@@ -246,7 +253,7 @@ namespace Internet_Check
 
             if (this.labelRunning.Text == "Running . . .")
             {
-                File.AppendAllText("connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
                 try
                 {
                     timer.Dispose();
@@ -263,6 +270,7 @@ namespace Internet_Check
             this.TopMost = true;
             Show();
             WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
             this.TopMost = false;
         }
 
@@ -312,6 +320,7 @@ namespace Internet_Check
             MethodInvoker Form1toFront = () => this.BringToFront();                                     //not needed?
             MethodInvoker Form1Show = () => this.Show();                                                //not needed?
             MethodInvoker Form1Activate = () => this.Activate();                                        //Icon blinks in Taskbar
+            MethodInvoker Form1ShowInTaskbar = () => this.ShowInTaskbar = true;                                        
             MethodInvoker Form1topMostFalse = () => this.TopMost = false;
 
             this.BeginInvoke(Form1Visible);
@@ -319,6 +328,7 @@ namespace Internet_Check
             this.BeginInvoke(Form1WindowStateNormal);
             this.BeginInvoke(Form1toFront);
             this.BeginInvoke(Form1Show);
+            this.BeginInvoke(Form1ShowInTaskbar);
             this.BeginInvoke(Form1topMostFalse);
             this.BeginInvoke(Form1Activate);
         }
@@ -410,10 +420,10 @@ namespace Internet_Check
             //https://asp-net-example.blogspot.com/2013/10/c-example-string-starts-with-number.html
 
             //Original file
-            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt"))
+            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
 
             //Temporary new file, Could also be a string or array
-            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"\connection issues - copy.txt"))
+            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "connection issues - copy.txt"))
             
             {
                 while (!reader.EndOfStream)
@@ -441,7 +451,7 @@ namespace Internet_Check
         //Deletes the old file connection issues. Called by WriteDataToNewFile().
         private void DeleteOldFile()
         {
-            string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt";
+            string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt";
             File.Delete(FilepathToDelete);
         }
 
@@ -449,8 +459,8 @@ namespace Internet_Check
         private void RenameOldFileToNew()
         {
             //source: https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
-            string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\connection issues - copy.txt";
-            string newFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\connection issues.txt";
+            string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection issues - copy.txt";
+            string newFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt";
             
             System.IO.File.Move(oldFilePath, newFilePath );
         }
@@ -473,7 +483,7 @@ namespace Internet_Check
         private void ChangeConfig()
         {
             DateTime now = DateTime.Now;
-            File.WriteAllText(("config.txt"), now.ToString());
+            File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "config.txt"), now.ToString());
         }
 
     }
