@@ -186,7 +186,7 @@ namespace Internet_Check
                 Ping myPing = new Ping();
                 String host = GetHost();
                 byte[] buffer = new byte[1]; 
-                int timeout = 2000;
+                int timeout = 2500;
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
                 myPing.Dispose();

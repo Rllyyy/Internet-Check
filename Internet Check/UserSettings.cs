@@ -101,24 +101,30 @@ namespace Internet_Check
                             td.RegistrationInfo.Description = "Launches Internet-Check with logon";
                             td.Triggers.Add(new LogonTrigger());
                             td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
+                            td.RegistrationInfo.Author = "Niklas Fischer";
                             td.Principal.RunLevel = TaskRunLevel.Highest;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
+
+                            //Accept new properties
                             Properties.Settings.Default.SettingWindowsStart = true;
                             Properties.Settings.Default.SettingTask = "Internet-Check";
                             Properties.Settings.Default.Save();
+
                         }
                         catch
                         {
-                            try
-                            {   
-                                //Give the User an errormessage if the app is not startet with admin rights. Errormessages are stored in form1
-                                form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
-                                this.checkBoxStartWithWindows.Checked = false;
-                            }
-                            catch
-                            {}
+ 
+                            //Give the User an errormessage if the app is not startet with admin rights. Errormessages are stored in form1
+                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
+                            this.checkBoxStartWithWindows.Checked = false;
                         }
                     }
+                    //If Hide whe Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false (manipulated by the above try/catch, the user will get an ErrorMessage
+                    if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true)
+                    {
+                        form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the systemtray.", 8000);
+                    }
+
                 }
                 else
                 {
@@ -136,15 +142,8 @@ namespace Internet_Check
                     }
                     catch
                     {
-                        try
-                        {
-                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
-                            this.checkBoxStartWithWindows.Checked = true;
-                        }
-                        catch
-                        {
-                            //Form1 not ininitialized
-                        }
+                        form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
+                        this.checkBoxStartWithWindows.Checked = true;
                     }
                 }
             }
