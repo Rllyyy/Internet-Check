@@ -161,12 +161,12 @@ namespace Internet_Check
 
             if (ping() == false)
             {
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() +" The server ("+ GetHost() + ") could not be reached. Your internetconnection might be down." + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() + " The server did not respond. Your internet connection might be down!" + " (Error: " + GetHost() + " failed ping.)" + Environment.NewLine);
             }
             else
             {
                 //Uncomment this if every ping should be written into the file
-                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", jetzt.ToString() + " The server (" + GetHost() +") is responing. Internet is up." + Environment.NewLine);
+                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() " The server did respond. Your internet connection is working fine!" + " (Message: " + GetHost() + " answered ping.)"+ Environment.NewLine);
             }
 
             i++;
@@ -177,16 +177,21 @@ namespace Internet_Check
                 i -= listServer.Count();
             }
         }
-        
+
+        //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
         public bool ping()
         {
             try
             {
-                //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
+
                 Ping myPing = new Ping();
                 String host = GetHost();
-                byte[] buffer = new byte[1]; 
-                int timeout = 2500;
+
+                //bytesitze = 1 Byte or 8 Bits
+                byte[] buffer = new byte[1];
+                //server has 2500 ms to respond
+                int timeout = 2500;                                                 
+                
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
                 myPing.Dispose();
@@ -200,6 +205,7 @@ namespace Internet_Check
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
+
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
             
@@ -209,7 +215,7 @@ namespace Internet_Check
 
         //readonly list insted of just a list?? Just add a string to the end of the list. Other methods do not need to be changed
         //8.8.8.8 : Gooogle public dns-a; 8.8.4.4 : Google public dns-b; 1.1.1.1:Cloudflare
-        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.google.com","www.yahoo.com" ,"www.microsoft.com", "8.8.4.4", "1.1.1.1", "www.example.com"};
+        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.google.com", "www.yahoo.com", "8.8.4.4", "1.1.1.1", "www.example.com"};
 
         private string GetHost()
         {
@@ -231,6 +237,7 @@ namespace Internet_Check
             }).Start();
         }
 
+        //Opens connection issues.txt and check if the file exists
         private void buttonOpen_Click(object sender, EventArgs e)
         {
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
@@ -244,7 +251,7 @@ namespace Internet_Check
                 Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");  
             } 
         }
-
+      
         //Writes the end Date to the textfile if the programm is currently pinging and closed by the user. Also works if windows is shut down.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -274,7 +281,11 @@ namespace Internet_Check
             this.TopMost = false;
         }
 
-        //Sets the visibity to false if the user set visibilty to hidden in the settings menu and form is minimized
+        /// <summary>
+        /// Sets the visibity to false if the user set visibilty to hidden in the settings menu and form is minimized
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Resize(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.SettingHideWhenMin == true && WindowState == FormWindowState.Minimized)
@@ -283,12 +294,15 @@ namespace Internet_Check
             }
         }
 
-        //Method watches config.txt and if changed by another process
-        //https://stackoverflow.com/questions/721714/notification-when-a-file-changes
-        //https://docs.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?redirectedfrom=MSDN&view=netcore-3.1
 
-        //declare the watcher out of the method to make it run all the time??
-        private static FileSystemWatcher watcher;
+        public static FileSystemWatcher watcher;
+        /// <summary>
+        /// Method watches config.txt and if changed by another process
+        /// https://docs.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?redirectedfrom=MSDN&view=netcore-3.1
+        /// https://stackoverflow.com/questions/721714/notification-when-a-file-changes
+        /// declare the watcher out of the method to make it run all the time??
+        /// </summary>
+        /// <param name="path"></param>
         public void watchFiles(string path)
         {
             if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "config.txt"))
@@ -485,7 +499,6 @@ namespace Internet_Check
             DateTime now = DateTime.Now;
             File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "config.txt"), now.ToString());
         }
-
     }
 }
 

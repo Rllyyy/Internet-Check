@@ -56,13 +56,9 @@ namespace Internet_Check
             //TODO: This own Thread??
             form1.ClearOnlyIrrelevant();
 
-
-
             this.Hide();
             this.SendToBack();
             this.Visible = false;
-
-
         }
 
         private void buttonReturn_Click(object sender, EventArgs e)

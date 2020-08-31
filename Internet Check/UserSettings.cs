@@ -52,6 +52,7 @@ namespace Internet_Check
                 {}
             }
         }
+
         private void checkBoxHideWhenMin_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBoxHideWhenMin.Checked == true)
