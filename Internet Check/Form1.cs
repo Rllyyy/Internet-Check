@@ -243,13 +243,30 @@ namespace Internet_Check
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
             {
                 //Opens the textfile
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"); 
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                GoToEndOfConnectionIssueTXT();
+
+                
             } else
             {   
                 //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
                 File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt").Dispose();
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");  
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                GoToEndOfConnectionIssueTXT();
             } 
+        }
+
+        //Called by buttonOpen_Click. Waits 100ms before going to the end of the file, so the relevant information is at the bottom.
+        private void GoToEndOfConnectionIssueTXT()
+        {
+            new Thread(() =>
+            {
+                //Waits X millisends before hitting the keys to scroll down, so the editor can be opened before hitting CTRL + END
+                //Fast pc can have a value of 25ms. But the value depends on the load of the cpu and harddrive. 
+                //100 ms should give the cpu enough time to process the request and not be too visible to the user.
+                Thread.Sleep(100);
+                SendKeys.SendWait("^{END}");
+            }).Start();
         }
       
         //Writes the end Date to the textfile if the programm is currently pinging and closed by the user. Also works if windows is shut down.
