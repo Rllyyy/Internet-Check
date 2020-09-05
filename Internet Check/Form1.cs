@@ -21,6 +21,7 @@ namespace Internet_Check
             
             if (MultipleInstances)
             {
+                //Exit the Application if multiple instances are detected and tell the other process to focus again
                 ChangeConfig();
                 this.Close();
                 Application.Exit();
@@ -39,7 +40,11 @@ namespace Internet_Check
         private void formStart()
         {
             InitializeComponent();
+            PrepareUIElements();
+        }
 
+        private void PrepareUIElements()
+        {
             //Prepare UI Elements
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             notifyIcon1.Visible = true;
@@ -47,6 +52,9 @@ namespace Internet_Check
             this.panelSeetings.SendToBack();
             this.userControlClearConfirm1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
+
+            //removes the border from buttonOpen on an click event
+            buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
 
             //Higlighting the Intervall Box
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
@@ -60,29 +68,7 @@ namespace Internet_Check
             }
         }
         
-        //https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
-        [DllImport("kernel32")]
-        extern static UInt64 GetTickCount64();
-        private void CheckIfStartedWithWindows()
-        {
-            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 9 minutes. Windows update might interfier with this.
-            TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
-            TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
-
-            if (TimeSinceWindowsStart <= time && Properties.Settings.Default.SettingWindowsStart == true)
-            {
-                if (Properties.Settings.Default.SettingHideWhenMin == true)
-                {
-                    this.WindowState = FormWindowState.Minimized;
-                    this.ShowInTaskbar = false;
-                    this.Visible = false;
-                }
-                ClickEvent();
-            }
-        }
-
         public static int countclick = 0;
-        private System.Threading.Timer timer;
         private void button1_Click(object sender, EventArgs e)
         {
             ClickEvent();
@@ -94,7 +80,7 @@ namespace Internet_Check
 
                 if (this.textBoxInterval.Text != Properties.Settings.Default.SettingInterval.ToString())
                 {
-
+                    //Give the user an Error if the intervall that was provided is a not number, bigger than 32767 or smaller than 4
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
                         UserErrorMessage("Please enter only positve numbers that are inbetween 4 and 32766",4200);
@@ -125,6 +111,8 @@ namespace Internet_Check
                 UserErrorMessage("Please enter an intervall.", 2700);
             }
         }
+
+        private System.Threading.Timer timer;
         private void tTimer()
         {
             DateTime now = DateTime.Now;
@@ -183,7 +171,6 @@ namespace Internet_Check
         {
             try
             {
-
                 Ping myPing = new Ping();
                 String host = GetHost();
 
@@ -213,9 +200,9 @@ namespace Internet_Check
             userControlClearConfirm1.setForm1(this);
         }
 
-        //readonly list insted of just a list?? Just add a string to the end of the list. Other methods do not need to be changed
-        //8.8.8.8 : Gooogle public dns-a; 8.8.4.4 : Google public dns-b; 1.1.1.1:Cloudflare
-        readonly List<string> listServer = new List<string>() { "8.8.8.8", "www.google.com", "www.yahoo.com", "8.8.4.4", "1.1.1.1", "www.example.com"};
+        //Only add Ip-adresses to this ping and not domainnames like www.example.com! The router or dns server might return a false value.
+        //8.8.8.8 : Gooogle public dns-a; 8.8.4.4 : Google public dns-b; 1.1.1.1: Cloudflare
+        readonly List<string> listServer = new List<string>() { "8.8.8.8", "8.8.4.4", "1.1.1.1"};
 
         private string GetHost()
         {
@@ -240,18 +227,17 @@ namespace Internet_Check
         //Opens connection issues.txt and check if the file exists
         private void buttonOpen_Click(object sender, EventArgs e)
         {
+
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
             {
-                //Opens the textfile
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
-                GoToEndOfConnectionIssueTXT();
+                CheckEditorAlreadyOpen();
 
-                
             } else
             {   
                 //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
                 File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt").Dispose();
                 Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                //Go to the end of the document
                 GoToEndOfConnectionIssueTXT();
             } 
         }
@@ -261,14 +247,64 @@ namespace Internet_Check
         {
             new Thread(() =>
             {
-                //Waits X millisends before hitting the keys to scroll down, so the editor can be opened before hitting CTRL + END
-                //Fast pc can have a value of 25ms. But the value depends on the load of the cpu and harddrive. 
+                //Waits X milliseconds before hitting the keys to scroll down, so the editor can be opened before hitting CTRL + END
+                //High-end pc can be given a low value of 25ms but the value depends on the load of the cpu and harddrive. 
                 //100 ms should give the cpu enough time to process the request and not be too visible to the user.
-                Thread.Sleep(100);
-                SendKeys.SendWait("^{END}");
+                
+                Thread.Sleep(100);              //Wait 100ms before executing the code, so the pc has time to open the file and focus it
+                SendKeys.SendWait("^{END}");    //Key CTRL + END
             }).Start();
         }
-      
+
+        /// <summary>
+        /// Search through all processes and fokus notepad if already opened.
+        /// </summary>
+        private void CheckEditorAlreadyOpen()
+        {
+            bool AlreadyOpen = false;
+
+            //https://stackoverflow.com/questions/7268302/get-the-titles-of-all-open-windows
+            Process[] processlist = Process.GetProcesses();
+            Process processName = null;
+            foreach (Process process in processlist)
+            {
+                if (!String.IsNullOrEmpty(process.MainWindowTitle) && process.MainWindowTitle == "connection issues - Editor")
+                {
+                    AlreadyOpen = true;
+                    processName = process;
+                    break;
+                }
+            }
+            
+            if (AlreadyOpen == true)
+            {
+                FocusEditor(processName);
+            } else
+            {
+                //Opens the textfile
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                //Go to the end of the document
+                GoToEndOfConnectionIssueTXT();
+            }
+        }
+
+        /// <summary>
+        /// Sets the editor to the foreground if already opened but in the background. https://stackoverflow.com/questions/25578305/c-sharp-focus-window-of-a-runing-program
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        internal static extern IntPtr SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow); //ShowWindow needs an IntPtr
+        private static void FocusEditor(Process process)
+        {
+            IntPtr hWnd;
+            hWnd = process.MainWindowHandle;
+            ShowWindow(hWnd, 9);
+            SetForegroundWindow(hWnd); //set to topmost
+        }
+
         //Writes the end Date to the textfile if the programm is currently pinging and closed by the user. Also works if windows is shut down.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -281,6 +317,8 @@ namespace Internet_Check
                 try
                 {
                     timer.Dispose();
+                    watcher.Dispose();
+                    
                 }
                 catch
                 {
@@ -312,7 +350,7 @@ namespace Internet_Check
         }
 
 
-        public static FileSystemWatcher watcher;
+        public static FileSystemWatcher watcher = new FileSystemWatcher();
         /// <summary>
         /// Method watches config.txt and if changed by another process
         /// https://docs.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?redirectedfrom=MSDN&view=netcore-3.1
@@ -334,7 +372,7 @@ namespace Internet_Check
                     watcher.EnableRaisingEvents = false;
                     watcher.Created -= new FileSystemEventHandler(OnChanged);
                 }
-                watcher = new FileSystemWatcher();
+                /*watcher = new FileSystemWatcher();*/
                 watcher.Path = Path.GetDirectoryName(path); 
                 watcher.Filter = Path.GetFileName(path);
                 watcher.Changed += new FileSystemEventHandler(OnChanged);
@@ -353,6 +391,7 @@ namespace Internet_Check
             MethodInvoker Form1Activate = () => this.Activate();                                        //Icon blinks in Taskbar
             MethodInvoker Form1ShowInTaskbar = () => this.ShowInTaskbar = true;                                        
             MethodInvoker Form1topMostFalse = () => this.TopMost = false;
+            /*MethodInvoker SetForegroundWindow = () => this.SetForegroundWindow(this);*/
 
             this.BeginInvoke(Form1Visible);
             this.BeginInvoke(Form1topMostTrue);
@@ -493,7 +532,7 @@ namespace Internet_Check
             string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection issues - copy.txt";
             string newFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt";
             
-            System.IO.File.Move(oldFilePath, newFilePath );
+            File.Move(oldFilePath, newFilePath );
         }
 
         //UserErrorMessages. Method takes the ErrorText by string and time for how long the errormessage is visible by int (1000 = 1 sec)
@@ -515,6 +554,31 @@ namespace Internet_Check
         {
             DateTime now = DateTime.Now;
             File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "config.txt"), now.ToString());
+        }
+
+        /// <summary>
+        /// Check if the application was started by windows. https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
+        /// </summary>
+        /// <returns></returns>
+        //
+        [DllImport("kernel32")]
+        extern static UInt64 GetTickCount64();
+        private void CheckIfStartedWithWindows()
+        {
+            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 9 minutes. Windows update might interfier with this.
+            TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
+            TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
+
+            if (TimeSinceWindowsStart <= time && Properties.Settings.Default.SettingWindowsStart == true)
+            {
+                if (Properties.Settings.Default.SettingHideWhenMin == true)
+                {
+                    this.WindowState = FormWindowState.Minimized;
+                    this.ShowInTaskbar = false;
+                    this.Visible = false;
+                }
+                ClickEvent();
+            }
         }
     }
 }
