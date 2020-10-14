@@ -231,6 +231,10 @@ namespace Internet_Check
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
             {
                 CheckEditorAlreadyOpen();
+                //Editor is opened where it was last closed
+                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                //Go to the end of the Editor file
+                GoToEndOfConnectionIssueTXT();
 
             } else
             {   
@@ -261,30 +265,15 @@ namespace Internet_Check
         /// </summary>
         private void CheckEditorAlreadyOpen()
         {
-            bool AlreadyOpen = false;
-
             //https://stackoverflow.com/questions/7268302/get-the-titles-of-all-open-windows
             Process[] processlist = Process.GetProcesses();
-            Process processName = null;
             foreach (Process process in processlist)
             {
                 if (!String.IsNullOrEmpty(process.MainWindowTitle) && process.MainWindowTitle == "connection issues - Editor")
                 {
-                    AlreadyOpen = true;
-                    processName = process;
+                    process.Kill();
                     break;
                 }
-            }
-            
-            if (AlreadyOpen == true)
-            {
-                FocusEditor(processName);
-            } else
-            {
-                //Opens the textfile
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
-                //Go to the end of the document
-                GoToEndOfConnectionIssueTXT();
             }
         }
 
