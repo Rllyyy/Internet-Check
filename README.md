@@ -14,7 +14,7 @@
       <a href="https://github.com/Rllyyy/Internet-Check/releases">
           <img src="https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square" alt="GitHub All Releases">
       </a>
-      <a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language) target=_blank">
+      <a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)" target="_blank">
           <img src="https://img.shields.io/github/languages/top/Rllyyy/Internet-Check?color=%232C974B&style=flat-square" alt="GitHub top language"> 
       </a>
       <a href="https://github.com/Rllyyy/Internet-Check/blob/master/LICENSE">
