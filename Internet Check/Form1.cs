@@ -124,7 +124,7 @@ namespace Internet_Check
                 now = DateTime.Now;
                 var startTimeSpan = TimeSpan.Zero;
                 var periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", "########### Program started at " + now.ToString() + " ###########" + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 this.labelRunning.Text = "Running . . .";
                 timer = new System.Threading.Timer((d) =>
                 {
@@ -135,7 +135,7 @@ namespace Internet_Check
             {
                 this.button1.Text = "Start";
                 timer.Dispose(); //Disposing the timer needed???
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
                 this.textBoxInterval.Enabled = true;
                 this.buttonClear.Enabled = true;
                 this.labelRunning.Text = "Waiting . . .";
@@ -149,14 +149,16 @@ namespace Internet_Check
 
             if (ping() == false)
             {
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() + " The server did not respond. Your internet connection might be down!" + " (Error: " + GetHost() + " failed ping.)" + Environment.NewLine);
+                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() + " The server did not respond. Your internet connection might be down!" + " (Error: " + GetHost() + " failed ping)" + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {GetHost()} failed ping){Environment.NewLine}");
             }
             else
             {
                 //Uncomment this if every ping should be written into the file
-                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() " The server did respond. Your internet connection is working fine!" + " (Message: " + GetHost() + " answered ping.)"+ Environment.NewLine);
+                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {GetHost()} answered ping){Environment.NewLine}");
             }
 
+            //Go to the next server in the list listServer
             i++;
 
             //If i is bigger than the amount of servers listet in the list listServer it is reset to the beginning of the list
@@ -192,7 +194,6 @@ namespace Internet_Check
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
             
