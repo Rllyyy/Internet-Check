@@ -28,10 +28,10 @@ namespace Internet_Check
             } 
             else
             {
-                //begin to watch the config file, if it changes this programm will come to front again
+                //Begin to watch the config file, if it changes this programm will come to front again
                 watchFiles(AppDomain.CurrentDomain.BaseDirectory + "config.txt");
 
-                //start the form
+                //Start the form
                 formStart();
                 CheckIfStartedWithWindows();
             }
