@@ -154,7 +154,7 @@ namespace Internet_Check
             }
             else
             {
-                //Uncomment this if every ping should be written into the file
+                //Uncomment the next line if every ping should be written into the file
                 //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {GetHost()} answered ping){Environment.NewLine}");
             }
 
