@@ -88,10 +88,11 @@ namespace Internet_Check
             this.SendToBack();
             this.Visible = false;
             form1.PanelSettings_Hide();
+            bool errorsCaught = false;
 
             if (this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
             {
-                if (this.checkBoxStartWithWindows.Checked == true)
+                if(this.checkBoxStartWithWindows.Checked == true)
                 {
                     using (TaskService ts = new TaskService())
                     {
@@ -106,45 +107,50 @@ namespace Internet_Check
                             td.Principal.RunLevel = TaskRunLevel.Highest;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
 
-                            //Accept new properties
-                            Properties.Settings.Default.SettingWindowsStart = true;
+                        } catch
+                        {
+                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 4000);
+                            this.checkBoxStartWithWindows.Checked = false;
+                            errorsCaught = true;
+                        }
+
+                        if (!errorsCaught)
+                        {
+                            //If everything is ok
                             Properties.Settings.Default.SettingTask = "Internet-Check";
+                            Properties.Settings.Default.SettingWindowsStart = true;
                             Properties.Settings.Default.Save();
 
+                            // If Hide whe Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false(manipulated by the above try/catch, the user will get an ErrorMessage
+                            if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true && Properties.Settings.Default.SettingWindowsStart == true)
+                            {
+                                form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the systemtray.", 8000);
+                            }
+                        }
+                    }
+
+                } else if (this.checkBoxStartWithWindows.Checked == false) {
+
+                    using (TaskService ts = new TaskService())
+                    {
+                        try
+                        {
+                            ts.RootFolder.DeleteTask(Properties.Settings.Default.SettingTask);
+                            Properties.Settings.Default.SettingTask = "";
                         }
                         catch
                         {
- 
-                            //Give the User an errormessage if the app is not startet with admin rights. Errormessages are stored in form1
                             form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
-                            this.checkBoxStartWithWindows.Checked = false;
+                            this.checkBoxStartWithWindows.Checked = true;
+                            errorsCaught = true;
                         }
-                    }
-                    //If Hide whe Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false (manipulated by the above try/catch, the user will get an ErrorMessage
-                    if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true)
-                    {
-                        form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the systemtray.", 8000);
-                    }
 
-                }
-                else
-                {
-                    Properties.Settings.Default.SettingWindowsStart = false;
-                    Properties.Settings.Default.Save();
-                    // Remove the task we just created
-                    try
-                    {
-                        using (TaskService ts = new TaskService())
+                        if (!errorsCaught)
                         {
-                            ts.RootFolder.DeleteTask(Properties.Settings.Default.SettingTask);
+                            //if everything is ok
+                            Properties.Settings.Default.SettingWindowsStart = false;
+                            Properties.Settings.Default.Save();
                         }
-                        Properties.Settings.Default.SettingTask = "";
-                        Properties.Settings.Default.Save();
-                    }
-                    catch
-                    {
-                        form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
-                        this.checkBoxStartWithWindows.Checked = true;
                     }
                 }
             }
