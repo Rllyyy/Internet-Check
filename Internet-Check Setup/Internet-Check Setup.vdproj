@@ -28,7 +28,7 @@
         "Entry"
         {
         "MsmKey" = "8:_4C911D258A670EB41E0C677CDD22A2A4"
-        "OwnerKey" = "8:_F16BD7AFF23E8114B7FF8E089DE0EB20"
+        "OwnerKey" = "8:_7E91BDE44CC9F40AAEDCF76E657F1F29"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -47,6 +47,12 @@
         {
         "MsmKey" = "8:_6D1ED0A5136F4AC789079DB2FE708602"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7E91BDE44CC9F40AAEDCF76E657F1F29"
+        "OwnerKey" = "8:_2928089558984888B95F35DE520FBE9C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -70,13 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_D87341E3381366948F6759CFE889D02C"
-        "OwnerKey" = "8:_F16BD7AFF23E8114B7FF8E089DE0EB20"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F16BD7AFF23E8114B7FF8E089DE0EB20"
-        "OwnerKey" = "8:_2928089558984888B95F35DE520FBE9C"
+        "OwnerKey" = "8:_7E91BDE44CC9F40AAEDCF76E657F1F29"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F16BD7AFF23E8114B7FF8E089DE0EB20"
+        "OwnerKey" = "8:_7E91BDE44CC9F40AAEDCF76E657F1F29"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -237,7 +237,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -312,6 +312,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7E91BDE44CC9F40AAEDCF76E657F1F29"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Win32.TaskScheduler, Version=2.8.21.0, Culture=neutral, PublicKeyToken=c416bc1b32d97233, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_7E91BDE44CC9F40AAEDCF76E657F1F29"
+                    {
+                    "Name" = "8:Microsoft.Win32.TaskScheduler.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Win32.TaskScheduler.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_96213F3F4E8A412B92875D660542BBC4"
             {
             "SourcePath" = "8:..\\Internet Check\\icons\\InternetSymbolPNG.ico"
@@ -377,37 +408,6 @@
                     }
                 }
             "SourcePath" = "8:System.IO.Compression.FileSystem.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F16BD7AFF23E8114B7FF8E089DE0EB20"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.Win32.TaskScheduler, Version=2.8.18.0, Culture=neutral, PublicKeyToken=c416bc1b32d97233, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_F16BD7AFF23E8114B7FF8E089DE0EB20"
-                    {
-                    "Name" = "8:Microsoft.Win32.TaskScheduler.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Microsoft.Win32.TaskScheduler.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
@@ -493,7 +493,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Internet-Check"
         "ProductCode" = "8:{A9846854-FA68-49EF-B1D1-57EB7FF7CAB9}"
-        "PackageCode" = "8:{23987D4F-2A7A-45F3-9BB0-DE9A92A80BEF}"
+        "PackageCode" = "8:{E0FF68E3-3147-408D-B26F-CD942A9D55AA}"
         "UpgradeCode" = "8:{F4B75A1B-C58D-4886-92C9-F43534BD0D70}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -501,7 +501,7 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.6"
-        "Manufacturer" = "8:3 Point Studios"
+        "Manufacturer" = "8:4PointsInteractive"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:Internet-Check Setup"
