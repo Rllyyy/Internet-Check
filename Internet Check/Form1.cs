@@ -303,7 +303,7 @@ namespace Internet_Check
 
             if (this.labelRunning.Text == "Running . . .")
             {
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", "########### Program stopped at " + now.ToString() + " ###########" + Environment.NewLine + Environment.NewLine);
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
                 try
                 {
                     timer.Dispose();

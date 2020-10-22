@@ -17,7 +17,6 @@ namespace Internet_Check
             {
                 UserControlClearConfirmLightmodeForm();
             }
-
         }
         public void UserControlClearConfirmDarkmodeForm()
         {

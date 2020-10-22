@@ -64,9 +64,9 @@
             this.checkBoxHideWhenMin.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxHideWhenMin.Location = new System.Drawing.Point(106, 68);
             this.checkBoxHideWhenMin.Name = "checkBoxHideWhenMin";
-            this.checkBoxHideWhenMin.Size = new System.Drawing.Size(199, 24);
+            this.checkBoxHideWhenMin.Size = new System.Drawing.Size(203, 24);
             this.checkBoxHideWhenMin.TabIndex = 2;
-            this.checkBoxHideWhenMin.Text = "Show only in Systemtray";
+            this.checkBoxHideWhenMin.Text = "Show only in System Tray";
             this.checkBoxHideWhenMin.UseVisualStyleBackColor = true;
             this.checkBoxHideWhenMin.CheckedChanged += new System.EventHandler(this.checkBoxHideWhenMin_CheckedChanged);
             // 

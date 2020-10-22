@@ -92,7 +92,7 @@ namespace Internet_Check
 
             if (this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
             {
-                if(this.checkBoxStartWithWindows.Checked == true)
+                if (this.checkBoxStartWithWindows.Checked == true)
                 {
                     using (TaskService ts = new TaskService())
                     {

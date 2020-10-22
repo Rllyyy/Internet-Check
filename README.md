@@ -34,49 +34,60 @@
        </a>
    </p>
 </div>
-
-___This program periodically checks if the computer is connected to the internet and log offline time.___
+<div class = "Description"> <p align = "center"><b><i>This program periodically checks if the computer is connected to the internet and logs offline time.</i></b></p></div>
 
 ## User Guide
+
 - After opening the program set an **interval** in which the Internet should be checked. (Default is 30 seconds)
 - Click on **Start** to start collecting data.
-- To stop the programm click on **Stop**.
+- To stop the program click on **Stop**.
 - Results can be viewed by clicking on **Open**.
 - The current status of the application is displayed in the bottom right.
-- By default the program will only show the offline time and not the time the computer is connected to the internet. 
-     - Programmers can change this by uncommenting the relevant lines in Form1.CheckAndWrite().
-- Results are cleared by pressing **Clear** and then either "Clear Everything" or "Clear Only Irrelevant Data". 
-     - Note: Make sure that the program is not currently loging data. (Status bottom right: Waiting . . .)
-     - Warning: A clear can not be undone.
+- By default the program will only show the offline time and not the time the computer is connected to the internet.
+  - Programmers can change this by uncommenting the relevant lines in Form1.CheckAndWrite().
+- Results are cleared by pressing **Clear** and then either "Clear Everything" or "Clear Only Irrelevant Data".
+  - Note: Make sure that the program is not currently logging data. (Status bottom right: Waiting . . .)
+  - Warning: A clear can not be undone.
 
 ## Install Guide
+
 1. [Visit the download page](https://github.com/Rllyyy/Internet-Check/releases/latest), open the setup and follow the instructions.
 2. Start InternetCheck.exe from either the destop or the appData folder.
 
 ## DarkMode
-1. Tick the Checkbox "Use DarkMode". The UI now switches to Darkmode.
-  - Note: The color of the title background may still apear white. These Windows settings can only be changed by the user. [Here](https://www.hellotech.com/guide/for/how-to-enable-dark-mode-in-windows-10) is how.
 
-## Start Application on Windows Start-Up:
+1. Tick the Checkbox "Use DarkMode". The UI now switches to Darkmode.
+
+- Note: The color of the title background may still appear white. These Windows settings can only be changed by the user. [Here](https://www.hellotech.com/guide/for/how-to-enable-dark-mode-in-windows-10) is how.
+
+## Start Application on Windows Start-Up
+
 1. Tick the Checkbox "Start with Windows" in the settings menu.
-- Warning: If both "Start with Windows" and "Show only in Systemtray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the systemtray or by running the .exe again. 
-  
-## Only show in Systemtray
-1. Tick the "Show only in Systemtray" Checkbox if you want to hide the application when minimized.
-- Warning: If both "Start with Windows" and "Show only in Systemtray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the systemtray or by running the .exe again.
+
+- Warning: If both "Start with Windows" and "Show only in system tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the system tray or by running the .exe again.
+
+## Only show in system tray
+
+1. Tick the "Show only in system tray" Checkbox if you want to hide the application when minimized.
+
+- Warning: If both "Start with Windows" and "Show only in system tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the system tray or by running the .exe again.
 
 ## Errors
-Error messages are implemented into the program itself. Please read them.
-Please report issues or crashes [here](https://github.com/Rllyyy/Internet-Check/issues/new/choose). 
-    
+
+Error messages are implemented into the program itself.
+Please report issues or crashes [here](https://github.com/Rllyyy/Internet-Check/issues/new/choose).
+
 ## Legal Note
-Although this program uses just 1 Byte (0.000001 Megabytes) to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS. 
+
+Although this program uses just 1 Byte (0.000001 Megabytes) to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS.
 We therefore advise the user to put in an interval that is bigger or equal to 30 seconds.
+The servers we are pinging (Googles DNS and Cloudflare) can handle the request with ease.
 For any programmers we advice against increasing the buffer size in the ping method and to only ping servers that are used to higher traffic.
+The author is not liable for any claim, damages or other liability whether in an action of contract, tort or otherwise, arising from,
+out of or in connection with the software or the use or other dealings in the software. Read the hole license [here](https://github.com/Rllyyy/Internet-Check/blob/master/LICENSE)
 
 ## Libraries and other external Software (no need to download them)
+
 - TaskScheduler from https://github.com/dahall/TaskScheduler
-
-
 
       Errors, feature request or code changes can be submitted to GitHub under the "Issues" tab.
