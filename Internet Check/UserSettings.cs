@@ -105,6 +105,8 @@ namespace Internet_Check
                             td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
                             td.RegistrationInfo.Author = "Niklas Fischer";
                             td.Principal.RunLevel = TaskRunLevel.Highest;
+                            td.Settings.DisallowStartIfOnBatteries = false;
+                            td.Settings.StopIfGoingOnBatteries = false;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
 
                         } catch
