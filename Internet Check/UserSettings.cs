@@ -99,6 +99,8 @@ namespace Internet_Check
                         try
                         {
                             //TaskSceduler by https://github.com/dahall/TaskScheduler
+                            TimeSpan interval = new TimeSpan(5, 0, 0, 0);
+
                             TaskDefinition td = ts.NewTask();
                             td.RegistrationInfo.Description = "Launches Internet-Check with logon";
                             td.Triggers.Add(new LogonTrigger());
@@ -107,6 +109,7 @@ namespace Internet_Check
                             td.Principal.RunLevel = TaskRunLevel.Highest;
                             td.Settings.DisallowStartIfOnBatteries = false;
                             td.Settings.StopIfGoingOnBatteries = false;
+                            td.Settings.ExecutionTimeLimit = interval;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
 
                         } catch

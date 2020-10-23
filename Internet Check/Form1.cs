@@ -308,7 +308,6 @@ namespace Internet_Check
                 {
                     timer.Dispose();
                     watcher.Dispose();
-                    
                 }
                 catch
                 {
