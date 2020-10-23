@@ -8,10 +8,10 @@
 </div>
 <div class="Badges">
   <p align="center">
-      <a href="https://github.com/Rllyyy/Internet-Check/releases">
+      <a href="https://github.com/Rllyyy/Internet-Check/releases/latest">
           <img src="https://img.shields.io/github/downloads/Rllyyy/Internet-Check/total?color=%232C974B&label=Downloads&style=flat-square" alt="GitHub All Releases">
        </a>
-      <a href="https://github.com/Rllyyy/Internet-Check/releases">
+      <a href="https://github.com/Rllyyy/Internet-Check/releases/latest">
           <img src="https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square" alt="GitHub All Releases">
       </a>
       <a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)" target="_blank">
