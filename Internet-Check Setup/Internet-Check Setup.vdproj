@@ -45,12 +45,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6D1ED0A5136F4AC789079DB2FE708602"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_7E91BDE44CC9F40AAEDCF76E657F1F29"
         "OwnerKey" = "8:_2928089558984888B95F35DE520FBE9C"
         "MsmSig" = "8:_UNDEFINED"
@@ -81,6 +75,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_FFCA66B5E5DC4E0DAF9995D41C15E0F8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_2928089558984888B95F35DE520FBE9C"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,19 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7E91BDE44CC9F40AAEDCF76E657F1F29"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C507CFA972EBB5E489935900601782A0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D87341E3381366948F6759CFE889D02C"
+        "OwnerKey" = "8:_6A95400F28F418E9A288B9124DDBCF0D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -112,7 +100,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6A95400F28F418E9A288B9124DDBCF0D"
+        "OwnerKey" = "8:_D87341E3381366948F6759CFE889D02C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C507CFA972EBB5E489935900601782A0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_7E91BDE44CC9F40AAEDCF76E657F1F29"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -268,11 +268,6 @@
             "AssemblyAsmDisplayName" = "8:System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
                 "ScatterAssemblies"
                 {
-                    "_6A95400F28F418E9A288B9124DDBCF0D"
-                    {
-                    "Name" = "8:System.IO.Compression.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.IO.Compression.dll"
             "TargetName" = "8:"
@@ -292,26 +287,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6D1ED0A5136F4AC789079DB2FE708602"
-            {
-            "SourcePath" = "8:..\\Internet Check\\bin\\Debug\\config.txt"
-            "TargetName" = "8:config.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7E91BDE44CC9F40AAEDCF76E657F1F29"
             {
             "AssemblyRegister" = "3:1"
@@ -319,11 +294,6 @@
             "AssemblyAsmDisplayName" = "8:Microsoft.Win32.TaskScheduler, Version=2.8.21.0, Culture=neutral, PublicKeyToken=c416bc1b32d97233, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7E91BDE44CC9F40AAEDCF76E657F1F29"
-                    {
-                    "Name" = "8:Microsoft.Win32.TaskScheduler.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Microsoft.Win32.TaskScheduler.dll"
             "TargetName" = "8:"
@@ -370,11 +340,6 @@
             "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
                 "ScatterAssemblies"
                 {
-                    "_C507CFA972EBB5E489935900601782A0"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.Net.Http.dll"
             "TargetName" = "8:"
@@ -401,11 +366,6 @@
             "AssemblyAsmDisplayName" = "8:System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
                 "ScatterAssemblies"
                 {
-                    "_D87341E3381366948F6759CFE889D02C"
-                    {
-                    "Name" = "8:System.IO.Compression.FileSystem.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.IO.Compression.FileSystem.dll"
             "TargetName" = "8:"
@@ -423,6 +383,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FFCA66B5E5DC4E0DAF9995D41C15E0F8"
+            {
+            "SourcePath" = "8:..\\Internet Check\\bin\\Debug\\MultipleInstancesDetected.txt"
+            "TargetName" = "8:MultipleInstancesDetected.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }

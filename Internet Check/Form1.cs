@@ -22,14 +22,14 @@ namespace Internet_Check
             if (MultipleInstances)
             {
                 //Exit the Application if multiple instances are detected and tell the other process to focus again
-                ChangeConfig();
+                MultipleInstancesDetected();
                 this.Close();
                 Application.Exit();
             } 
             else
             {
-                //Begin to watch the config file, if it changes this programm will come to front again
-                watchFiles(AppDomain.CurrentDomain.BaseDirectory + "config.txt");
+                //Begin to watch the MultipleInstancesDetected file, if it changes this programm will come to front again
+                watchFiles(AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt");
 
                 //Start the form
                 formStart();
@@ -341,7 +341,7 @@ namespace Internet_Check
 
         public static FileSystemWatcher watcher = new FileSystemWatcher();
         /// <summary>
-        /// Method watches config.txt and if changed by another process
+        /// Method watches MultipleInstancesDetected.txt and if changed by another process
         /// https://docs.microsoft.com/en-us/dotnet/api/system.io.filesystemwatcher?redirectedfrom=MSDN&view=netcore-3.1
         /// https://stackoverflow.com/questions/721714/notification-when-a-file-changes
         /// declare the watcher out of the method to make it run all the time??
@@ -349,9 +349,9 @@ namespace Internet_Check
         /// <param name="path"></param>
         public void watchFiles(string path)
         {
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "config.txt"))
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"))
             {
-                File.CreateText("config.txt").Dispose();
+                File.CreateText("MultipleInstancesDetected.txt").Dispose();
             }
 
             new Thread(() =>
@@ -539,10 +539,10 @@ namespace Internet_Check
         }
 
         //Writes current date to file if the User tries to open the applicaiton more than onece. The original application watches this file and if changes brings itself back to the front.
-        private void ChangeConfig()
+        private void MultipleInstancesDetected()
         {
             DateTime now = DateTime.Now;
-            File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "config.txt"), now.ToString());
+            File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"), now.ToString());
         }
 
         /// <summary>
