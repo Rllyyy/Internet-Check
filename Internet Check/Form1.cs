@@ -149,7 +149,6 @@ namespace Internet_Check
 
             if (ping() == false)
             {
-                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", now.ToString() + " The server did not respond. Your internet connection might be down!" + " (Error: " + GetHost() + " failed ping)" + Environment.NewLine); old
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {GetHost()} failed ping){Environment.NewLine}");
             }
             else
