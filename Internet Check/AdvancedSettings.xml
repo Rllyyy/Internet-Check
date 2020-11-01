@@ -1,3 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<!--Settings can be editted by changing the value inside the <value> </value> tags.-->
 <root>
+  <setting name="TaskschedulerStopTaskAfterDays">
+    <!--Stops the task if the pc is running longer than the value in days. 
+    This only applies if the option start with windows is selected. 
+    If the program is started by the user (i.e. if the user clicks on start) the task will run until it is stopped ore the computer is shut down.
+    To apply the change click on "Start with Windows" in the app. 
+    If the settings was already active before changing this value, please deselect the checkbox, click on back, go into settings again and select the option "Start with Windows".-->
+    <value>5</value>
+  </setting>
+  <setting name="DisallowStartIfOnBatteries">
+    <!--If this setting is set to true the app will not be launched by the tasksceduler if the pc is not connected to a power source (running on batteries). The standard value is false.-->
+    <value>false</value>
+  </setting>
+  <setting name="StopIfGoingOnBatteries">
+    <!--If this setting is set to true the app will stop if it was launched by the tasksceduler and the pc is just running from the battery. The standard value is false.-->
+    <value>false</value>
+  </setting>
+  <setting name="StopOnIdleEnd">
+    <!--If this setting is set to true the app will stop if it was launched by the tasksceduler and the pc is returning from an idle state (i.e. if the laptop entered sleeping mode). The standard value is false.-->
+    <value>false</value>
+  </setting>
+  <setting name="">
+    <value></value>
+  </setting>
 </root>

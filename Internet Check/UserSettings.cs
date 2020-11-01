@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Win32.TaskScheduler;
+using System.Xml;
 
 namespace Internet_Check
 {
@@ -99,16 +100,16 @@ namespace Internet_Check
                         try
                         {
                             //TaskSceduler by https://github.com/dahall/TaskScheduler
-                            TimeSpan interval = new TimeSpan(5, 0, 0, 0);
-
+                            TimeSpan interval = new TimeSpan(TaskschedulerStopTaskAfterDays(), 0, 0, 0);
                             TaskDefinition td = ts.NewTask();
                             td.RegistrationInfo.Description = "Launches Internet-Check with logon";
                             td.Triggers.Add(new LogonTrigger());
                             td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
                             td.RegistrationInfo.Author = "Niklas Fischer";
                             td.Principal.RunLevel = TaskRunLevel.Highest;
-                            td.Settings.DisallowStartIfOnBatteries = false;
-                            td.Settings.StopIfGoingOnBatteries = false;
+                            td.Settings.DisallowStartIfOnBatteries = boolAdvancedSettings("DisallowStartIfOnBatteries", false);
+                            td.Settings.StopIfGoingOnBatteries = boolAdvancedSettings("StopIfGoingOnBatteries", false);
+                            td.Settings.IdleSettings.StopOnIdleEnd = boolAdvancedSettings("StopOnIdleEnd", false);
                             td.Settings.ExecutionTimeLimit = interval;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
 
@@ -159,7 +160,82 @@ namespace Internet_Check
                     }
                 }
             }
-        } 
+        }
+
+        private int TaskschedulerStopTaskAfterDays()
+        {
+            int days = 5;
+
+            //https://stackoverflow.com/questions/2875674/how-to-ignore-comments-when-reading-a-xml-file-into-a-xmldocument
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+
+            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
+            {
+                XmlDocument myData = new XmlDocument();
+                myData.Load(reader);
+
+                foreach (XmlNode node in myData.DocumentElement)
+                {
+                    string settingName = node.Attributes[0].InnerText;
+                    if (settingName == "TaskschedulerStopTaskAfterDays")
+                    {
+                        foreach (XmlNode child in node.ChildNodes)
+                        {
+                            string value = child.InnerText;
+                            try
+                            {
+                                days = Int16.Parse(value);
+                            } catch
+                            {
+                                MessageBox.Show("The value inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.");
+                            }
+                        }
+                    }
+                }
+                reader.Dispose();
+            }
+            
+            return days;
+        }
+
+        private bool boolAdvancedSettings(string settingInherited, bool standardValue)
+        {
+            bool boolSetting = standardValue;
+
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+
+            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
+            {
+                XmlDocument myData = new XmlDocument();
+                myData.Load(reader);
+
+                foreach (XmlNode node in myData.DocumentElement)
+                {
+                    string settingName = node.Attributes[0].InnerText;
+                    if (settingName == settingInherited)
+                    {
+                        foreach (XmlNode child in node.ChildNodes)
+                        {
+                            string settingValue = child.InnerText;
+                            try
+                            {
+                                boolSetting = bool.Parse(settingValue);
+                            }
+                            catch
+                            {
+                                MessageBox.Show($"The value inside the child node of {settingInherited} of AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.");
+                            }
+                        }
+                    }
+                }
+                reader.Dispose();
+            }
+
+            return boolSetting;
+        }
+
         //Kollege -Ole regelt
         public void setForm1 (Form1 f)
         {
