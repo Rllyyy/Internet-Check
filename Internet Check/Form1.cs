@@ -8,24 +8,25 @@ using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Xml;
 
 namespace Internet_Check
 {
     public partial class Form1 : Form
-    {   
+    {
         public Form1()
         {
             //Get the ammount of instances running and exit if the count is greater than 1
             //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
-            var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1; 
-            
+            var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+
             if (MultipleInstances)
             {
                 //Exit the Application if multiple instances are detected and tell the other process to focus again
                 MultipleInstancesDetected();
                 this.Close();
                 Application.Exit();
-            } 
+            }
             else
             {
                 //Begin to watch the MultipleInstancesDetected file, if it changes this programm will come to front again
@@ -34,6 +35,10 @@ namespace Internet_Check
                 //Start the form
                 formStart();
                 CheckIfStartedWithWindows();
+
+                /*
+                List<string> test = serverList();
+                MessageBox.Show(String.Join(",", test)); */
             }
         }
 
@@ -67,7 +72,7 @@ namespace Internet_Check
                 DarkmodeForm();
             }
         }
-        
+
         public static int countclick = 0;
         private void button1_Click(object sender, EventArgs e)
         {
@@ -77,13 +82,12 @@ namespace Internet_Check
         {
             if (!string.IsNullOrEmpty(this.textBoxInterval.Text))
             {
-
                 if (this.textBoxInterval.Text != Properties.Settings.Default.SettingInterval.ToString())
                 {
                     //Give the user an Error if the intervall that was provided is a not number, bigger than 32767 or smaller than 4
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        UserErrorMessage("Please enter only positve numbers that are inbetween 4 and 32766",4200);
+                        UserErrorMessage("Please enter only positve numbers that are inbetween 4 and 32766", 4200);
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -115,73 +119,94 @@ namespace Internet_Check
         private System.Threading.Timer timer;
         private void tTimer()
         {
-            DateTime now = DateTime.Now;
+            DateTime now;
+            //TODO: Make countclick into bool
             if (countclick % 2 == 1)
-            {
+            {   
+                //Prepare UI Elemts
                 this.button1.Text = "Stop";
                 this.textBoxInterval.Enabled = false;
                 this.buttonClear.Enabled = false;
+                this.labelRunning.Text = "Running . . .";
+
+                //Write starting info into the text file
                 now = DateTime.Now;
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
+                
+                //Prepare variables for timer
+                
                 var startTimeSpan = TimeSpan.Zero;
                 var periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
-                this.labelRunning.Text = "Running . . .";
+                List<string> serverList = getServersFromXML();
+                int currentPositionInList = 0;
+
+                //timer executes onence every periodTimeSpan seconds
+                //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
                 timer = new System.Threading.Timer((d) =>
                 {
-                    CheckAndWrite();
-                }, null, startTimeSpan, periodTimeSpan);
+                    //Give the CheckAndWrite method the current server as a string
+                    CheckAndWrite(serverList[currentPositionInList]);
+
+                    //Increment the value of currentPostionInList by one to get the next server
+                    currentPositionInList++;
+
+                    //Go to the beginning of the list if the value is bigger than the lenght of the list
+                    if (currentPositionInList >= serverList.Count())
+                    {
+                        currentPositionInList -= serverList.Count();
+                    }
+                    
+                }, (currentPositionInList, serverList), startTimeSpan, periodTimeSpan);
+                
             }
             else
             {
-                this.button1.Text = "Start";
-                timer.Dispose(); //Disposing the timer needed???
+                now = DateTime.Now;
+
+                //Dispose the timer
+                timer.Dispose();
+
+                //Write text if clicked on stop
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+
+                //Reset the UI elements to starting values
+                this.button1.Text = "Start";
                 this.textBoxInterval.Enabled = true;
                 this.buttonClear.Enabled = true;
                 this.labelRunning.Text = "Waiting . . .";
             }
         }
 
-        int i = 0;
-        private void CheckAndWrite()
+        private void CheckAndWrite(string currentServer)
         {
             DateTime now = DateTime.Now;
 
-            if (ping() == false)
+            if (ping(currentServer) == false)
             {
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {GetHost()} failed ping){Environment.NewLine}");
-            }
-            else
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+            } else
             {
                 //Uncomment the next line if every ping should be written into the file
-                //File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {GetHost()} answered ping){Environment.NewLine}");
-            }
-
-            //Go to the next server in the list listServer
-            i++;
-
-            //If i is bigger than the amount of servers listet in the list listServer it is reset to the beginning of the list
-            if (i >= listServer.Count())
-            {
-                i -= listServer.Count();
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
             }
         }
 
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
-        public bool ping()
+        private bool ping(string currentServer)
         {
             try
             {
                 Ping myPing = new Ping();
-                String host = GetHost();
+                String host = currentServer;
 
                 //bytesitze = 1 Byte or 8 Bits
                 byte[] buffer = new byte[1];
                 //server has 2500 ms to respond
-                int timeout = 2500;                                                 
-                
+                int timeout = 2500;
+
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+
                 myPing.Dispose();
                 return (reply.Status == IPStatus.Success);
             }
@@ -195,19 +220,55 @@ namespace Internet_Check
         {
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
-            
+
             //Pass Form1 to ClearConfirm
             userControlClearConfirm1.setForm1(this);
         }
 
-        //Only add Ip-adresses to this ping and not domainnames like www.example.com! The router or dns server might return a false value.
-        //8.8.8.8 : Gooogle public dns-a; 8.8.4.4 : Google public dns-b; 1.1.1.1: Cloudflare
-        readonly List<string> listServer = new List<string>() { "8.8.8.8", "8.8.4.4", "1.1.1.1"};
 
-        private string GetHost()
+        //readonly List<string> listServer = new List<string>() { "8.8.8.8", "8.8.4.4", "1.1.1.1"};
+        private List<string> getServersFromXML()
         {
-            string name = listServer[i]; // Index is 0-based
-            return name;
+            List<string> xmlServerList = new List<string>();
+
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+
+            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
+            {
+                XmlDocument myData = new XmlDocument();
+                try
+                {
+                    myData.Load(reader);
+                } catch
+                {
+                    MessageBox.Show("Could not find AdvancedSettings.xml");
+                    return xmlServerList;
+                }
+                
+
+                foreach (XmlNode node in myData.DocumentElement)
+                {
+                    string settingName = node.Attributes[0].InnerText;
+                    if (settingName == "servers")
+                    {
+                        foreach (XmlNode child in node.ChildNodes)
+                        {
+                            string server = child.InnerText;
+                            try
+                            {
+                                xmlServerList.Add((string)server);
+                            }
+                            catch
+                            {
+                                MessageBox.Show("Could not add server from XML file to internal server list. The server was ignored.");
+                            }
+                        }
+                    }
+                }
+                reader.Dispose();
+            }
+            return xmlServerList;
         }
 
         public void ClearEverything()
