@@ -188,7 +188,7 @@ namespace Internet_Check
                                 days = Int16.Parse(value);
                             } catch
                             {
-                                MessageBox.Show("The value inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.");
+                                MessageBox.Show("The value inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.","Invalid Syntax",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
                         }
                     }
@@ -225,14 +225,13 @@ namespace Internet_Check
                             }
                             catch
                             {
-                                MessageBox.Show($"The value inside the child node of {settingInherited} of AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.");
+                                MessageBox.Show($"The value inside the child node of {settingInherited} of AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.","Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
                         }
                     }
                 }
                 reader.Dispose();
             }
-
             return boolSetting;
         }
 

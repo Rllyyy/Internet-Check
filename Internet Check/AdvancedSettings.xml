@@ -24,4 +24,11 @@
   <setting name="">
     <value></value>
   </setting>
+  <setting name="servers">
+    <!--Only add Ip-adresses to this list and not domainnames like www.example.com! The router or dns server might return a false value.
+    8.8.8.8: Gooogle public dns-a; 8.8.4.4: Google public dns-b; 1.1.1.1: Cloudflare!-->
+    <value>8.8.8.8</value>
+    <value>8.8.4.4</value>
+    <value>1.1.1.1</value>
+  </setting>
 </root>
