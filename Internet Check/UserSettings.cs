@@ -188,9 +188,10 @@ namespace Internet_Check
                                 days = Int16.Parse(value);
                             } catch
                             {
-                                MessageBox.Show("The value inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.","Invalid Syntax",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                MessageBox.Show($"The value {value.ToString()} inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.","Invalid Syntax",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
                         }
+                        break;
                     }
                 }
                 reader.Dispose();
@@ -199,7 +200,7 @@ namespace Internet_Check
             return days;
         }
 
-        private bool boolAdvancedSettings(string settingInherited, bool standardValue)
+        private bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
         {
             bool boolSetting = standardValue;
 
@@ -214,7 +215,7 @@ namespace Internet_Check
                 foreach (XmlNode node in myData.DocumentElement)
                 {
                     string settingName = node.Attributes[0].InnerText;
-                    if (settingName == settingInherited)
+                    if (settingName == settingNameInherited)
                     {
                         foreach (XmlNode child in node.ChildNodes)
                         {
@@ -225,9 +226,10 @@ namespace Internet_Check
                             }
                             catch
                             {
-                                MessageBox.Show($"The value inside the child node of {settingInherited} of AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.","Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                MessageBox.Show($"The value {settingValue.ToString()} inside of {settingNameInherited} in AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.","Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
                         }
+                        break;
                     }
                 }
                 reader.Dispose();
