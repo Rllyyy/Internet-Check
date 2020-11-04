@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Xml;
+using System.Net;
 
 namespace Internet_Check
 {
@@ -130,30 +131,21 @@ namespace Internet_Check
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 
                 //Prepare variables for timer
-                var startTimeSpan = TimeSpan.Zero;
-                var periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
+                TimeSpan startTimeSpan = TimeSpan.Zero;
+                TimeSpan periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
                 List<string> serverList = getServersFromXML();
                 bool writeSuccessfulPings = boolAdvancedSettings("ShowAllPingResults", false);
                 int currentPositionInList = 0;
 
-                //timer executes onence every periodTimeSpan seconds
-                //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
-                timer = new System.Threading.Timer((d) =>
+                bool useAlternativePingMethod = boolAdvancedSettings("UseAlternativePingMethod", false);
+                //Decides which ping mehtod is used. The standard
+                if (!useAlternativePingMethod)
                 {
-                    //Give the CheckAndWrite method the current server as a string
-                    CheckAndWrite(serverList[currentPositionInList], writeSuccessfulPings);
-
-                    //Increment the value of currentPostionInList by one to get the next server
-                    currentPositionInList++;
-
-                    //Go to the beginning of the list if the value is bigger than the lenght of the list
-                    if (currentPositionInList >= serverList.Count())
-                    {
-                        currentPositionInList -= serverList.Count();
-                    }
-                    
-                }, (currentPositionInList, serverList, writeSuccessfulPings), startTimeSpan, periodTimeSpan);
-                
+                    checkWithStandardPingProtocoll(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList);
+                } else
+                {
+                    checkWithWebClient(startTimeSpan, periodTimeSpan, writeSuccessfulPings);
+                }
             }
             else
             {
@@ -173,9 +165,28 @@ namespace Internet_Check
             }
         }
 
+        private void checkWithStandardPingProtocoll(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, List<string> serverList, bool writeSuccessfulPings, int currentPositionInList)
+        {
+            //timer executes onence every periodTimeSpan seconds
+            //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
+            timer = new System.Threading.Timer((d) =>
+            {
+                //Give the CheckAndWrite method the current server as a string
+                CheckAndWrite(serverList[currentPositionInList], writeSuccessfulPings);
+
+                //Increment the value of currentPostionInList by one to get the next server
+                currentPositionInList++;
+
+                //Go to the beginning of the list if the value is bigger than the lenght of the list
+                if (currentPositionInList >= serverList.Count())
+                {
+                    currentPositionInList -= serverList.Count();
+                }
+            }, (currentPositionInList, serverList, writeSuccessfulPings), startTimeSpan, periodTimeSpan);
+        }
+
         private void CheckAndWrite(string currentServer, bool writeSuccessfulPings)
         {
-            
             bool serverPingedBack = ping(currentServer);
 
             if (serverPingedBack == false)
@@ -192,6 +203,7 @@ namespace Internet_Check
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
         private bool ping(string currentServer)
         {
+            //This is the standard ping method which uses the ping protocoll
             try
             {
                 Ping myPing = new Ping();
@@ -209,6 +221,44 @@ namespace Internet_Check
                 return (reply.Status == IPStatus.Success);
             }
             catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        //This is the alternative to the check() method and combines it with the alternative to the CheckAndWrite Method.
+        private void checkWithWebClient(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, bool writeSuccessfulPings)
+        {
+            //timer executes onence every periodTimeSpan seconds
+            //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
+            timer = new System.Threading.Timer((d) =>
+            {
+                bool serverPingedBack = pingWithWebClient();
+
+                if (serverPingedBack == false)
+                {
+                    DateTime now = DateTime.Now;
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                }
+                else if (serverPingedBack == true && writeSuccessfulPings == true)
+                {
+                    DateTime now = DateTime.Now;
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: www.google.com answered ping){Environment.NewLine}");
+                }
+            }, writeSuccessfulPings, startTimeSpan, periodTimeSpan);
+        }
+
+        //This is the alternative to the ping mehtod whick relies on the webClient instead of the ping protocoll. Can be activated by setting UseAlternativePingMethod in the xml file to true.
+        //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
+        private bool pingWithWebClient()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                using (client.OpenRead("http://google.com/generate_204"))
+                return true;
+            }
+            catch
             {
                 return false;
             }

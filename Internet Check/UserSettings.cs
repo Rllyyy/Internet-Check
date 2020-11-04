@@ -196,7 +196,6 @@ namespace Internet_Check
                 }
                 reader.Dispose();
             }
-            
             return days;
         }
 
