@@ -35,10 +35,6 @@ namespace Internet_Check
                 //Start the form
                 formStart();
                 CheckIfStartedWithWindows();
-
-                /*
-                List<string> test = serverList();
-                MessageBox.Show(String.Join(",", test)); */
             }
         }
 
@@ -134,10 +130,10 @@ namespace Internet_Check
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 
                 //Prepare variables for timer
-                
                 var startTimeSpan = TimeSpan.Zero;
                 var periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
                 List<string> serverList = getServersFromXML();
+                bool writeSuccessfulPings = boolAdvancedSettings("ShowAllPingResults", false);
                 int currentPositionInList = 0;
 
                 //timer executes onence every periodTimeSpan seconds
@@ -145,7 +141,7 @@ namespace Internet_Check
                 timer = new System.Threading.Timer((d) =>
                 {
                     //Give the CheckAndWrite method the current server as a string
-                    CheckAndWrite(serverList[currentPositionInList]);
+                    CheckAndWrite(serverList[currentPositionInList], writeSuccessfulPings);
 
                     //Increment the value of currentPostionInList by one to get the next server
                     currentPositionInList++;
@@ -156,7 +152,7 @@ namespace Internet_Check
                         currentPositionInList -= serverList.Count();
                     }
                     
-                }, (currentPositionInList, serverList), startTimeSpan, periodTimeSpan);
+                }, (currentPositionInList, serverList, writeSuccessfulPings), startTimeSpan, periodTimeSpan);
                 
             }
             else
@@ -177,16 +173,18 @@ namespace Internet_Check
             }
         }
 
-        private void CheckAndWrite(string currentServer)
+        private void CheckAndWrite(string currentServer, bool writeSuccessfulPings)
         {
-            DateTime now = DateTime.Now;
+            
+            bool serverPingedBack = ping(currentServer);
 
-            if (ping(currentServer) == false)
+            if (serverPingedBack == false)
             {
+                DateTime now = DateTime.Now;
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
-            } else
+            } else if (serverPingedBack == true && writeSuccessfulPings == true)
             {
-                //Uncomment the next line if every ping should be written into the file
+                DateTime now = DateTime.Now;
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
             }
         }
@@ -225,8 +223,6 @@ namespace Internet_Check
             userControlClearConfirm1.setForm1(this);
         }
 
-
-        //readonly List<string> listServer = new List<string>() { "8.8.8.8", "8.8.4.4", "1.1.1.1"};
         private List<string> getServersFromXML()
         {
             List<string> xmlServerList = new List<string>();
@@ -628,6 +624,43 @@ namespace Internet_Check
                 }
                 ClickEvent();
             }
+        }
+
+        private bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
+        {
+            bool boolSetting = standardValue;
+
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+
+            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
+            {
+                XmlDocument myData = new XmlDocument();
+                myData.Load(reader);
+
+                foreach (XmlNode node in myData.DocumentElement)
+                {
+                    string settingName = node.Attributes[0].InnerText;
+                    if (settingName == settingNameInherited)
+                    {
+                        foreach (XmlNode child in node.ChildNodes)
+                        {
+                            string settingValue = child.InnerText;
+                            try
+                            {
+                                boolSetting = bool.Parse(settingValue);
+                            }
+                            catch
+                            {
+                                MessageBox.Show($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.", "Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+                        }
+                        break;
+                    }
+                }
+                reader.Dispose();
+            }
+            return boolSetting;
         }
     }
 }
