@@ -9,13 +9,14 @@
     <value>1.1.1.1</value>
   </setting>
   <setting name="UseAlternativePingMethod">
-    <!---->
+    <!--Set this value to true if you only get the message that the server did not respond although there is an active internet connection. Server from the above node will be ignored. 
+    Restart the app to apply the changes. The standard value is false-->
     <value>false</value>
   </setting>
   <setting name="ShowAllPingResults">
     <!--If value is set to true both successful and unsuccessful pings will be noted. If set to false only unsuccessful pings are recorded. 
     Standard value is false.-->
-    <value>false</value>
+    <value>true</value>
   </setting>
   <setting name="TaskschedulerStopTaskAfterDays">
     <!--Stops the task if the pc is running longer than the value in days. 
@@ -26,7 +27,7 @@
     <value>5</value>
   </setting>
   <setting name="DisallowStartIfOnBatteries">
-    <!--If this setting is set to true the app will not be launched by the tasksceduler if the pc is not connected to a power source (running on batteries). The standard value is false.-->
+    <!--If this setting is set to true the app will not be launched by the tasksceduler if the pc is not connected to a power source and is instead running on batteries. The standard value is false.-->
     <value>false</value>
   </setting>
   <setting name="StopIfGoingOnBatteries">
