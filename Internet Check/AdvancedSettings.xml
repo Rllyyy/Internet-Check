@@ -16,7 +16,7 @@
   <setting name="ShowAllPingResults">
     <!--If value is set to true both successful and unsuccessful pings will be noted. If set to false only unsuccessful pings are recorded. 
     Standard value is false.-->
-    <value>true</value>
+    <value>false</value>
   </setting>
   <setting name="TaskschedulerStopTaskAfterDays">
     <!--Stops the task if the pc is running longer than the value in days. 

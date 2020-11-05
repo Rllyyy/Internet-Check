@@ -70,12 +70,19 @@ namespace Internet_Check
             }
         }
 
-        public static int countclick = 0;
         private void button1_Click(object sender, EventArgs e)
         {
-            ClickEvent();
+            if (this.button1.Text == "Start")
+            {
+                checkIfIntervallCorrect();
+            }
+            else
+            {
+                stopCollecting();
+            }
         }
-        private void ClickEvent()
+
+        private void checkIfIntervallCorrect()
         {
             if (!string.IsNullOrEmpty(this.textBoxInterval.Text))
             {
@@ -96,14 +103,12 @@ namespace Internet_Check
                         }
                         catch
                         {}
-                        countclick++;
-                        tTimer();
+                        startCollecting();
                     }
                 }
                 else
                 {
-                    countclick++;
-                    tTimer();
+                    startCollecting();
                 }
             }
             else
@@ -114,55 +119,54 @@ namespace Internet_Check
         }
 
         private System.Threading.Timer timer;
-        private void tTimer()
+        private void startCollecting()
         {
-            DateTime now;
-            //TODO: Make countclick into bool
-            if (countclick % 2 == 1)
-            {   
-                //Prepare UI Elemts
-                this.button1.Text = "Stop";
-                this.textBoxInterval.Enabled = false;
-                this.buttonClear.Enabled = false;
-                this.labelRunning.Text = "Running . . .";
+            //Prepare UI Elemts
+            this.button1.Text = "Stop";
+            this.textBoxInterval.Enabled = false;
+            this.buttonClear.Enabled = false;
+            this.labelRunning.Text = "Running . . .";
 
-                //Write starting info into the text file
-                now = DateTime.Now;
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
+            //Write starting info into the text file
+            DateTime now = DateTime.Now;
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 
-                //Prepare variables for timer
-                TimeSpan startTimeSpan = TimeSpan.Zero;
-                TimeSpan periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-                List<string> serverList = getServersFromXML();
-                bool writeSuccessfulPings = boolAdvancedSettings("ShowAllPingResults", false);
-                int currentPositionInList = 0;
+            //Prepare variables for timer
+            TimeSpan startTimeSpan = TimeSpan.Zero;
+            TimeSpan periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
+            List<string> serverList = getServersFromXML();
+            bool writeSuccessfulPings = boolAdvancedSettings("ShowAllPingResults", false);
+            int currentPositionInList = 0;
 
-                bool useAlternativePingMethod = boolAdvancedSettings("UseAlternativePingMethod", false);
-                //Decides which ping mehtod is used. The standard
-                if (!useAlternativePingMethod)
-                {
-                    checkWithStandardPingProtocoll(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList);
-                } else
-                {
-                    checkWithWebClient(startTimeSpan, periodTimeSpan, writeSuccessfulPings);
-                }
-            }
-            else
+            bool useAlternativePingMethod = boolAdvancedSettings("UseAlternativePingMethod", false);
+            //Decides which ping mehtod is used. The standard
+            if (!useAlternativePingMethod)
             {
-                now = DateTime.Now;
-
-                //Dispose the timer
-                timer.Dispose();
-
-                //Write text if clicked on stop
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
-
-                //Reset the UI elements to starting values
-                this.button1.Text = "Start";
-                this.textBoxInterval.Enabled = true;
-                this.buttonClear.Enabled = true;
-                this.labelRunning.Text = "Waiting . . .";
+                checkWithStandardPingProtocoll(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList);
+            } else
+            {
+                checkWithWebClient(startTimeSpan, periodTimeSpan, writeSuccessfulPings);
             }
+        }
+
+        private void stopCollecting ()
+        {
+            //Dispose the timer created in checkWithStandardPingProtocoll
+            try
+            {
+                timer.Dispose();
+            } catch
+            {}
+
+            //Write text if clicked on stop
+            DateTime now = DateTime.Now;
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+
+            //Reset the UI elements to starting values
+            this.button1.Text = "Start";
+            this.textBoxInterval.Enabled = true;
+            this.buttonClear.Enabled = true;
+            this.labelRunning.Text = "Waiting . . .";
         }
 
         private void checkWithStandardPingProtocoll(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, List<string> serverList, bool writeSuccessfulPings, int currentPositionInList)
@@ -254,8 +258,9 @@ namespace Internet_Check
         {
             try
             {
-                using (var client = new WebClient())
-                using (client.OpenRead("http://google.com/generate_204"))
+                using (var client = new WebClient()) 
+                using (client.OpenRead("http://google.com/generate_204")) 
+                    client.Dispose();
                 return true;
             }
             catch
@@ -339,7 +344,7 @@ namespace Internet_Check
             {
                 CheckEditorAlreadyOpen();
                 //Editor is opened where it was last closed
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
                 //Go to the end of the Editor file
                 GoToEndOfConnectionIssueTXT();
 
@@ -347,7 +352,7 @@ namespace Internet_Check
             {   
                 //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
                 File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt").Dispose();
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
                 //Go to the end of the document
                 GoToEndOfConnectionIssueTXT();
             } 
@@ -384,31 +389,16 @@ namespace Internet_Check
             }
         }
 
-        /// <summary>
-        /// Sets the editor to the foreground if already opened but in the background. https://stackoverflow.com/questions/25578305/c-sharp-focus-window-of-a-runing-program
-        /// </summary>
-        /// <param name="hWnd"></param>
-        /// <returns></returns>
-        [DllImport("user32.dll")]
-        internal static extern IntPtr SetForegroundWindow(IntPtr hWnd);
-        [DllImport("user32.dll")]
-        internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow); //ShowWindow needs an IntPtr
-        private static void FocusEditor(Process process)
-        {
-            IntPtr hWnd;
-            hWnd = process.MainWindowHandle;
-            ShowWindow(hWnd, 9);
-            SetForegroundWindow(hWnd); //set to topmost
-        }
-
         //Writes the end Date to the textfile if the programm is currently pinging and closed by the user. Also works if windows is shut down.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //gets the Time of now 
-            DateTime now = DateTime.Now;
+            
 
             if (this.labelRunning.Text == "Running . . .")
             {
+                //gets the Time of now 
+                DateTime now = DateTime.Now;
+
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
                 try
                 {
@@ -416,8 +406,7 @@ namespace Internet_Check
                     watcher.Dispose();
                 }
                 catch
-                {
-                }
+                {}
             }
         }
 
@@ -530,7 +519,7 @@ namespace Internet_Check
         {
             if (e.KeyValue == (char)Keys.Enter) 
             {
-                ClickEvent();
+                checkIfIntervallCorrect();
             }
         }
 
@@ -655,7 +644,6 @@ namespace Internet_Check
         /// Check if the application was started by windows. https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
         /// </summary>
         /// <returns></returns>
-        //
         [DllImport("kernel32")]
         extern static UInt64 GetTickCount64();
         private void CheckIfStartedWithWindows()
@@ -672,7 +660,7 @@ namespace Internet_Check
                     this.ShowInTaskbar = false;
                     this.Visible = false;
                 }
-                ClickEvent();
+                checkIfIntervallCorrect();
             }
         }
 
