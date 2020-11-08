@@ -17,7 +17,7 @@ namespace Internet_Check
     {
         public Form1()
         {
-            //Get the ammount of instances running and exit if the count is greater than 1
+            //Get the amount of instances running and exit if the count is greater than 1
             //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
             var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
 
@@ -30,7 +30,7 @@ namespace Internet_Check
             }
             else
             {
-                //Begin to watch the MultipleInstancesDetected file, if it changes this programm will come to front again
+                //Begin to watch the MultipleInstancesDetected file, if it changes this program will come to front again
                 watchFiles(AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt");
 
                 //Start the form
@@ -58,8 +58,8 @@ namespace Internet_Check
             //removes the border from buttonOpen on an click event
             buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
 
-            //Higlighting the Intervall Box
-            //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occure
+            //Highlight the Intervall Box
+            //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occur
             textBoxInterval.SelectionStart = 0;
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
 
@@ -91,7 +91,7 @@ namespace Internet_Check
                     //Give the user an Error if the intervall that was provided is a not number, bigger than 32767 or smaller than 4
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        UserErrorMessage("Please enter only positve numbers that are inbetween 4 and 32766", 4200);
+                        UserErrorMessage("Please enter only positive numbers that are inbetween 4 and 32766", 4200);
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -121,7 +121,7 @@ namespace Internet_Check
         private System.Threading.Timer timer;
         private void startCollecting()
         {
-            //Prepare UI Elemts
+            //Prepare UI Elements
             this.button1.Text = "Stop";
             this.textBoxInterval.Enabled = false;
             this.buttonClear.Enabled = false;
@@ -142,8 +142,9 @@ namespace Internet_Check
             //Decides which ping mehtod is used. The standard
             if (!useAlternativePingMethod)
             {
-                checkWithStandardPingProtocoll(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList);
-            } else
+                checkWithStandardPingProtocol(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList);
+            } 
+            else
             {
                 checkWithWebClient(startTimeSpan, periodTimeSpan, writeSuccessfulPings);
             }
@@ -151,7 +152,7 @@ namespace Internet_Check
 
         private void stopCollecting ()
         {
-            //Dispose the timer created in checkWithStandardPingProtocoll
+            //Dispose the timer created in checkWithStandardPingProtocol
             try
             {
                 timer.Dispose();
@@ -169,9 +170,9 @@ namespace Internet_Check
             this.labelRunning.Text = "Waiting . . .";
         }
 
-        private void checkWithStandardPingProtocoll(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, List<string> serverList, bool writeSuccessfulPings, int currentPositionInList)
+        private void checkWithStandardPingProtocol(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, List<string> serverList, bool writeSuccessfulPings, int currentPositionInList)
         {
-            //timer executes onence every periodTimeSpan seconds
+            //timer executes once every periodTimeSpan seconds
             //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
             timer = new System.Threading.Timer((d) =>
             {
@@ -197,7 +198,8 @@ namespace Internet_Check
             {
                 DateTime now = DateTime.Now;
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
-            } else if (serverPingedBack == true && writeSuccessfulPings == true)
+            } 
+            else if (serverPingedBack == true && writeSuccessfulPings == true)
             {
                 DateTime now = DateTime.Now;
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
@@ -233,7 +235,7 @@ namespace Internet_Check
         //This is the alternative to the check() method and combines it with the alternative to the CheckAndWrite Method.
         private void checkWithWebClient(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, bool writeSuccessfulPings)
         {
-            //timer executes onence every periodTimeSpan seconds
+            //timer executes once every periodTimeSpan seconds
             //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
             timer = new System.Threading.Timer((d) =>
             {
@@ -252,7 +254,7 @@ namespace Internet_Check
             }, writeSuccessfulPings, startTimeSpan, periodTimeSpan);
         }
 
-        //This is the alternative to the ping mehtod whick relies on the webClient instead of the ping protocoll. Can be activated by setting UseAlternativePingMethod in the xml file to true.
+        //This is the alternative to the ping mehtod which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the xml file to true.
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
         private bool pingWithWebClient()
         {
@@ -296,12 +298,11 @@ namespace Internet_Check
                     MessageBox.Show("Could not find AdvancedSettings.xml");
                     return xmlServerList;
                 }
-                
 
                 foreach (XmlNode node in myData.DocumentElement)
                 {
                     string settingName = node.Attributes[0].InnerText;
-                    if (settingName == "servers")
+                    if (settingName == "Servers")
                     {
                         foreach (XmlNode child in node.ChildNodes)
                         {
@@ -348,7 +349,8 @@ namespace Internet_Check
                 //Go to the end of the Editor file
                 GoToEndOfConnectionIssueTXT();
 
-            } else
+            } 
+            else
             {   
                 //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
                 File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt").Dispose();
@@ -389,7 +391,7 @@ namespace Internet_Check
             }
         }
 
-        //Writes the end Date to the textfile if the programm is currently pinging and closed by the user. Also works if windows is shut down.
+        //Writes the end Date to the textfile if the program is currently pinging and closed by the user. Also works if windows is shut down.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             
@@ -410,7 +412,7 @@ namespace Internet_Check
             }
         }
 
-        //Maximizes the applicaiton if click on in the systemtray
+        //Maximizes the application if click on in the systemtray
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             this.TopMost = true;
@@ -421,7 +423,7 @@ namespace Internet_Check
         }
 
         /// <summary>
-        /// Sets the visibity to false if the user set visibilty to hidden in the settings menu and form is minimized
+        /// Sets the visibility to false if the user set visibility to hidden in the settings menu and form is minimized
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -564,7 +566,7 @@ namespace Internet_Check
             }).Start();
         }
 
-        //Writes Data to new file if Clear Only Irrelevant Data is selected. Caled from Form1.ClearOnlyIrrelevant()
+        //Writes Data to new file if Clear Only Irrelevant Data is selected. Called from Form1.ClearOnlyIrrelevant()
         private void WriteDataToNewFile() 
         {
             //Copies lines starting with a number to backup file
@@ -633,7 +635,7 @@ namespace Internet_Check
             }).Start();
         }
 
-        //Writes current date to file if the User tries to open the applicaiton more than onece. The original application watches this file and if changes brings itself back to the front.
+        //Writes current date to file if the User tries to open the application more than once. The original application watches this file and if changes brings itself back to the front.
         private void MultipleInstancesDetected()
         {
             DateTime now = DateTime.Now;

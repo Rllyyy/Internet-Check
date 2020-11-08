@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!--Settings can be editted by changing the value inside the <value> </value> tags.-->
+<!--Settings can be edited by changing the value inside the <value> </value> tags.-->
 <root>
-  <setting name="servers">
-    <!--Only add Ip-adresses to this list and not domainnames like www.example.com! The router or dns server might return a false value.
-    8.8.8.8: Gooogle public dns-a; 8.8.4.4: Google public dns-b; 1.1.1.1: Cloudflare-->
-    <value>8.8.8.8</value>
-    <value>8.8.4.4</value>
-    <value>1.1.1.1</value>
+  <setting name="Servers">
+    <!--Only add Ip-addresses to this list and not domain names like www.example.com so the router or dns server doesn't return a false value.
+    The code automatically detects if a value has been added or removed. There is no need to change anything inside the source code.-->
+    <value>8.8.8.8</value> <!--8.8.8.8: Google public dns-a-->
+    <value>8.8.4.4</value> <!--8.8.4.4: Google public dns-b-->
+    <value>1.1.1.1</value> <!--1.1.1.1: Cloudflare-->
   </setting>
   <setting name="UseAlternativePingMethod">
-    <!--Set this value to true if you only get the message that the server did not respond although there is an active internet connection. Server from the above node will be ignored. 
+    <!--Set this value to true if you only get the message that the server did not respond although there is an active internet connection. 
+    Server from the above node will be ignored. 
     Restart the app to apply the changes. The standard value is false-->
     <value>false</value>
   </setting>
   <setting name="ShowAllPingResults">
-    <!--If value is set to true both successful and unsuccessful pings will be noted. If set to false only unsuccessful pings are recorded. 
+    <!--If this value is set to true both successful and unsuccessful pings will be noted. If set to false only unsuccessful pings are recorded. 
     Standard value is false.-->
     <value>false</value>
   </setting>
@@ -23,19 +24,25 @@
     This only applies if the option start with windows is selected. 
     If the program is started by the user (i.e. if the user clicks on start) the task will run until it is stopped ore the computer is shut down.
     To apply the change click on "Start with Windows" in the app. 
-    If the settings was already active before changing this value, please deselect the checkbox, click on back, go into settings again and select the option "Start with Windows".-->
+    If the setting was already active before changing this value, please deselect the checkbox, click on back, go into settings again and select the option "Start with Windows".-->
     <value>5</value>
   </setting>
   <setting name="DisallowStartIfOnBatteries">
-    <!--If this setting is set to true the app will not be launched by the tasksceduler if the pc is not connected to a power source and is instead running on batteries. The standard value is false.-->
+    <!--If this setting is set to true the app will not be launched by the Task Scheduler if the pc is not connected to a power source and is instead running on batteries. 
+    If "Start with Windows" was already active, please deselect the setting, click on back, go into settings again and select the option "Start with Windows".
+    The standard value is false. -->
     <value>false</value>
   </setting>
   <setting name="StopIfGoingOnBatteries">
-    <!--If this setting is set to true the app will stop if it was launched by the tasksceduler and the pc is just running from the battery. The standard value is false.-->
+    <!--If this setting is set to true the app will stop if it was launched by the Task Scheduler and the pc is just running from the battery.
+    If "Start with Windows" was already active, please deselect the setting, click on back, go into settings again and select the option "Start with Windows".
+    The standard value is false.-->
     <value>false</value>
   </setting>
   <setting name="StopOnIdleEnd">
-    <!--If this setting is set to true the app will stop if it was launched by the tasksceduler and the pc is returning from an idle state (i.e. if the laptop returns from sleep mode). The standard value is false.-->
+    <!--If this setting is set to true the app will stop if it was launched by the Task Scheduler and the pc is returning from an idle state (i.e. if the laptop returns from sleep mode). 
+    If "Start with Windows" was already active, please deselect the setting, click on back, go into settings again and select the option "Start with Windows".
+    The standard value is false.-->
     <value>false</value>
   </setting>
 </root>
