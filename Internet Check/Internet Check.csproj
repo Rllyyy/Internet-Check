@@ -133,9 +133,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AdvancedSettings.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <Content Include="InternetSymbolPNG.ico" />
     <None Include="Properties\icons\InternetSymbol.png" />
   </ItemGroup>

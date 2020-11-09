@@ -54,22 +54,22 @@
 1. [Visit the download page](https://github.com/Rllyyy/Internet-Check/releases/latest), open the setup and follow the instructions.
 2. Start InternetCheck.exe from either the Desktop or the appData folder.
 
-# InApp Settings
+# In-App Settings (DarkMode, Windows Autostart, System Tray)
 
-### DarkMode
+## DarkMode
 
 1. Tick the **Checkbox "Use DarkMode"**. The UI now switches to a darker colour pattern.
 
 **_Note:_** The color of the title background may still appear white. These Windows settings can only be changed by the user. [Here](https://www.hellotech.com/guide/for/how-to-enable-dark-mode-in-windows-10) is a quick guide.
 
-### Start Application on Windows Start-Up
+## Start Application on Windows Start-Up
 
 1. Start the Application with admin rights.
 1. Tick the **Checkbox "Start with Windows"** in the settings menu.
 
 **_Warning:_** If both "Start with Windows" and "Show only in system tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the system tray or by running the .exe again.
 
-### Show only in System Tray
+## Show only in System Tray
 
 1. Tick the **"Show only in system tray" Checkbox** if you want to hide the application when minimized.
 
