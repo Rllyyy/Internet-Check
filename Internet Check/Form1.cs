@@ -62,12 +62,12 @@ namespace Internet_Check
             //removes the border from buttonOpen on an click event
             buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
 
-            //Highlight the Intervall Box
-            //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval which sometimes occur
+            //Highlight the interval Box
+            //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval
             textBoxInterval.SelectionStart = 0;
             textBoxInterval.SelectionLength = textBoxInterval.Text.Length;
 
-            //Initialise DarkMode
+            //Initialize DarkMode
             if (Properties.Settings.Default.SettingDarkmode == true)
             {
                 DarkmodeForm();
@@ -97,10 +97,10 @@ namespace Internet_Check
             {
                 if (this.textBoxInterval.Text != Properties.Settings.Default.SettingInterval.ToString())
                 {
-                    //Give the user an Error if the intervall that was provided is a not number, bigger than 32767 or smaller than 4
+                    //Give the user an Error if the interval that was provided is a not number, bigger than 32767 or smaller than 4
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        UserErrorMessage("Please enter only positive numbers that are inbetween 4 and 32766", 4200);
+                        UserErrorMessage("Please enter only positive numbers that are in-between 4 and 32766", 4200);
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -122,8 +122,8 @@ namespace Internet_Check
             }
             else
             {
-                //Give the User an error if he enters no intervall
-                UserErrorMessage("Please enter an intervall.", 2700);
+                //Give the User an error if he enters no interval
+                UserErrorMessage("Please enter an interval.", 2700);
             }
         }
 
@@ -138,7 +138,7 @@ namespace Internet_Check
 
             //Write starting info into the text file
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 
             //Prepare variables for timer
             TimeSpan startTimeSpan = TimeSpan.Zero;
@@ -148,7 +148,7 @@ namespace Internet_Check
             int currentPositionInList = 0;
 
             bool useAlternativePingMethod = boolAdvancedSettings("UseAlternativePingMethod", false);
-            //Decides which ping mehtod is used. The standard
+            //Decides which ping method is used. The standard
             if (!useAlternativePingMethod)
             {
                 checkWithStandardPingProtocol(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList);
@@ -170,7 +170,7 @@ namespace Internet_Check
 
             //Write text if clicked on stop
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
 
             //Reset the UI elements to starting values
             this.button1.Text = "Start";
@@ -191,7 +191,7 @@ namespace Internet_Check
                 //Increment the value of currentPostionInList by one to get the next server
                 currentPositionInList++;
 
-                //Go to the beginning of the list if the value is bigger than the lenght of the list
+                //Go to the beginning of the list if the value is bigger than the length of the list
                 if (currentPositionInList >= serverList.Count())
                 {
                     currentPositionInList -= serverList.Count();
@@ -218,16 +218,16 @@ namespace Internet_Check
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
         private bool ping(string currentServer)
         {
-            //This is the standard ping method which uses the ping protocoll
+            //This is the standard ping method which uses the ping protocol
             try
             {
                 Ping myPing = new Ping();
-                String host = currentServer;
 
                 //bytesitze = 1 Byte or 8 Bits
                 byte[] buffer = new byte[1];
                 //server has 2500 ms to respond
                 int timeout = 2500;
+                String host = currentServer;
 
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
@@ -263,7 +263,7 @@ namespace Internet_Check
             }, writeSuccessfulPings, startTimeSpan, periodTimeSpan);
         }
 
-        //This is the alternative to the ping mehtod which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the xml file to true.
+        //This is the alternative to the ping method which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the XML file to true.
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
         private bool pingWithWebClient()
         {
@@ -290,42 +290,53 @@ namespace Internet_Check
         {
             List<string> xmlServerList = new List<string>();
 
+            //Define reader settings to ignore comments
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
 
-            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
+            XmlDocument myData = new XmlDocument();
+            XmlReader reader;
+            try
             {
-                XmlDocument myData = new XmlDocument();
-                try
-                {
-                    myData.Load(reader);
-                } catch
-                {
-                    MessageBox.Show("Could not find AdvancedSettings.xml");
-                    return xmlServerList;
-                }
+                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
+                myData.Load(reader);
+            } catch
+            {
+                MessageBox.Show("Could not find AdvancedSettings.xml. The following servers were used: 8.8.8.8, 8.8.4.4 and 1.1.1.1! Please visit www.github.com/Rllyyy/Internet-Check/releases/latest and reinstall the program or create the file yourself", "No XML File" ,MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return xmlServerList = new List<string>{"8.8.8.8", "8.8.4.4", "1.1.1.1"};
+            }
 
-                foreach (XmlNode node in myData.DocumentElement)
+            //Search through the XML file if there is no error found
+            foreach (XmlNode node in myData.DocumentElement)
+            {
+                string settingName = node.Attributes[0].InnerText;
+                if (settingName == "Servers")
                 {
-                    string settingName = node.Attributes[0].InnerText;
-                    if (settingName == "Servers")
+                    foreach (XmlNode child in node.ChildNodes)
                     {
-                        foreach (XmlNode child in node.ChildNodes)
+                        string server = child.InnerText;
+                        if (!string.IsNullOrWhiteSpace(server))
                         {
-                            string server = child.InnerText;
                             try
                             {
                                 xmlServerList.Add((string)server);
                             }
                             catch
                             {
-                                MessageBox.Show("Could not add server from XML file to internal server list. The server was ignored.");
+                                MessageBox.Show($"Could not add the server {server.ToString()} from XML file to internal server list. The server was ignored.");
                             }
+                        } else
+                        {
+                            MessageBox.Show($"There is an empty server inside the server list of AdvancedSettings.xml! The server was ignored.");
                         }
                     }
+                    //Break out of the loop if the value is found
+                    break;
                 }
-                reader.Dispose();
             }
+
+            myData = null;
+            reader.Dispose();
             return xmlServerList;
         }
 
@@ -358,7 +369,7 @@ namespace Internet_Check
             } 
             else
             {   
-                //If the textfile doesn't exists, the program creates one, dispoeses the filecreator and opens the textfile
+                //If the text file doesn't exists, the program creates one, disposes the file-creator and opens the text file
                 File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt").Dispose();
                 Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
                 //Go to the end of the document
@@ -372,7 +383,7 @@ namespace Internet_Check
             new Thread(() =>
             {
                 //Waits X milliseconds before hitting the keys to scroll down, so the editor can be opened before hitting CTRL + END
-                //High-end pc can be given a low value of 25ms but the value depends on the load of the cpu and harddrive. 
+                //High-end pc can be given a low value of 25ms but the value depends on the load of the cpu and hard drive. 
                 //100 ms should give the cpu enough time to process the request and not be too visible to the user.
                 
                 Thread.Sleep(100);              //Wait 100ms before executing the code, so the pc has time to open the file and focus it
@@ -381,7 +392,7 @@ namespace Internet_Check
         }
 
         /// <summary>
-        /// Search through all processes and fokus notepad if already opened.
+        /// Search through all processes and focus notepad if already opened.
         /// </summary>
         private void CheckEditorAlreadyOpen()
         {
@@ -397,7 +408,7 @@ namespace Internet_Check
             }
         }
 
-        //Writes the end Date to the textfile if the program is currently pinging and closed by the user. Also works if windows is shut down.
+        //Writes the end Date to the text file if the program is currently pinging and closed by the user. Also works if windows is shut down.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             
@@ -407,7 +418,7 @@ namespace Internet_Check
                 //gets the Time of now 
                 DateTime now = DateTime.Now;
 
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an intervall of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
                 try
                 {
                     timer.Dispose();
@@ -418,7 +429,7 @@ namespace Internet_Check
             }
         }
 
-        //Maximizes the application if click on in the systemtray
+        //Maximizes the application if click on in the System Tray
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             this.TopMost = true;
@@ -472,7 +483,7 @@ namespace Internet_Check
             }).Start();
         }
 
-        // OnChange eventhandler makes the already running Form1 visible again. Called by watchFiles().
+        // OnChange Event Handler makes the already running Form1 visible again. Called by watchFiles().
         private void OnChanged(object source, FileSystemEventArgs e)
         {
             MethodInvoker Form1WindowStateNormal = () => this.WindowState = FormWindowState.Normal;
@@ -480,7 +491,7 @@ namespace Internet_Check
             MethodInvoker Form1Visible = () => this.Visible = true;                                     //not needed?
             MethodInvoker Form1toFront = () => this.BringToFront();                                     //not needed?
             MethodInvoker Form1Show = () => this.Show();                                                //not needed?
-            MethodInvoker Form1Activate = () => this.Activate();                                        //Icon blinks in Taskbar
+            MethodInvoker Form1Activate = () => this.Activate();                                        //Icon blinks in Task bar
             MethodInvoker Form1ShowInTaskbar = () => this.ShowInTaskbar = true;                                        
             MethodInvoker Form1topMostFalse = () => this.TopMost = false;
             /*MethodInvoker SetForegroundWindow = () => this.SetForegroundWindow(this);*/
@@ -594,7 +605,7 @@ namespace Internet_Check
                     try
                     {
                         //If the line does not start with a # and the line is not empty, the writer writes the line into a new file
-                        if(!line.StartsWith("#")&& !string.IsNullOrEmpty(line))
+                        if (!line.StartsWith("#") && !string.IsNullOrEmpty(line))
                         {
                             writer.WriteLine(line);
                         }
@@ -627,7 +638,7 @@ namespace Internet_Check
             File.Move(oldFilePath, newFilePath );
         }
 
-        //UserErrorMessages. Method takes the ErrorText by string and time for how long the errormessage is visible by int (1000 = 1 sec)
+        //UserErrorMessages. Method takes the ErrorText by string and time for how long the error message is visible by int (1000 = 1 sec)
         public void UserErrorMessage(string ErrorText, int TimeErrorVisible)
         {
             new Thread(() =>
@@ -656,7 +667,7 @@ namespace Internet_Check
         extern static UInt64 GetTickCount64();
         private void CheckIfStartedWithWindows()
         {
-            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 9 minutes. Windows update might interfier with this.
+            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 9 minutes. Windows update might interfere with this.
             TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
             TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
 
@@ -672,40 +683,49 @@ namespace Internet_Check
             }
         }
 
-        private bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
+        public bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
         {
             bool boolSetting = standardValue;
 
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
 
-            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
-            {
-                XmlDocument myData = new XmlDocument();
-                myData.Load(reader);
+            XmlReader reader;
+            XmlDocument myData = new XmlDocument();
 
-                foreach (XmlNode node in myData.DocumentElement)
-                {
-                    string settingName = node.Attributes[0].InnerText;
-                    if (settingName == settingNameInherited)
-                    {
-                        foreach (XmlNode child in node.ChildNodes)
-                        {
-                            string settingValue = child.InnerText;
-                            try
-                            {
-                                boolSetting = bool.Parse(settingValue);
-                            }
-                            catch
-                            {
-                                MessageBox.Show($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.", "Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            }
-                        }
-                        break;
-                    }
-                }
-                reader.Dispose();
+            try
+            {
+                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
+                myData.Load(reader);
+            } catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return standardValue;
             }
+
+            foreach (XmlNode node in myData.DocumentElement)
+            {
+                string settingName = node.Attributes[0].InnerText;
+                if (settingName == settingNameInherited)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        string settingValue = child.InnerText;
+                        try
+                        {
+                            boolSetting = bool.Parse(settingValue);
+                        }
+                        catch
+                        {
+                            MessageBox.Show($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.", "Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                    }
+                    break;
+                }
+            }
+            readerSettings = null;
+            reader.Dispose();
+            myData = null;
             return boolSetting;
         }
     }

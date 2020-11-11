@@ -9,7 +9,6 @@ namespace Internet_Check
     public partial class UserSettings : UserControl
     {
         Form1 form1;
-
         public UserSettings()
         {
             InitializeComponent();
@@ -100,16 +99,18 @@ namespace Internet_Check
                         try
                         {
                             //TaskSceduler by https://github.com/dahall/TaskScheduler
-                            TimeSpan interval = new TimeSpan(TaskschedulerStopTaskAfterDays(), 0, 0, 0);
                             TaskDefinition td = ts.NewTask();
-                            td.RegistrationInfo.Description = "Launches Internet-Check with logon";
                             td.Triggers.Add(new LogonTrigger());
                             td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
+                            td.RegistrationInfo.Description = "Launches Internet-Check with login";
                             td.RegistrationInfo.Author = "Niklas Fischer";
                             td.Principal.RunLevel = TaskRunLevel.Highest;
-                            td.Settings.DisallowStartIfOnBatteries = boolAdvancedSettings("DisallowStartIfOnBatteries", false);
-                            td.Settings.StopIfGoingOnBatteries = boolAdvancedSettings("StopIfGoingOnBatteries", false);
-                            td.Settings.IdleSettings.StopOnIdleEnd = boolAdvancedSettings("StopOnIdleEnd", false);
+
+                            //get the XML Settings. XML Reader is in form1; Interval XML reader is in this class (UserSettings.cs)
+                            td.Settings.DisallowStartIfOnBatteries = form1.boolAdvancedSettings("DisallowStartIfOnBatteries", false);
+                            td.Settings.StopIfGoingOnBatteries = form1.boolAdvancedSettings("StopIfGoingOnBatteries", false);
+                            td.Settings.IdleSettings.StopOnIdleEnd = form1.boolAdvancedSettings("StopOnIdleEnd", false);
+                            TimeSpan interval = new TimeSpan(TaskSchedulerStopTaskAfterDays(), 0, 0, 0);
                             td.Settings.ExecutionTimeLimit = interval;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
 
@@ -127,10 +128,10 @@ namespace Internet_Check
                             Properties.Settings.Default.SettingWindowsStart = true;
                             Properties.Settings.Default.Save();
 
-                            // If Hide whe Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false(manipulated by the above try/catch, the user will get an ErrorMessage
+                            // If Hide when Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false(manipulated by the above try/catch, the user will get an ErrorMessage
                             if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true && Properties.Settings.Default.SettingWindowsStart == true)
                             {
-                                form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the systemtray.", 8000);
+                                form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.", 8000);
                             }
                         }
                     }
@@ -161,8 +162,8 @@ namespace Internet_Check
                 }
             }
         }
-
-        private int TaskschedulerStopTaskAfterDays()
+        
+        private int TaskSchedulerStopTaskAfterDays()
         {
             int days = 5;
 
@@ -170,70 +171,41 @@ namespace Internet_Check
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
 
-            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
+            XmlReader reader = null;
+            XmlDocument myData = new XmlDocument();
+            try
             {
-                XmlDocument myData = new XmlDocument();
+                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
                 myData.Load(reader);
-
-                foreach (XmlNode node in myData.DocumentElement)
-                {
-                    string settingName = node.Attributes[0].InnerText;
-                    if (settingName == "TaskschedulerStopTaskAfterDays")
-                    {
-                        foreach (XmlNode child in node.ChildNodes)
-                        {
-                            string value = child.InnerText;
-                            try
-                            {
-                                days = Int16.Parse(value);
-                            } catch
-                            {
-                                MessageBox.Show($"The value {value.ToString()} inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.","Invalid Syntax",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            }
-                        }
-                        break;
-                    }
-                }
-                reader.Dispose();
+            } catch
+            {
+                MessageBox.Show("Could not find AdvancedSettings.xml! The Standard value of 5 days was used for TaskSchedulerStopTaskAfterDays. Please visit www.github.com/Rllyyy/Internet-Check/releases/latest and reinstall the program or create the file yourself", "No XML File" ,MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return days;
             }
+
+            //If the file is found, loop through it to find the relevant data
+            foreach (XmlNode node in myData.DocumentElement)
+            {
+                string settingName = node.Attributes[0].InnerText;
+                if (settingName == "TaskSchedulerStopTaskAfterDays")
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        string value = child.InnerText;
+                        try
+                        {
+                            days = Int16.Parse(value);
+                        } catch
+                        {
+                            MessageBox.Show($"The value {value.ToString()} inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.","Invalid Syntax",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                    }
+                    break;
+                }
+            }
+            reader.Dispose();
+            myData = null;
             return days;
-        }
-
-        private bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
-        {
-            bool boolSetting = standardValue;
-
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            using (XmlReader reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings))
-            {
-                XmlDocument myData = new XmlDocument();
-                myData.Load(reader);
-
-                foreach (XmlNode node in myData.DocumentElement)
-                {
-                    string settingName = node.Attributes[0].InnerText;
-                    if (settingName == settingNameInherited)
-                    {
-                        foreach (XmlNode child in node.ChildNodes)
-                        {
-                            string settingValue = child.InnerText;
-                            try
-                            {
-                                boolSetting = bool.Parse(settingValue);
-                            }
-                            catch
-                            {
-                                MessageBox.Show($"The value {settingValue.ToString()} inside of {settingNameInherited} in AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.","Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                            }
-                        }
-                        break;
-                    }
-                }
-                reader.Dispose();
-            }
-            return boolSetting;
         }
 
         //Kollege -Ole regelt
