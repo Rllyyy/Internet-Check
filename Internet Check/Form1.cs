@@ -46,7 +46,11 @@ namespace Internet_Check
         }
 
         private void PrepareUIElements()
-        {
+        {   
+            //Pass Form1 to the other classes
+            userSettings1.setForm1(this);
+            userControlClearConfirm1.setForm1(this);
+
             //Prepare UI Elements
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             notifyIcon1.Visible = true;
@@ -70,6 +74,11 @@ namespace Internet_Check
             }
         }
 
+        /// <summary>
+        /// Method for the stop or start Button depended on the current state of the program
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             if (this.button1.Text == "Start")
@@ -275,9 +284,6 @@ namespace Internet_Check
         {
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
-
-            //Pass Form1 to ClearConfirm
-            userControlClearConfirm1.setForm1(this);
         }
 
         private List<string> getServersFromXML()
@@ -535,7 +541,7 @@ namespace Internet_Check
             this.panelSeetings.Show();
             this.panelSeetings.Visible = true;
             this.panelSeetings.BringToFront();
-            userSettings1.setForm1(this);
+            
         }
 
         //Hides the Settings-Panel
