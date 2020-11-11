@@ -53,6 +53,91 @@ namespace Internet_Check
             }
         }
 
+        private void checkBoxStartWithWindows_CheckedChanged(object sender, EventArgs e)
+        {
+            bool errorsCaught = false;
+
+            if (this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
+            {
+                if (this.checkBoxStartWithWindows.Checked == true)
+                {
+                    using (TaskService ts = new TaskService())
+                    {
+                        try
+                        {
+                            //TaskSceduler by https://github.com/dahall/TaskScheduler
+                            TaskDefinition td = ts.NewTask();
+                            td.Triggers.Add(new LogonTrigger());
+                            td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
+                            td.RegistrationInfo.Description = "Launches Internet-Check with login";
+                            td.RegistrationInfo.Author = "Niklas Fischer";
+                            td.Principal.RunLevel = TaskRunLevel.Highest;
+
+                            //get the XML Settings. XML Reader is in form1; Interval XML reader is in this class (UserSettings.cs)
+                            td.Settings.DisallowStartIfOnBatteries = form1.boolAdvancedSettings("DisallowStartIfOnBatteries", false);
+                            td.Settings.StopIfGoingOnBatteries = form1.boolAdvancedSettings("StopIfGoingOnBatteries", false);
+                            td.Settings.IdleSettings.StopOnIdleEnd = form1.boolAdvancedSettings("StopOnIdleEnd", false);
+                            TimeSpan interval = new TimeSpan(TaskSchedulerStopTaskAfterDays(), 0, 0, 0);
+                            td.Settings.ExecutionTimeLimit = interval;
+                            ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
+
+                        }
+                        catch
+                        {
+                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 4000);
+                            this.checkBoxStartWithWindows.Checked = false;
+                            errorsCaught = true;
+                        }
+
+                        if (!errorsCaught)
+                        {
+                            //If everything is ok
+                            Properties.Settings.Default.SettingTask = "Internet-Check";
+                            Properties.Settings.Default.SettingWindowsStart = true;
+                            Properties.Settings.Default.Save();
+                            this.checkBoxStartWithWindows.Checked = true;
+
+                            // If Hide when Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false(manipulated by the above try/catch, the user will get an ErrorMessage
+                            // Temporary solution until ErrorMessageboxClass arrives in a later update (1.6.2)
+                            if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true && Properties.Settings.Default.SettingWindowsStart == true)
+                            {
+                                new System.Threading.Thread(() =>
+                                {
+                                    System.Threading.Thread.Sleep(1200);
+                                    form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.", 8000);
+                                }).Start();
+                            }
+                        }
+                    }
+
+                }
+                else if (this.checkBoxStartWithWindows.Checked == false)
+                {
+                    using (TaskService ts = new TaskService())
+                    {
+                        try
+                        {
+                            ts.RootFolder.DeleteTask(Properties.Settings.Default.SettingTask);
+                            Properties.Settings.Default.SettingTask = "";
+                        }
+                        catch
+                        {
+                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
+                            this.checkBoxStartWithWindows.Checked = true;
+                            errorsCaught = true;
+                        }
+
+                        if (!errorsCaught)
+                        {
+                            //if everything is ok
+                            Properties.Settings.Default.SettingWindowsStart = false;
+                            Properties.Settings.Default.Save();
+                        }
+                    }
+                }
+            }
+        }
+
         private void checkBoxHideWhenMin_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBoxHideWhenMin.Checked == true)
@@ -80,87 +165,6 @@ namespace Internet_Check
             this.checkBoxStartWithWindows.ForeColor = Color.Black;
             this.checkBoxHideWhenMin.ForeColor = Color.Black;
             this.buttonBack.ForeColor = Color.Black;
-        }
-
-        private void buttonBack_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            this.SendToBack();
-            this.Visible = false;
-            form1.PanelSettings_Hide();
-            bool errorsCaught = false;
-
-            if (this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
-            {
-                if (this.checkBoxStartWithWindows.Checked == true)
-                {
-                    using (TaskService ts = new TaskService())
-                    {
-                        try
-                        {
-                            //TaskSceduler by https://github.com/dahall/TaskScheduler
-                            TaskDefinition td = ts.NewTask();
-                            td.Triggers.Add(new LogonTrigger());
-                            td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
-                            td.RegistrationInfo.Description = "Launches Internet-Check with login";
-                            td.RegistrationInfo.Author = "Niklas Fischer";
-                            td.Principal.RunLevel = TaskRunLevel.Highest;
-
-                            //get the XML Settings. XML Reader is in form1; Interval XML reader is in this class (UserSettings.cs)
-                            td.Settings.DisallowStartIfOnBatteries = form1.boolAdvancedSettings("DisallowStartIfOnBatteries", false);
-                            td.Settings.StopIfGoingOnBatteries = form1.boolAdvancedSettings("StopIfGoingOnBatteries", false);
-                            td.Settings.IdleSettings.StopOnIdleEnd = form1.boolAdvancedSettings("StopOnIdleEnd", false);
-                            TimeSpan interval = new TimeSpan(TaskSchedulerStopTaskAfterDays(), 0, 0, 0);
-                            td.Settings.ExecutionTimeLimit = interval;
-                            ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
-
-                        } catch
-                        {
-                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 4000);
-                            this.checkBoxStartWithWindows.Checked = false;
-                            errorsCaught = true;
-                        }
-
-                        if (!errorsCaught)
-                        {
-                            //If everything is ok
-                            Properties.Settings.Default.SettingTask = "Internet-Check";
-                            Properties.Settings.Default.SettingWindowsStart = true;
-                            Properties.Settings.Default.Save();
-
-                            // If Hide when Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false(manipulated by the above try/catch, the user will get an ErrorMessage
-                            if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true && Properties.Settings.Default.SettingWindowsStart == true)
-                            {
-                                form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.", 8000);
-                            }
-                        }
-                    }
-
-                } else if (this.checkBoxStartWithWindows.Checked == false) {
-
-                    using (TaskService ts = new TaskService())
-                    {
-                        try
-                        {
-                            ts.RootFolder.DeleteTask(Properties.Settings.Default.SettingTask);
-                            Properties.Settings.Default.SettingTask = "";
-                        }
-                        catch
-                        {
-                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
-                            this.checkBoxStartWithWindows.Checked = true;
-                            errorsCaught = true;
-                        }
-
-                        if (!errorsCaught)
-                        {
-                            //if everything is ok
-                            Properties.Settings.Default.SettingWindowsStart = false;
-                            Properties.Settings.Default.Save();
-                        }
-                    }
-                }
-            }
         }
         
         private int TaskSchedulerStopTaskAfterDays()
@@ -206,6 +210,14 @@ namespace Internet_Check
             reader.Dispose();
             myData = null;
             return days;
+        }
+
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            this.SendToBack();
+            this.Visible = false;
+            form1.PanelSettings_Hide();
         }
 
         //Kollege -Ole regelt
