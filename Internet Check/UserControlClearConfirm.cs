@@ -41,7 +41,7 @@ namespace Internet_Check
 
         private void buttonClearEverything_Click(object sender, EventArgs e)
         {
-            //This needs to be done in Form1 to have acess to the variables and UI Thread
+            //This needs to be done in Form1 to have access to the variables and UI Thread
             form1.ClearEverything();
             //Returns back to Form1
             this.Hide();
@@ -51,7 +51,7 @@ namespace Internet_Check
 
         private void buttonClearOnlyIrrelevant_Click(object sender, EventArgs e)
         {
-            //This needs to be done in Form1 to have acess to the variables and UI Thread
+            //This needs to be done in Form1 to have access to the variables and UI Thread
             //TODO: This own Thread??
             form1.ClearOnlyIrrelevant();
 

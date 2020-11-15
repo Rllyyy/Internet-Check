@@ -59,6 +59,8 @@ namespace Internet_Check
             this.userControlClearConfirm1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
 
+            this.notifyIcon1.Visible = false;
+
             //removes the border from buttonOpen on an click event
             buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
 
@@ -411,8 +413,6 @@ namespace Internet_Check
         //Writes the end Date to the text file if the program is currently pinging and closed by the user. Also works if windows is shut down.
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
-
             if (this.labelRunning.Text == "Running . . .")
             {
                 //gets the Time of now 
@@ -437,6 +437,7 @@ namespace Internet_Check
             WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
             this.TopMost = false;
+            this.notifyIcon1.Visible = false;
         }
 
         /// <summary>
@@ -449,6 +450,7 @@ namespace Internet_Check
             if (Properties.Settings.Default.SettingHideWhenMin == true && WindowState == FormWindowState.Minimized)
             {
                 this.Visible = false;
+                this.notifyIcon1.Visible = true;
             }
         }
 
@@ -678,6 +680,7 @@ namespace Internet_Check
                     this.WindowState = FormWindowState.Minimized;
                     this.ShowInTaskbar = false;
                     this.Visible = false;
+                    this.notifyIcon1.Visible = false;
                 }
                 checkIfIntervallCorrect();
             }

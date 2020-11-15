@@ -144,6 +144,16 @@ namespace Internet_Check
             {
                 Properties.Settings.Default.SettingHideWhenMin = true;
                 Properties.Settings.Default.Save();
+
+                if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true && Properties.Settings.Default.SettingWindowsStart == true)
+                {
+                    new System.Threading.Thread(() =>
+                    {
+                        System.Threading.Thread.Sleep(1200);
+                        form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.", 8000);
+                    }).Start();
+                }
+
             }
             else
             {
