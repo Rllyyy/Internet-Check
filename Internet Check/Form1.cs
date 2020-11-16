@@ -451,6 +451,10 @@ namespace Internet_Check
             {
                 this.Visible = false;
                 this.notifyIcon1.Visible = true;
+                if(boolAdvancedSettings("ShowMinimizedInfo",true) == true)
+                {
+                    this.notifyIcon1.ShowBalloonTip(17000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
+                }
             }
         }
 
@@ -477,7 +481,6 @@ namespace Internet_Check
                     watcher.EnableRaisingEvents = false;
                     watcher.Created -= new FileSystemEventHandler(OnChanged);
                 }
-                /*watcher = new FileSystemWatcher();*/
                 watcher.Path = Path.GetDirectoryName(path); 
                 watcher.Filter = Path.GetFileName(path);
                 watcher.Changed += new FileSystemEventHandler(OnChanged);
@@ -599,7 +602,6 @@ namespace Internet_Check
 
             //Temporary new file, Could also be a string or array
             using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "connection issues - copy.txt"))
-            
             {
                 while (!reader.EndOfStream)
                 {
