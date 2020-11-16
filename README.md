@@ -49,10 +49,15 @@
   - Note: Make sure that the program is not currently logging data. (Status bottom right: Waiting . . .)
   - Warning: A clear can not be undone.
 
-# Install Guide
+# Install Guide & System Requirements
 
-1. [Visit the download page](https://github.com/Rllyyy/Internet-Check/releases/latest), open the setup and follow the instructions.
+1. <b>[Visit the download page](https://github.com/Rllyyy/Internet-Check/releases/latest)</b>, open the setup and follow the instructions.
 2. Start InternetCheck.exe from either the Desktop or the appData folder.
+
+**_System Requirements:_**
+
+- **.NET Framework 4.7.2** (included in **Windows 10** April 2018 Update) but should also work on Windows 7+ and Windows Server 2008 R2+
+- Memory: 20 MB RAM
 
 # In-App Settings (DarkMode, Windows Autostart, System Tray)
 
@@ -78,36 +83,37 @@
 # FAQ
 
 <details>
-  <summary> <b>Why does the program tell me that I don't have internet although my internet is working fine? </b></summary>
-  <p>Some routers may block the ping protocol. For users experiencing this problem please follow the instructions in "use alternative ping method" under advanced settings in this readme.
-  </p>
+  <summary><b>Why does the program tell me that I don't have internet although my internet is working fine? </b></summary>
+  <span>Some routers may block the ping protocol. For users experiencing this problem please follow the instructions in "use alternative ping method" under advanced settings in this readme.
+  </span>
 </details>
 
 <details>
-  <summary> <b>Why does the program sometimes show that the connection is disrupted?</b></summary>
-  <p>A failed ping is noted when the server doesn't respond within 2.5 seconds. Often this is the result of a packet loss within the users network. A very few servers may also not respond within the given time frame of 2.5 seconds or temporary block the users ip address (ping to death prevention). The severs that come with this program should respond within the time frame and won't block the user. The ping protocol doesn't use TCP which would resend data and instead is using ICMP.
-  </p>
+  <summary><b>Why does the program sometimes show that the connection is disrupted?</b></summary>
+  <span>A failed ping is noted when the server doesn't respond within 2.5 seconds. Often this is the result of a packet loss within the users network. A very few servers may also not respond within the given time frame of 2.5 seconds or temporary block the users ip address (ping to death prevention). The severs that come with this program should respond within the time frame and won't block the user. The ping protocol doesn't use TCP which would resend data and instead is using ICMP.
+  </span>
 </details>
 <details>
-  <summary> <b>I found a bug, have a feature request or want to make a proposition for a code change. Where can they be reported?</b></summary>
-  <p>Bugs, feature request or code changes can be submitted to GitHub under the <a href="https://github.com/Rllyyy/Internet-Check/issues/new/choose">"Issues"</a> tab.
-  </p>
+  <summary><b>I found a bug, have a feature request or want to make a proposition for a code change. Where can they be reported?</b></summary>
+  <span>Bugs, feature request or code changes can be submitted to GitHub under the <a href="https://github.com/Rllyyy/Internet-Check/issues/new/choose">"Issues"</a> tab.
+  </span>
 </details>
 <details>
-  <summary> <b>Where are the program files saved?</b></summary>
-  <p>The program files live in Users\[userName]\AppData\Local\4PointsInteractive\Internet-Check.
+  <summary><b>Where are the program files saved?</b></summary>
+  <span>The program files live in Users\[userName]\AppData\Local\4PointsInteractive\Internet-Check.
   To make the setup work we sadly had to save the application inside the users appData folder which is not visible by default.
   <a href="https://cybertext.wordpress.com/2012/05/29/cant-see-the-appdata-folder/">Here</a> is a guide to make the appData folder visible.
-  </p>
+  </span>
 </details>
 
 # Advanced Settings
 
 These settings allow to the advanced user to further change certain aspects of the application. Applying incorrect or incomplete settings may prevent the application from running. AdvancedSettings.xml lives inside the AppData folder and can be edited by any editor (notepad, notepad++ or VSCode).
+For the exact file location read "Where are the program files saved?" in the FAQ.
 
 <!--Servers-->
 <details>
-  <summary> <b>Edit Servers that are Pinged</b></summary>
+  <summary><b>Edit Servers that are Pinged</b></summary>
   Create a value tag and write the the ip address inside. Only add IP addresses to this list and not domain names (like www.example.com) so the router or dns server doesn't return a false value. The application automatically detects if a server has been added or removed when the user clicks on the start button. Please make sure to save the XML file in beforehand.
   <p>
 
@@ -125,7 +131,7 @@ These settings allow to the advanced user to further change certain aspects of t
 
 <!--Ping Methods-->
 <details>
-  <summary> <b>Use alternative Ping Method</b></summary>
+  <summary><b>Use alternative Ping Method</b></summary>
   Set this value to true if you only get the message that the server did not respond although there is an active internet connection. This error might 
   occur if the ping protocol is blocked by the router.
   Server from the node "Servers" will be ignored and the application now sends a request to google.com/generate_204. Save the XML file and click on start in Internet Check.
@@ -142,7 +148,7 @@ These settings allow to the advanced user to further change certain aspects of t
 
 <!--Show all Ping Results-->
 <details>
-  <summary> <b>Show all Ping Results</b></summary>
+  <summary><b>Show all Ping Results</b></summary>
   If this value is set to true both successful and unsuccessful pings will be noted. If set to false only unsuccessful pings are recorded. Please click on start again in the application to apply the change and make sure that the XML file was saved beforehand.
   <p>
 
@@ -155,11 +161,26 @@ These settings allow to the advanced user to further change certain aspects of t
   </p>
 </details>
 
+<!--Show Minimized Info-->
+<details>
+  <summary><b>Show minimized Info Notification</b></summary>
+  Set this value to false if the ballon item that shows up if the application is minimized and "show only in System Tray" is active should  not be displayed. This setting will be applied the next time the application is minimized. Make sure to save AdvancedSettings.xml! The standard value is true.
+  <p>
+
+```xml
+  <setting name="ShowMinimizedInfo">
+    <value>true</value>
+  </setting>
+```
+
+  </p>
+</details>
+
 <!--Stop application after X days-->
 <details>
-  <summary> <b>Stop the Application after X days (Task Scheduler)</b></summary>
+  <summary><b>Stop the Application after X days (Task Scheduler)</b></summary>
   This setting stops the task if the pc is running longer than the value in days. This only applies if the option "start with windows" is selected and the application was therefore started by windows itself. If the program is started by the user this setting will not be applied.
-  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user tick the checkbox "Start with Windows".
+  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows".
   <p>
 
 ```xml
@@ -173,10 +194,10 @@ These settings allow to the advanced user to further change certain aspects of t
 
 <!--Disallow start if on batteries-->
 <details>
-  <summary> <b>Disallow Start if on Batteries (Task Scheduler)</b></summary>
+  <summary><b>Disallow Start if on Batteries (Task Scheduler)</b></summary>
   
   <p>If this setting is set to true the app will not be launched by the Task Scheduler if the pc is not connected to a power source and is instead running on batteries.
-  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user tick the checkbox "Start with Windows". The standard value is false.
+  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows". The standard value is false.
   </p>
   <p>
 
@@ -191,10 +212,10 @@ These settings allow to the advanced user to further change certain aspects of t
 
 <!--Stop If Going On Batteries-->
 <details>
-  <summary> <b>Stop if going on Batteries (Task Scheduler)</b></summary>
+  <summary><b>Stop if going on Batteries (Task Scheduler)</b></summary>
   
   <p>If this setting is set to true the app will stop if it was launched by the Task Scheduler and the pc is just running from the battery.
-    After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user tick the checkbox "Start with Windows".
+    After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows".
     The standard value is false.
   </p>
   <p>
@@ -210,10 +231,10 @@ These settings allow to the advanced user to further change certain aspects of t
 
 <!--Stop On Idle End-->
 <details>
-  <summary> <b>Stop the program if returning from an Idle State (Task Scheduler)</b></summary>
+  <summary><b>Stop the program if returning from an Idle State (Task Scheduler)</b></summary>
   
   <p>If this setting is set to true the app will stop if it was launched by the Task Scheduler and the pc is returning from an idle state (i.e. if the laptop returns from sleep mode).
-  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user tick the checkbox "Start with Windows".
+  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows".
   The standard value is false.
   </p>
   <p>
@@ -229,7 +250,7 @@ These settings allow to the advanced user to further change certain aspects of t
 
 # Legal Note
 
-Although this program uses less that 100 Bytes (0.000100 Megabytes) to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS or ping of death attack.
+Although this program uses less than 100 Bytes (0.000100 Megabytes) to ping a server in an interval (of min. 5 seconds) it may be seen as a (D)DOS or ping of death attack.
 We therefore advise the user to put in an interval that is bigger or equal to 30 seconds.
 The servers we are pinging (Googles DNS and Cloudflare) should handle the request with ease.
 For any programmers we advice against increasing the buffer size in the ping method and to only ping servers that are used to higher traffic.
