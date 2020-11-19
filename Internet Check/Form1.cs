@@ -57,6 +57,7 @@ namespace Internet_Check
             this.button1.Text = "Start";
             this.panelSeetings.SendToBack();
             this.userControlClearConfirm1.SendToBack();
+            this.userControlErrorMessage1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
 
             this.notifyIcon1.Visible = false;
@@ -102,7 +103,7 @@ namespace Internet_Check
                     //Give the user an Error if the interval that was provided is a not number, bigger than 32767 or smaller than 4
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        UserErrorMessage("Please enter only positive numbers that are in-between 4 and 32766", 4200);
+                        this.ErrorMessage("Please enter only positive numbers that are in-between 4 and 32766");
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -125,7 +126,7 @@ namespace Internet_Check
             else
             {
                 //Give the User an error if he enters no interval
-                UserErrorMessage("Please enter an interval.", 2700);
+               this.ErrorMessage("Please enter an interval.");
             }
         }
 
@@ -643,8 +644,9 @@ namespace Internet_Check
         }
 
         //UserErrorMessages. Method takes the ErrorText by string and time for how long the error message is visible by int (1000 = 1 sec)
-        public void UserErrorMessage(string ErrorText, int TimeErrorVisible)
+        public void ErrorMessage(string errorText)
         {
+            /*
             new Thread(() =>
             {
                 this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = ErrorText; ; });
@@ -654,6 +656,8 @@ namespace Internet_Check
                 Thread.CurrentThread.IsBackground = true;
                 this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
             }).Start();
+            */
+            userControlErrorMessage1.setErrorMessageText(errorText);
         }
 
         //Writes current date to file if the User tries to open the application more than once. The original application watches this file and if changes brings itself back to the front.

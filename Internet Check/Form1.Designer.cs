@@ -41,9 +41,10 @@
             this.labelErrormessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelSeetings = new System.Windows.Forms.Panel();
-            this.userSettings1 = new Internet_Check.UserSettings();
             this.button2 = new System.Windows.Forms.Button();
             this.userControlClearConfirm1 = new Internet_Check.UserControlClearConfirm();
+            this.userSettings1 = new Internet_Check.UserSettings();
+            this.userControlErrorMessage1 = new Internet_Check.UserControlErrorMessage();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panelSeetings.SuspendLayout();
@@ -186,17 +187,6 @@
             this.panelSeetings.TabIndex = 9;
             this.panelSeetings.Visible = false;
             // 
-            // userSettings1
-            // 
-            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.userSettings1.BackColor = System.Drawing.Color.White;
-            this.userSettings1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userSettings1.Location = new System.Drawing.Point(0, 0);
-            this.userSettings1.Name = "userSettings1";
-            this.userSettings1.Size = new System.Drawing.Size(360, 129);
-            this.userSettings1.TabIndex = 10;
-            // 
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -222,6 +212,28 @@
             this.userControlClearConfirm1.Size = new System.Drawing.Size(376, 129);
             this.userControlClearConfirm1.TabIndex = 10;
             // 
+            // userSettings1
+            // 
+            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userSettings1.BackColor = System.Drawing.Color.White;
+            this.userSettings1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userSettings1.Location = new System.Drawing.Point(0, 0);
+            this.userSettings1.Name = "userSettings1";
+            this.userSettings1.Size = new System.Drawing.Size(360, 129);
+            this.userSettings1.TabIndex = 10;
+            // 
+            // userControlErrorMessage1
+            // 
+            this.userControlErrorMessage1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userControlErrorMessage1.BackColor = System.Drawing.Color.White;
+            this.userControlErrorMessage1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userControlErrorMessage1.Location = new System.Drawing.Point(0, 0);
+            this.userControlErrorMessage1.Name = "userControlErrorMessage1";
+            this.userControlErrorMessage1.Size = new System.Drawing.Size(376, 129);
+            this.userControlErrorMessage1.TabIndex = 11;
+            this.userControlErrorMessage1.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -229,16 +241,17 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(356, 152);
-            this.Controls.Add(this.userControlClearConfirm1);
-            this.Controls.Add(this.labelErrormessage);
+            this.Controls.Add(this.userControlErrorMessage1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.userControlClearConfirm1);
+            this.Controls.Add(this.labelErrormessage);
             this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1000, 1000);
-            this.MinimumSize = new System.Drawing.Size(370, 174);
+            this.MinimumSize = new System.Drawing.Size(372, 191);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Internet Check - v1.6.1";
@@ -268,6 +281,7 @@
         private System.Windows.Forms.Panel panelSeetings;
         private UserControlClearConfirm userControlClearConfirm1;
         public System.Windows.Forms.Label labelRunning;
+        private UserControlErrorMessage userControlErrorMessage1;
     }
 }
 

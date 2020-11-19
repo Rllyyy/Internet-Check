@@ -78,6 +78,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserControlErrorMessage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlErrorMessage.Designer.cs">
+      <DependentUpon>UserControlErrorMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     <Compile Include="UserSettings.Designer.cs">
       <DependentUpon>UserSettings.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UserControlErrorMessage.resx">
+      <DependentUpon>UserControlErrorMessage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
