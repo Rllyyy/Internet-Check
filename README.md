@@ -54,10 +54,16 @@
 1. <b>[Visit the download page](https://github.com/Rllyyy/Internet-Check/releases/latest)</b>, open the setup and follow the instructions.
 2. Start InternetCheck.exe from either the Desktop or the appData folder.
 
-**_System Requirements:_**
-
-- **.NET Framework 4.7.2** (included in **Windows 10** April 2018 Update) but should also work on Windows 7+ and Windows Server 2008 R2+
-- Memory: 20 MB RAM
+<details>
+  <summary><b><i>View System Requirements</i></b></summary>
+  <p>
+  <ul>
+  <li><b>.NET Framework 4.7.2</b> (included in <b>Windows 10</b> April 2018 Update) but should also work on Windows 7+ or Windows Server 2008 R2+ </li>
+  <li>Memory: 20 MB RAM</li>
+  <li>Storage: 800 KB available space</li>
+</ul>
+  </p>
+</details>
 
 # In-App Settings (DarkMode, Windows Autostart, System Tray)
 
@@ -114,7 +120,7 @@ For the exact file location read "Where are the program files saved?" in the FAQ
 <!--Servers-->
 <details>
   <summary><b>Edit Servers that are Pinged</b></summary>
-  Create a value tag and write the the ip address inside. Only add IP addresses to this list and not domain names (like www.example.com) so the router or dns server doesn't return a false value. The application automatically detects if a server has been added or removed when the user clicks on the start button. Please make sure to save the XML file in beforehand.
+  Create a value tag and write the IP address inside. Only add IP addresses to this list and not domain names (like www.example.com) so the router or DNS server doesn't return a false value. The application automatically detects if a server has been added or removed when the user clicks on the start button. Please make sure to save the XML file in beforehand.
   <p>
 
 ```xml
@@ -164,13 +170,18 @@ For the exact file location read "Where are the program files saved?" in the FAQ
 <!--Show Minimized Info-->
 <details>
   <summary><b>Show minimized Info Notification</b></summary>
-  Set this value to false if the ballon item that shows up if the application is minimized and "show only in System Tray" is active should  not be displayed. This setting will be applied the next time the application is minimized. Make sure to save AdvancedSettings.xml! The standard value is true.
+  <p>
+  Set this value to false if the balloon item that shows up if the application is minimized and "show only in System Tray" is active should  not be displayed. This setting will be applied the next time the application is minimized. Make sure to save AdvancedSettings.xml! The standard value is true.
+  </p>
+  <p>
+  <img src=".\.github\balloonTip.png" alt="BallonTip">
+  </p>
   <p>
 
 ```xml
-  <setting name="ShowMinimizedInfo">
-    <value>true</value>
-  </setting>
+<setting name="ShowMinimizedInfo">
+  <value>true</value>
+</setting>
 ```
 
   </p>
@@ -195,7 +206,6 @@ For the exact file location read "Where are the program files saved?" in the FAQ
 <!--Disallow start if on batteries-->
 <details>
   <summary><b>Disallow Start if on Batteries (Task Scheduler)</b></summary>
-  
   <p>If this setting is set to true the app will not be launched by the Task Scheduler if the pc is not connected to a power source and is instead running on batteries.
   After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows". The standard value is false.
   </p>
