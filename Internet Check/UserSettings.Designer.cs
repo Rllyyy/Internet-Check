@@ -78,9 +78,9 @@
             this.buttonBack.FlatAppearance.BorderSize = 0;
             this.buttonBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonBack.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonBack.Location = new System.Drawing.Point(6, 96);
+            this.buttonBack.Location = new System.Drawing.Point(5, 96);
             this.buttonBack.Name = "buttonBack";
-            this.buttonBack.Size = new System.Drawing.Size(350, 30);
+            this.buttonBack.Size = new System.Drawing.Size(366, 30);
             this.buttonBack.TabIndex = 3;
             this.buttonBack.Text = "Return";
             this.buttonBack.UseVisualStyleBackColor = true;

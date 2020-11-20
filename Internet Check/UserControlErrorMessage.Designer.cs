@@ -40,7 +40,7 @@
             this.buttonOk.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonOk.Location = new System.Drawing.Point(5, 96);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(350, 30);
+            this.buttonOk.Size = new System.Drawing.Size(366, 30);
             this.buttonOk.TabIndex = 4;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -51,7 +51,7 @@
             this.labelErrorMessage.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelErrorMessage.Location = new System.Drawing.Point(0, 0);
             this.labelErrorMessage.Name = "labelErrorMessage";
-            this.labelErrorMessage.Size = new System.Drawing.Size(356, 93);
+            this.labelErrorMessage.Size = new System.Drawing.Size(376, 93);
             this.labelErrorMessage.TabIndex = 5;
             this.labelErrorMessage.Text = "Error Message";
             this.labelErrorMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

@@ -217,7 +217,6 @@ namespace Internet_Check
             this.Hide();
             this.SendToBack();
             this.Visible = false;
-            form1.PanelSettings_Hide();
         }
 
         //Kollege -Ole regelt
