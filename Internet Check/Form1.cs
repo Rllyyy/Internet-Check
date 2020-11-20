@@ -17,6 +17,11 @@ namespace Internet_Check
     {
         public Form1()
         {
+            checkForMultipleInstances();
+        }
+
+        private void checkForMultipleInstances()
+        {
             //Get the amount of instances running and exit if the count is greater than 1
             //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
             var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
@@ -715,7 +720,6 @@ namespace Internet_Check
             myData = null;
             return boolSetting;
         }
-
     }
 }
 

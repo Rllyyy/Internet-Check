@@ -108,7 +108,7 @@
             this.buttonOpen.Location = new System.Drawing.Point(5, 32);
             this.buttonOpen.Name = "buttonOpen";
             this.buttonOpen.Size = new System.Drawing.Size(366, 30);
-            this.buttonOpen.TabIndex = 7;
+            this.buttonOpen.TabIndex = 2;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
@@ -145,7 +145,7 @@
             this.button1.Location = new System.Drawing.Point(5, 0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(366, 30);
-            this.button1.TabIndex = 5;
+            this.button1.TabIndex = 1;
             this.button1.Text = "Start/Stop";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -228,7 +228,7 @@
             this.MinimumSize = new System.Drawing.Size(376, 191);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Internet Check - v1.6.1";
+            this.Text = "Internet Check - v1.6.2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
