@@ -17,6 +17,11 @@ namespace Internet_Check
     {
         public Form1()
         {
+            checkForMultipleInstances();
+        }
+
+        private void checkForMultipleInstances()
+        {
             //Get the amount of instances running and exit if the count is greater than 1
             //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
             var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
@@ -55,8 +60,9 @@ namespace Internet_Check
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             notifyIcon1.Visible = true;
             this.button1.Text = "Start";
-            this.panelSeetings.SendToBack();
+            this.userSettings1.SendToBack();
             this.userControlClearConfirm1.SendToBack();
+            this.userControlErrorMessage1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
 
             this.notifyIcon1.Visible = false;
@@ -102,7 +108,7 @@ namespace Internet_Check
                     //Give the user an Error if the interval that was provided is a not number, bigger than 32767 or smaller than 4
                     if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
                     {
-                        UserErrorMessage("Please enter only positive numbers that are in-between 4 and 32766", 4200);
+                        this.ErrorMessage("Please enter only positive numbers that are in-between 4 and 32766");
                         textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
                     }
                     else
@@ -125,7 +131,7 @@ namespace Internet_Check
             else
             {
                 //Give the User an error if he enters no interval
-                UserErrorMessage("Please enter an interval.", 2700);
+               this.ErrorMessage("Please enter an interval.");
             }
         }
 
@@ -518,7 +524,8 @@ namespace Internet_Check
             this.button1.ForeColor = Color.FromArgb(233, 233, 233);
             this.buttonOpen.ForeColor = Color.FromArgb(233, 233, 233);
             this.buttonClear.ForeColor = Color.FromArgb(233, 233, 233);
-            this.labelErrormessage.ForeColor = Color.FromArgb(233, 233, 233);
+            this.userControlErrorMessage1.BackColor = Color.FromArgb(56, 55, 55);
+            this.userControlErrorMessage1.ForeColor = Color.FromArgb(233, 233, 233);
             this.button2.ForeColor = Color.FromArgb(233, 233, 233);
             this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);
             this.userControlClearConfirm1.UserControlClearConfirmDarkmodeForm();
@@ -531,9 +538,11 @@ namespace Internet_Check
             this.button1.ForeColor = Color.Black;
             this.buttonOpen.ForeColor = Color.Black;
             this.buttonClear.ForeColor = Color.Black;
-            this.labelErrormessage.ForeColor = Color.Black;
+            this.userControlErrorMessage1.ForeColor = Color.Black;
             this.button2.ForeColor = Color.Black;
             this.userSettings1.BackColor = Color.White;
+            this.userControlErrorMessage1.BackColor = Color.White;
+            this.userControlErrorMessage1.ForeColor = Color.Black;
             this.userControlClearConfirm1.BackColor = Color.White;
             this.userControlClearConfirm1.UserControlClearConfirmLightmodeForm();
         }
@@ -554,21 +563,7 @@ namespace Internet_Check
             this.userSettings1.BringToFront();
             this.userSettings1.Visible = true;
             this.userSettings1.Show();
-            this.panelSeetings.Show();
-            this.panelSeetings.Visible = true;
-            this.panelSeetings.BringToFront();
-            
         }
-
-        //Hides the Settings-Panel
-        public void PanelSettings_Hide()
-        {
-            this.panel2.BringToFront();
-            this.panel2.Visible = true;
-            this.panel2.Show();
-            this.panelSeetings.SendToBack();
-        }
-
 
         //UI-Elements for ClearOnlyIrrelevant. Called from UserControlClearConfirm.cs
         public void ClearOnlyIrrelevant()
@@ -642,18 +637,10 @@ namespace Internet_Check
             File.Move(oldFilePath, newFilePath );
         }
 
-        //UserErrorMessages. Method takes the ErrorText by string and time for how long the error message is visible by int (1000 = 1 sec)
-        public void UserErrorMessage(string ErrorText, int TimeErrorVisible)
+        //Gives the class UserControllErrorMessage the error Text and can be called from outside of this class.
+        public void ErrorMessage(string errorText)
         {
-            new Thread(() =>
-            {
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Text = ErrorText; ; });
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = true; ; });
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.BringToFront(); ; });
-                Thread.Sleep(TimeErrorVisible);
-                Thread.CurrentThread.IsBackground = true;
-                this.labelErrormessage.BeginInvoke((MethodInvoker)delegate () { this.labelErrormessage.Visible = false; ; });
-            }).Start();
+            userControlErrorMessage1.setErrorMessageText(errorText);
         }
 
         //Writes current date to file if the User tries to open the application more than once. The original application watches this file and if changes brings itself back to the front.

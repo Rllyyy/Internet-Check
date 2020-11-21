@@ -38,15 +38,13 @@
             this.buttonClear = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.button1 = new System.Windows.Forms.Button();
-            this.labelErrormessage = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panelSeetings = new System.Windows.Forms.Panel();
-            this.userSettings1 = new Internet_Check.UserSettings();
             this.button2 = new System.Windows.Forms.Button();
+            this.userSettings1 = new Internet_Check.UserSettings();
+            this.userControlErrorMessage1 = new Internet_Check.UserControlErrorMessage();
             this.userControlClearConfirm1 = new Internet_Check.UserControlClearConfirm();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panelSeetings.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -58,7 +56,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 130);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(356, 22);
+            this.panel1.Size = new System.Drawing.Size(375, 22);
             this.panel1.TabIndex = 2;
             // 
             // labelRunning
@@ -67,7 +65,7 @@
             this.labelRunning.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelRunning.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelRunning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(233)))), ((int)(((byte)(233)))), ((int)(((byte)(233)))));
-            this.labelRunning.Location = new System.Drawing.Point(274, 0);
+            this.labelRunning.Location = new System.Drawing.Point(293, 0);
             this.labelRunning.Name = "labelRunning";
             this.labelRunning.Size = new System.Drawing.Size(82, 17);
             this.labelRunning.TabIndex = 0;
@@ -84,7 +82,7 @@
             this.textBoxInterval.Location = new System.Drawing.Point(94, 0);
             this.textBoxInterval.MaxLength = 5;
             this.textBoxInterval.Name = "textBoxInterval";
-            this.textBoxInterval.Size = new System.Drawing.Size(262, 16);
+            this.textBoxInterval.Size = new System.Drawing.Size(281, 16);
             this.textBoxInterval.TabIndex = 1;
             this.textBoxInterval.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxInterval_KeyDown);
             // 
@@ -107,10 +105,10 @@
             this.buttonOpen.FlatAppearance.BorderSize = 0;
             this.buttonOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonOpen.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOpen.Location = new System.Drawing.Point(0, 32);
+            this.buttonOpen.Location = new System.Drawing.Point(5, 32);
             this.buttonOpen.Name = "buttonOpen";
-            this.buttonOpen.Size = new System.Drawing.Size(346, 30);
-            this.buttonOpen.TabIndex = 7;
+            this.buttonOpen.Size = new System.Drawing.Size(366, 30);
+            this.buttonOpen.TabIndex = 2;
             this.buttonOpen.Text = "Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
             this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
@@ -122,9 +120,9 @@
             this.buttonClear.FlatAppearance.BorderSize = 0;
             this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClear.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClear.Location = new System.Drawing.Point(0, 64);
+            this.buttonClear.Location = new System.Drawing.Point(5, 64);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(346, 30);
+            this.buttonClear.Size = new System.Drawing.Size(366, 30);
             this.buttonClear.TabIndex = 6;
             this.buttonClear.Text = "Clear";
             this.buttonClear.UseVisualStyleBackColor = true;
@@ -144,58 +142,24 @@
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Location = new System.Drawing.Point(5, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(346, 30);
-            this.button1.TabIndex = 5;
+            this.button1.Size = new System.Drawing.Size(366, 30);
+            this.button1.TabIndex = 1;
             this.button1.Text = "Start/Stop";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // labelErrormessage
-            // 
-            this.labelErrormessage.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelErrormessage.Location = new System.Drawing.Point(0, 0);
-            this.labelErrormessage.Name = "labelErrormessage";
-            this.labelErrormessage.Size = new System.Drawing.Size(355, 126);
-            this.labelErrormessage.TabIndex = 1;
-            this.labelErrormessage.Text = "Errormessage";
-            this.labelErrormessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labelErrormessage.Visible = false;
-            // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.panelSeetings);
             this.panel2.Controls.Add(this.buttonOpen);
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.buttonClear);
-            this.panel2.Location = new System.Drawing.Point(5, 0);
+            this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(360, 129);
+            this.panel2.Size = new System.Drawing.Size(376, 129);
             this.panel2.TabIndex = 9;
-            // 
-            // panelSeetings
-            // 
-            this.panelSeetings.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panelSeetings.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panelSeetings.Controls.Add(this.userSettings1);
-            this.panelSeetings.Location = new System.Drawing.Point(-2, 0);
-            this.panelSeetings.Name = "panelSeetings";
-            this.panelSeetings.Size = new System.Drawing.Size(360, 129);
-            this.panelSeetings.TabIndex = 9;
-            this.panelSeetings.Visible = false;
-            // 
-            // userSettings1
-            // 
-            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.userSettings1.BackColor = System.Drawing.Color.White;
-            this.userSettings1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userSettings1.Location = new System.Drawing.Point(0, 0);
-            this.userSettings1.Name = "userSettings1";
-            this.userSettings1.Size = new System.Drawing.Size(360, 129);
-            this.userSettings1.TabIndex = 10;
             // 
             // button2
             // 
@@ -204,13 +168,35 @@
             this.button2.FlatAppearance.BorderSize = 0;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(0, 96);
+            this.button2.Location = new System.Drawing.Point(5, 96);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(346, 30);
+            this.button2.Size = new System.Drawing.Size(366, 30);
             this.button2.TabIndex = 8;
             this.button2.Text = "Settings";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // userSettings1
+            // 
+            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userSettings1.BackColor = System.Drawing.Color.White;
+            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userSettings1.Location = new System.Drawing.Point(0, 0);
+            this.userSettings1.Name = "userSettings1";
+            this.userSettings1.Size = new System.Drawing.Size(376, 129);
+            this.userSettings1.TabIndex = 12;
+            this.userSettings1.Visible = false;
+            // 
+            // userControlErrorMessage1
+            // 
+            this.userControlErrorMessage1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userControlErrorMessage1.BackColor = System.Drawing.Color.White;
+            this.userControlErrorMessage1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userControlErrorMessage1.Location = new System.Drawing.Point(0, 0);
+            this.userControlErrorMessage1.Name = "userControlErrorMessage1";
+            this.userControlErrorMessage1.Size = new System.Drawing.Size(376, 129);
+            this.userControlErrorMessage1.TabIndex = 11;
+            this.userControlErrorMessage1.Visible = false;
             // 
             // userControlClearConfirm1
             // 
@@ -228,26 +214,26 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(356, 152);
-            this.Controls.Add(this.userControlClearConfirm1);
-            this.Controls.Add(this.labelErrormessage);
-            this.Controls.Add(this.panel2);
+            this.ClientSize = new System.Drawing.Size(375, 152);
+            this.Controls.Add(this.userSettings1);
+            this.Controls.Add(this.userControlErrorMessage1);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.userControlClearConfirm1);
+            this.Controls.Add(this.panel2);
             this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1000, 1000);
-            this.MinimumSize = new System.Drawing.Size(370, 174);
+            this.MinimumSize = new System.Drawing.Size(376, 191);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Internet Check - v1.6.1";
+            this.Text = "Internet Check - v1.6.2";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
-            this.panelSeetings.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -261,13 +247,12 @@
         private System.Windows.Forms.Button buttonClear;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label labelErrormessage;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button2;
-        private UserSettings userSettings1;
-        private System.Windows.Forms.Panel panelSeetings;
         private UserControlClearConfirm userControlClearConfirm1;
         public System.Windows.Forms.Label labelRunning;
+        private UserControlErrorMessage userControlErrorMessage1;
+        private UserSettings userSettings1;
     }
 }
 

@@ -84,7 +84,7 @@ namespace Internet_Check
                         }
                         catch
                         {
-                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 4000);
+                            form1.ErrorMessage("Please restart the app with admin rights. \n Settings were not applied!");
                             this.checkBoxStartWithWindows.Checked = false;
                             errorsCaught = true;
                         }
@@ -98,14 +98,9 @@ namespace Internet_Check
                             this.checkBoxStartWithWindows.Checked = true;
 
                             // If Hide when Minimized and start with windows are both enabled and heckBoxStartWithWindows.Checked is still false(manipulated by the above try/catch, the user will get an ErrorMessage
-                            // Temporary solution until ErrorMessageboxClass arrives in a later update (1.6.2)
                             if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true && Properties.Settings.Default.SettingWindowsStart == true)
                             {
-                                new System.Threading.Thread(() =>
-                                {
-                                    System.Threading.Thread.Sleep(1200);
-                                    form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.", 8000);
-                                }).Start();
+                                form1.ErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.");
                             }
                         }
                     }
@@ -122,7 +117,7 @@ namespace Internet_Check
                         }
                         catch
                         {
-                            form1.UserErrorMessage("Please restart the app with admin rights. \n Settings were not applied!", 3500);
+                            form1.ErrorMessage("Please restart the app with admin rights. \n Settings were not applied!");
                             this.checkBoxStartWithWindows.Checked = true;
                             errorsCaught = true;
                         }
@@ -147,13 +142,8 @@ namespace Internet_Check
 
                 if (Properties.Settings.Default.SettingHideWhenMin == true & this.checkBoxStartWithWindows.Checked == true && Properties.Settings.Default.SettingWindowsStart == true)
                 {
-                    new System.Threading.Thread(() =>
-                    {
-                        System.Threading.Thread.Sleep(1200);
-                        form1.UserErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.", 8000);
-                    }).Start();
+                    form1.ErrorMessage("On Windows boot the application will start \n running in the background and you won't see it! \n You can access the program through the System Tray.");
                 }
-
             }
             else
             {
@@ -227,7 +217,6 @@ namespace Internet_Check
             this.Hide();
             this.SendToBack();
             this.Visible = false;
-            form1.PanelSettings_Hide();
         }
 
         //Kollege -Ole regelt

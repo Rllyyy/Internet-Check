@@ -42,7 +42,7 @@
             this.buttonReturn.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonReturn.Location = new System.Drawing.Point(5, 96);
             this.buttonReturn.Name = "buttonReturn";
-            this.buttonReturn.Size = new System.Drawing.Size(350, 30);
+            this.buttonReturn.Size = new System.Drawing.Size(366, 30);
             this.buttonReturn.TabIndex = 4;
             this.buttonReturn.Text = "Return";
             this.buttonReturn.UseVisualStyleBackColor = true;
@@ -57,7 +57,7 @@
             this.buttonClearOnlyIrrelevant.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonClearOnlyIrrelevant.Location = new System.Drawing.Point(5, 31);
             this.buttonClearOnlyIrrelevant.Name = "buttonClearOnlyIrrelevant";
-            this.buttonClearOnlyIrrelevant.Size = new System.Drawing.Size(350, 30);
+            this.buttonClearOnlyIrrelevant.Size = new System.Drawing.Size(366, 30);
             this.buttonClearOnlyIrrelevant.TabIndex = 5;
             this.buttonClearOnlyIrrelevant.Text = "Clear Only Irrelevant Data";
             this.buttonClearOnlyIrrelevant.UseVisualStyleBackColor = true;
@@ -72,7 +72,7 @@
             this.buttonClearEverything.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonClearEverything.Location = new System.Drawing.Point(5, 0);
             this.buttonClearEverything.Name = "buttonClearEverything";
-            this.buttonClearEverything.Size = new System.Drawing.Size(350, 30);
+            this.buttonClearEverything.Size = new System.Drawing.Size(366, 30);
             this.buttonClearEverything.TabIndex = 6;
             this.buttonClearEverything.Text = "Clear Everything";
             this.buttonClearEverything.UseVisualStyleBackColor = true;
