@@ -40,7 +40,11 @@ namespace Internet_Check
 
                 //Start the form
                 formStart();
-                CheckIfStartedWithWindows();
+
+                if(CheckIfStartedWithWindows() == true && Properties.Settings.Default.SettingWindowsStart == true)
+                {
+                    startInSystemTray();
+                }
             }
         }
 
@@ -80,6 +84,42 @@ namespace Internet_Check
             {
                 DarkmodeForm();
             }
+        }
+
+        /// <summary>
+        /// Check if the application was started by windows. https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
+        /// </summary>
+        /// <returns></returns>
+        [DllImport("kernel32")]
+        extern static UInt64 GetTickCount64();
+        private bool CheckIfStartedWithWindows()
+        {
+            //Return if windows was started in the last 9 Minutes
+            //TODO fix when returning from sleep mode
+            bool startedByWindows;
+            TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
+            TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
+
+            if (TimeSinceWindowsStart <= time)
+            {
+                return startedByWindows = true;
+            }
+            else
+            {
+                return startedByWindows = false;
+            }
+        }
+
+        private void startInSystemTray()
+        {
+            if (Properties.Settings.Default.SettingHideWhenMin == true)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+                this.Visible = false;
+                this.notifyIcon1.Visible = false;
+            }
+            startCollecting();
         }
 
         /// <summary>
@@ -457,7 +497,7 @@ namespace Internet_Check
             {
                 this.Visible = false;
                 this.notifyIcon1.Visible = true;
-                if(boolAdvancedSettings("ShowMinimizedInfo",true) == true)
+                if(boolAdvancedSettings("ShowMinimizedInfo",true) == true && CheckIfStartedWithWindows() == false)
                 {
                     this.notifyIcon1.ShowBalloonTip(17000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
                 }
@@ -648,31 +688,6 @@ namespace Internet_Check
         {
             DateTime now = DateTime.Now;
             File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"), now.ToString());
-        }
-
-        /// <summary>
-        /// Check if the application was started by windows. https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
-        /// </summary>
-        /// <returns></returns>
-        [DllImport("kernel32")]
-        extern static UInt64 GetTickCount64();
-        private void CheckIfStartedWithWindows()
-        {
-            //Start collecting data if StartWithWindows is true and time since boot is smaller or equal to 9 minutes. Windows update might interfere with this.
-            TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
-            TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
-
-            if (TimeSinceWindowsStart <= time && Properties.Settings.Default.SettingWindowsStart == true)
-            {
-                if (Properties.Settings.Default.SettingHideWhenMin == true)
-                {
-                    this.WindowState = FormWindowState.Minimized;
-                    this.ShowInTaskbar = false;
-                    this.Visible = false;
-                    this.notifyIcon1.Visible = false;
-                }
-                checkIfIntervallCorrect();
-            }
         }
 
         public bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
