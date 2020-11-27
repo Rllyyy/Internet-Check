@@ -270,5 +270,6 @@ out of or in connection with the software or the use or other dealings in the so
 # Libraries and other external Software (no need to download them)
 
 - TaskScheduler from https://github.com/dahall/TaskScheduler
+- Octokit.net (GitHub API client library) from https://github.com/octokit/octokit.net
 
       Bugs, feature request or code changes can be submitted to GitHub under the "Issues" tab.
