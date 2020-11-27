@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Xml;
 using System.Net;
+using Octokit;
 
 namespace Internet_Check
 {
@@ -31,7 +32,7 @@ namespace Internet_Check
                 //Exit the Application if multiple instances are detected and tell the other process to focus again
                 MultipleInstancesDetected();
                 this.Close();
-                Application.Exit();
+                System.Windows.Forms.Application.Exit();
             }
             else
             {
@@ -51,11 +52,13 @@ namespace Internet_Check
         private void formStart()
         {
             InitializeComponent();
-            PrepareUIElements();
+            PrepareUIElementsAsync();
         }
 
-        private void PrepareUIElements()
-        {   
+        public static string localVersionNumber = "1.6.2";
+        private async System.Threading.Tasks.Task PrepareUIElementsAsync()
+        {
+            this.Text = this.Text + localVersionNumber;
             //Pass Form1 to the other classes
             userSettings1.setForm1(this);
             userControlClearConfirm1.setForm1(this);
@@ -84,6 +87,8 @@ namespace Internet_Check
             {
                 DarkmodeForm();
             }
+
+            await CheckGitHubNewerVersionAsync();
         }
 
         /// <summary>
@@ -186,7 +191,7 @@ namespace Internet_Check
 
             //Write starting info into the text file
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program started at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program started at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 
             //Prepare variables for timer
             TimeSpan startTimeSpan = TimeSpan.Zero;
@@ -218,7 +223,7 @@ namespace Internet_Check
 
             //Write text if clicked on stop
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
 
             //Reset the UI elements to starting values
             this.button1.Text = "Start";
@@ -254,12 +259,12 @@ namespace Internet_Check
             if (serverPingedBack == false)
             {
                 DateTime now = DateTime.Now;
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
             } 
             else if (serverPingedBack == true && writeSuccessfulPings == true)
             {
                 DateTime now = DateTime.Now;
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
             }
         }
 
@@ -301,12 +306,12 @@ namespace Internet_Check
                 if (serverPingedBack == false)
                 {
                     DateTime now = DateTime.Now;
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
                 }
                 else if (serverPingedBack == true && writeSuccessfulPings == true)
                 {
                     DateTime now = DateTime.Now;
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: www.google.com answered ping){Environment.NewLine}");
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: www.google.com answered ping){Environment.NewLine}");
                 }
             }, writeSuccessfulPings, startTimeSpan, periodTimeSpan);
         }
@@ -396,21 +401,27 @@ namespace Internet_Check
             {
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
                 Thread.CurrentThread.IsBackground = true;
-                File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"), String.Empty);
+                File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"), String.Empty);
                 Thread.Sleep(2500);
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
             }).Start();
         }
 
-        //Opens connection issues.txt and check if the file exists
+        //Opens connection_issues.txt and check if the file exists
         private void buttonOpen_Click(object sender, EventArgs e)
         {
 
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"))
             {
                 CheckEditorAlreadyOpen();
                 //Editor is opened where it was last closed
-                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                //Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
+                Process foo = new Process();
+                foo.StartInfo.UseShellExecute = true;
+                foo.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
+                //foo.StartInfo.Arguments = "code";
+                foo.Start();
+                //MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
                 //Go to the end of the Editor file
                 GoToEndOfConnectionIssueTXT();
 
@@ -418,8 +429,8 @@ namespace Internet_Check
             else
             {   
                 //If the text file doesn't exists, the program creates one, disposes the file-creator and opens the text file
-                File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt").Dispose();
-                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt");
+                File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt").Dispose();
+                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
                 //Go to the end of the document
                 GoToEndOfConnectionIssueTXT();
             } 
@@ -448,7 +459,7 @@ namespace Internet_Check
             Process[] processlist = Process.GetProcesses();
             foreach (Process process in processlist)
             {
-                if (!String.IsNullOrEmpty(process.MainWindowTitle) && process.MainWindowTitle == "connection issues - Editor")
+                if (!String.IsNullOrEmpty(process.MainWindowTitle) && process.MainWindowTitle == "connection_issues - Editor")
                 {
                     process.Kill();
                     break;
@@ -464,7 +475,7 @@ namespace Internet_Check
                 //gets the Time of now 
                 DateTime now = DateTime.Now;
 
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
                 try
                 {
                     timer.Dispose();
@@ -633,10 +644,10 @@ namespace Internet_Check
             //https://asp-net-example.blogspot.com/2013/10/c-example-string-starts-with-number.html
 
             //Original file
-            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt"))
+            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"))
 
             //Temporary new file, Could also be a string or array
-            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "connection issues - copy.txt"))
+            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "connection_issues - copy.txt"))
             {
                 while (!reader.EndOfStream)
                 {
@@ -663,7 +674,7 @@ namespace Internet_Check
         //Deletes the old file connection issues. Called by WriteDataToNewFile().
         private void DeleteOldFile()
         {
-            string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt";
+            string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
             File.Delete(FilepathToDelete);
         }
 
@@ -671,8 +682,8 @@ namespace Internet_Check
         private void RenameOldFileToNew()
         {
             //source: https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
-            string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection issues - copy.txt";
-            string newFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection issues.txt";
+            string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection_issues - copy.txt";
+            string newFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
             
             File.Move(oldFilePath, newFilePath );
         }
@@ -734,6 +745,45 @@ namespace Internet_Check
             reader.Dispose();
             myData = null;
             return boolSetting;
+        }
+
+        private async System.Threading.Tasks.Task CheckGitHubNewerVersionAsync()
+        {
+            //This will let you access unauthenticated GitHub APIs
+            //https://octokitnet.readthedocs.io/en/latest/getting-started/
+            GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
+            IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("Rllyyy", "Internet-Check");
+            Version latestGitHubVersion = new Version(releases[0].TagName);
+            Version localVersion = new Version(localVersionNumber);
+
+            int versionComparison = localVersion.CompareTo(latestGitHubVersion);
+            if (versionComparison < 0)
+            {
+                //The Version on GitHub is more up to date. Prompt the user to update. This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
+                this.ErrorMessage($"Please visit www.github.com/Rllyyy/Internet-Check/releases/latest to update to the latest version ({latestGitHubVersion}). \n This notification will be shown X more times.");
+            }
+            else if (versionComparison > 0)
+            {
+                //localVersion is greater than the Version on GitHub. No action needed.
+            }              
+            else
+            {
+                //This local Version and the Version on GitHub are equal
+            }
+        }
+
+        private void GitHubAPIRateInformation()
+        {
+            // Prior to first API call, this will be null, because it only deals with the last call.
+            GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
+            var apiInfo = client.GetLastApiInfo();
+
+            // If the ApiInfo isn't null, there will be a property called RateLimit
+            var rateLimit = apiInfo?.RateLimit;
+
+            var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
+            var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
+            var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
         }
     }
 }
