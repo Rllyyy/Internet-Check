@@ -81,6 +81,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings.cs" />
     <Compile Include="UserControlErrorMessage.cs">
       <SubType>UserControl</SubType>
     </Compile>

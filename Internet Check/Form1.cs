@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using System.Net;
 using Octokit;
+using System.Text;
 
 namespace Internet_Check
 {
@@ -708,7 +709,7 @@ namespace Internet_Check
             XmlReaderSettings readerSettings = new XmlReaderSettings();
             readerSettings.IgnoreComments = true;
 
-            XmlReader reader;
+            XmlReader reader = null;
             XmlDocument myData = new XmlDocument();
 
             try
@@ -717,7 +718,7 @@ namespace Internet_Check
                 myData.Load(reader);
             } catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                this.ErrorMessage(e.Message);
                 return standardValue;
             }
 
@@ -735,7 +736,7 @@ namespace Internet_Check
                         }
                         catch
                         {
-                            MessageBox.Show($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml was invalid. The standard value {standardValue.ToString().ToLower()} was used.", "Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            MessageBox.Show($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml is invalid. The standard value {standardValue.ToString().ToLower()} was used.", "Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
                     break;
@@ -746,36 +747,110 @@ namespace Internet_Check
             myData = null;
             return boolSetting;
         }
+        //TaskSchedulerStopTaskAfterDays
+        public int intAdvancedSettings(string settingNameInherited, int standardValue)
+        {
+            int returnValue = standardValue;
+
+            //https://stackoverflow.com/questions/2875674/how-to-ignore-comments-when-reading-a-xml-file-into-a-xmldocument
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+
+            XmlReader reader = null;
+            XmlDocument myData = new XmlDocument();
+            try
+            {
+                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
+                myData.Load(reader);
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage(e.Message);
+                return standardValue;
+            }
+
+            //If the file is found, loop through it to find the relevant data
+            foreach (XmlNode node in myData.DocumentElement)
+            {
+                string settingName = node.Attributes[0].InnerText;
+                if (settingName == settingNameInherited)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        string value = child.InnerText;
+                        try
+                        {
+                            returnValue = Int16.Parse(value);
+                            
+                        }
+                        catch
+                        {
+                            this.ErrorMessage($"The value {value.ToString()} of ${settingNameInherited} in AdvancedSettings.xml is invalid. The standard value of ${standardValue.ToString()} days was used.");
+                        }
+                    }
+                    break;
+                }
+            }
+            reader.Dispose();
+            myData = null;
+            return returnValue;
+        }
 
         private async System.Threading.Tasks.Task CheckGitHubNewerVersionAsync()
         {
-            //This will let you access unauthenticated GitHub APIs
-            //https://octokitnet.readthedocs.io/en/latest/getting-started/
-            GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
-            IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("Rllyyy", "Internet-Check");
-            Version latestGitHubVersion = new Version(releases[0].TagName);
-            Version localVersion = new Version(localVersionNumber);
+            int UpdateNotificationsLeft = intAdvancedSettings("UpdateNotificationsLeft", 0);
+            //MessageBox.Show(UpdateNotificationsLeft.ToString());
+            if (UpdateNotificationsLeft > 0)
+            {
+                //Downloading all GitHub releases from one repository
+                //https://octokitnet.readthedocs.io/en/latest/getting-started/
+                GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
+                IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("Rllyyy", "Internet-Check");
 
-            int versionComparison = localVersion.CompareTo(latestGitHubVersion);
-            if (versionComparison < 0)
-            {
-                //The Version on GitHub is more up to date. Prompt the user to update. This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
-                this.ErrorMessage($"Please visit www.github.com/Rllyyy/Internet-Check/releases/latest to update to the latest version ({latestGitHubVersion}). \n This notification will be shown X more times.");
-            }
-            else if (versionComparison > 0)
-            {
-                //localVersion is greater than the Version on GitHub. No action needed.
-            }              
-            else
-            {
-                //This local Version and the Version on GitHub are equal
+                //Check the GitHub API rate limit
+                //GitHubAPIRateInformation(client);
+
+                //Setup the versions
+                Version latestGitHubVersion = new Version(releases[0].TagName);
+                Version localVersion = new Version(localVersionNumber);
+
+                //Compare the Versions
+                //source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
+                int versionComparison = localVersion.CompareTo(latestGitHubVersion);
+                if (versionComparison < 0)
+                {
+                    DecreaseUpdateNotifcationsLeft(UpdateNotificationsLeft);
+                    //The Version on GitHub is more up to date. Prompt the user to update. This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
+                    this.ErrorMessage($"Please visit www.github.com/Rllyyy/Internet-Check/releases/latest to update to the latest version ({latestGitHubVersion}). \n This notification will be shown {UpdateNotificationsLeft-1} more times.");
+                }
+                else if (versionComparison > 0)
+                {
+                    //localVersion is greater than the Version on GitHub. No action needed.
+                }
+                else
+                {
+                    //This local Version and the Version on GitHub are equal
+                }
             }
         }
 
-        private void GitHubAPIRateInformation()
+        private void DecreaseUpdateNotifcationsLeft(int UpdateNotificationsLeft)
         {
-            // Prior to first API call, this will be null, because it only deals with the last call.
-            GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
+            //Decrease variable
+            UpdateNotificationsLeft -= 1;
+            
+            //Open and load XML File
+            XmlDocument document = new XmlDocument();
+            document.Load(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml");
+
+            //Update inner Text and save
+            document.SelectSingleNode("//setting[@name='UpdateNotificationsLeft']/value").InnerText = UpdateNotificationsLeft.ToString();
+            document.Save(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml");
+            document = null;
+        }
+
+        private void GitHubAPIRateInformation(GitHubClient client)
+        {
             var apiInfo = client.GetLastApiInfo();
 
             // If the ApiInfo isn't null, there will be a property called RateLimit
@@ -783,7 +858,9 @@ namespace Internet_Check
 
             var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
             var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
-            var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
+            var whenDoesTheLimitReset = rateLimit?.Reset;
+
+            MessageBox.Show($"Maximum request per hour: {howManyRequestsCanIMakePerHour}\nRequest left this hour: {howManyRequestsDoIHaveLeft}\nLimit reset time (UTC): {whenDoesTheLimitReset}", "GitHub API Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

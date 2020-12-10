@@ -77,7 +77,7 @@ namespace Internet_Check
                             td.Settings.DisallowStartIfOnBatteries = form1.boolAdvancedSettings("DisallowStartIfOnBatteries", false);
                             td.Settings.StopIfGoingOnBatteries = form1.boolAdvancedSettings("StopIfGoingOnBatteries", false);
                             td.Settings.IdleSettings.StopOnIdleEnd = form1.boolAdvancedSettings("StopOnIdleEnd", false);
-                            TimeSpan interval = new TimeSpan(TaskSchedulerStopTaskAfterDays(), 0, 0, 0);
+                            TimeSpan interval = new TimeSpan(form1.intAdvancedSettings("TaskSchedulerStopTaskAfterDays", 5), 0, 0, 0);
                             td.Settings.ExecutionTimeLimit = interval;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
 
@@ -167,51 +167,6 @@ namespace Internet_Check
             this.buttonBack.ForeColor = Color.Black;
         }
         
-        private int TaskSchedulerStopTaskAfterDays()
-        {
-            int days = 5;
-
-            //https://stackoverflow.com/questions/2875674/how-to-ignore-comments-when-reading-a-xml-file-into-a-xmldocument
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlReader reader = null;
-            XmlDocument myData = new XmlDocument();
-            try
-            {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            } catch
-            {
-                MessageBox.Show("Could not find AdvancedSettings.xml! The Standard value of 5 days was used for TaskSchedulerStopTaskAfterDays. Please visit www.github.com/Rllyyy/Internet-Check/releases/latest and reinstall the program or create the file yourself", "No XML File" ,MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return days;
-            }
-
-            //If the file is found, loop through it to find the relevant data
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == "TaskSchedulerStopTaskAfterDays")
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string value = child.InnerText;
-                        try
-                        {
-                            days = Int16.Parse(value);
-                        } catch
-                        {
-                            MessageBox.Show($"The value {value.ToString()} inside the child node of TaskschedulerStopTaskAfterDays of AdvancedSettings.xml was invalid. The standard value of 5 days was used.","Invalid Syntax",MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        }
-                    }
-                    break;
-                }
-            }
-            reader.Dispose();
-            myData = null;
-            return days;
-        }
-
         private void buttonBack_Click(object sender, EventArgs e)
         {
             this.Hide();
