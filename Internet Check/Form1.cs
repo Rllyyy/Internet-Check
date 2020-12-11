@@ -11,7 +11,6 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using System.Net;
 using Octokit;
-using System.Text;
 
 namespace Internet_Check
 {
@@ -356,7 +355,7 @@ namespace Internet_Check
                 myData.Load(reader);
             } catch
             {
-                MessageBox.Show("Could not find AdvancedSettings.xml. The following servers were used: 8.8.8.8, 8.8.4.4 and 1.1.1.1! Please visit www.github.com/Rllyyy/Internet-Check/releases/latest and reinstall the program or create the file yourself", "No XML File" ,MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.ErrorMessage("Could not find AdvancedSettings.xml.The following servers were used: 8.8.8.8, 8.8.4.4 and 1.1.1.1! Please reinstall the program or create the file yoursel");
                 return xmlServerList = new List<string>{"8.8.8.8", "8.8.4.4", "1.1.1.1"};
             }
 
@@ -377,11 +376,11 @@ namespace Internet_Check
                             }
                             catch
                             {
-                                MessageBox.Show($"Could not add the server {server.ToString()} from XML file to internal server list. The server was ignored.");
+                                this.ErrorMessage($"Could not add the server {server.ToString()} from XML file to internal server list. The server was ignored.");
                             }
                         } else
                         {
-                            MessageBox.Show($"There is an empty server inside the server list of AdvancedSettings.xml! The server was ignored.");
+                            this.ErrorMessage($"There is an empty server inside the server list of AdvancedSettings.xml! The server was ignored.");
                         }
                     }
                     //Break out of the loop if the value is found
@@ -416,13 +415,14 @@ namespace Internet_Check
             {
                 CheckEditorAlreadyOpen();
                 //Editor is opened where it was last closed
-                //Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
+                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
+                /*
                 Process foo = new Process();
                 foo.StartInfo.UseShellExecute = true;
                 foo.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
                 //foo.StartInfo.Arguments = "code";
                 foo.Start();
-                //MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
+                */
                 //Go to the end of the Editor file
                 GoToEndOfConnectionIssueTXT();
 
@@ -736,7 +736,7 @@ namespace Internet_Check
                         }
                         catch
                         {
-                            MessageBox.Show($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml is invalid. The standard value {standardValue.ToString().ToLower()} was used.", "Invalid Syntax", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            this.ErrorMessage($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml is invalid. The standard value {standardValue.ToString().ToLower()} was used.");
                         }
                     }
                     break;
@@ -799,7 +799,6 @@ namespace Internet_Check
         private async System.Threading.Tasks.Task CheckGitHubNewerVersionAsync()
         {
             int UpdateNotificationsLeft = intAdvancedSettings("UpdateNotificationsLeft", 0);
-            //MessageBox.Show(UpdateNotificationsLeft.ToString());
             if (UpdateNotificationsLeft > 0)
             {
                 //Downloading all GitHub releases from one repository
