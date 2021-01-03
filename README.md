@@ -187,6 +187,23 @@ For the exact file location read "Where are the program files saved?" in the FAQ
   </p>
 </details>
 
+<!--UpdateNotificationsLeft-->
+<details>
+  <summary><b>Edit Update Notifications left</b></summary>
+  This setting controls how many update notifications the user has left. The value in this setting is decreased by the program if there's a newer version on GitHub and a update notification was shown. If you don't want to receive any notifications set this value to 0.
+  The setting gets reset to 3 after each update.
+  The standard value is 3.
+  <p>
+
+```xml
+<setting name="UpdateNotificationsLeft">
+  <value>3</value>
+</setting>
+```
+
+  </p>
+</details>
+
 <!--Stop application after X days-->
 <details>
   <summary><b>Stop the Application after X days (Task Scheduler)</b></summary>
