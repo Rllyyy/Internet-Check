@@ -55,10 +55,10 @@ namespace Internet_Check
             PrepareUIElementsAsync();
         }
 
-        public static string localVersionNumber = "1.6.2";
+        public static string localVersionNumber = "1.6.3";
         private async System.Threading.Tasks.Task PrepareUIElementsAsync()
         {
-            this.Text = this.Text + localVersionNumber;
+            this.Text += localVersionNumber;
             //Pass Form1 to the other classes
             userSettings1.setForm1(this);
             userControlClearConfirm1.setForm1(this);
@@ -74,8 +74,9 @@ namespace Internet_Check
 
             this.notifyIcon1.Visible = false;
 
-            //removes the border from buttonOpen on an click event
+            //removes the border from buttonOpen/button1 (startButton) on click event
             buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
+            button1.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
 
             //Highlight the interval Box
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval
