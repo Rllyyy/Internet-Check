@@ -68,7 +68,7 @@ namespace Internet_Check
                             //TaskSceduler by https://github.com/dahall/TaskScheduler
                             TaskDefinition td = ts.NewTask();
                             td.Triggers.Add(new LogonTrigger());
-                            td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location, null, null));
+                            td.Actions.Add(new ExecAction(System.Reflection.Assembly.GetEntryAssembly().Location,"fromTask", null));
                             td.RegistrationInfo.Description = "Launches Internet-Check with login";
                             td.RegistrationInfo.Author = "Niklas Fischer";
                             td.Principal.RunLevel = TaskRunLevel.Highest;

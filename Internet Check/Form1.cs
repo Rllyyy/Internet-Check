@@ -18,14 +18,18 @@ namespace Internet_Check
     {
         public Form1()
         {
+            //Check if any other instances of the program are running
             checkForMultipleInstances();
+            //Start the form if only one instance is detected
+            formStart();
+            CheckIfStartedByTaskScheduler();
         }
 
         private void checkForMultipleInstances()
         {
             //Get the amount of instances running and exit if the count is greater than 1
             //https://stackoverflow.com/questions/6392031/how-to-check-if-another-instance-of-the-application-is-running
-            var MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+            bool MultipleInstances = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
 
             if (MultipleInstances)
             {
@@ -38,14 +42,6 @@ namespace Internet_Check
             {
                 //Begin to watch the MultipleInstancesDetected file, if it changes this program will come to front again
                 watchFiles(AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt");
-
-                //Start the form
-                formStart();
-
-                if(CheckIfStartedWithWindows() == true && Properties.Settings.Default.SettingWindowsStart == true)
-                {
-                    startInSystemTray();
-                }
             }
         }
 
@@ -53,6 +49,18 @@ namespace Internet_Check
         {
             InitializeComponent();
             PrepareUIElementsAsync();
+        }
+
+        private void CheckIfStartedByTaskScheduler()
+        {
+            if (Environment.GetCommandLineArgs().Contains(@"fromTask"))
+            {
+                if (Properties.Settings.Default.SettingHideWhenMin == true)
+                {
+                    startInSystemTray();
+                }
+                startCollecting();
+            }
         }
 
         public static string localVersionNumber = "1.6.3";
@@ -88,10 +96,10 @@ namespace Internet_Check
             {
                 DarkmodeForm();
             }
-
             await CheckGitHubNewerVersionAsync();
         }
 
+        
         /// <summary>
         /// Check if the application was started by windows. https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
         /// </summary>
@@ -101,7 +109,6 @@ namespace Internet_Check
         private bool CheckIfStartedWithWindows()
         {
             //Return if windows was started in the last 9 Minutes
-            //TODO fix when returning from sleep mode
             bool startedByWindows;
             TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
             TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
@@ -356,7 +363,7 @@ namespace Internet_Check
                 myData.Load(reader);
             } catch
             {
-                this.ErrorMessage("Could not find AdvancedSettings.xml.The following servers were used: 8.8.8.8, 8.8.4.4 and 1.1.1.1! Please reinstall the program or create the file yoursel");
+                this.ErrorMessage("Could not find AdvancedSettings.xml.The following servers were used: 8.8.8.8, 8.8.4.4 and 1.1.1.1! Please reinstall the program or create the file yourself");
                 return xmlServerList = new List<string>{"8.8.8.8", "8.8.4.4", "1.1.1.1"};
             }
 
