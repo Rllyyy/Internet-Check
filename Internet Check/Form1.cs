@@ -73,14 +73,14 @@ namespace Internet_Check
 
             //Prepare UI Elements
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
-            notifyIcon1.Visible = true;
+            this.notifyIcon1.Visible = false;
             this.button1.Text = "Start";
             this.userSettings1.SendToBack();
             this.userControlClearConfirm1.SendToBack();
             this.userControlErrorMessage1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
 
-            this.notifyIcon1.Visible = false;
+            
 
             //removes the border from buttonOpen/button1 (startButton) on click event
             buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
@@ -130,9 +130,8 @@ namespace Internet_Check
                 this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
                 this.Visible = false;
-                this.notifyIcon1.Visible = false;
+                //this.notifyIcon1.Visible = false;
             }
-            startCollecting();
         }
 
         /// <summary>
