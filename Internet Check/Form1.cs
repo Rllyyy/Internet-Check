@@ -80,8 +80,6 @@ namespace Internet_Check
             this.userControlErrorMessage1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
 
-            
-
             //removes the border from buttonOpen/button1 (startButton) on click event
             buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
             button1.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
@@ -106,7 +104,7 @@ namespace Internet_Check
         /// <returns></returns>
         [DllImport("kernel32")]
         extern static UInt64 GetTickCount64();
-        private bool CheckIfStartedWithWindows()
+        private bool StartedInLast9Minutes()
         {
             //Return if windows was started in the last 9 Minutes
             bool startedByWindows;
@@ -130,7 +128,6 @@ namespace Internet_Check
                 this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
                 this.Visible = false;
-                //this.notifyIcon1.Visible = false;
             }
         }
 
@@ -516,7 +513,7 @@ namespace Internet_Check
             {
                 this.Visible = false;
                 this.notifyIcon1.Visible = true;
-                if(boolAdvancedSettings("ShowMinimizedInfo",true) == true && CheckIfStartedWithWindows() == false)
+                if(boolAdvancedSettings("ShowMinimizedInfo",true) == true && StartedInLast9Minutes() == false)
                 {
                     this.notifyIcon1.ShowBalloonTip(17000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
                 }
@@ -663,7 +660,7 @@ namespace Internet_Check
                     try
                     {
                         //If the line does not start with a # and the line is not empty, the writer writes the line into a new file
-                        if (!line.StartsWith("#") && !string.IsNullOrEmpty(line))
+                        if (!line.StartsWith("#") && !string.IsNullOrEmpty(line) && !line.EndsWith("answered ping)"))
                         {
                             writer.WriteLine(line);
                         }
@@ -676,18 +673,18 @@ namespace Internet_Check
                 reader.Close();
             }
 
-            DeleteOldFile();
-            RenameOldFileToNew();
+            DeleteOriginalFile();
+            RenameModifiedFileToNew();
         }
         //Deletes the old file connection issues. Called by WriteDataToNewFile().
-        private void DeleteOldFile()
+        private void DeleteOriginalFile()
         {
             string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
             File.Delete(FilepathToDelete);
         }
 
         //Renames the new file from "connection issues - copy.txt" to "connection issues.txt". Called by WriteDataToNewFile().
-        private void RenameOldFileToNew()
+        private void RenameModifiedFileToNew()
         {
             //source: https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
             string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection_issues - copy.txt";
