@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using System.Net;
 using Octokit;
+using System.Reflection;
 
 namespace Internet_Check
 {
@@ -63,10 +64,10 @@ namespace Internet_Check
             }
         }
 
-        public static string localVersionNumber = "1.6.3";
         private async System.Threading.Tasks.Task PrepareUIElementsAsync()
         {
-            this.Text += localVersionNumber;
+            this.Text += getAssemblyFileVersion();
+
             //Pass Form1 to the other classes
             userSettings1.setForm1(this);
             userControlClearConfirm1.setForm1(this);
@@ -97,6 +98,17 @@ namespace Internet_Check
             await CheckGitHubNewerVersionAsync();
         }
 
+        /// <summary>
+        /// Get the assembly FileVersion from Properties/assemblyInfo.cs
+        /// </summary>
+        /// <returns></returns>
+        private string getAssemblyFileVersion()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string fileVerison = fvi.FileVersion.Substring(0, 5);
+            return fileVerison;
+        }
         
         /// <summary>
         /// Check if the application was started by windows. https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
@@ -107,18 +119,14 @@ namespace Internet_Check
         private bool StartedInLast9Minutes()
         {
             //Return if windows was started in the last 9 Minutes
-            bool startedByWindows;
             TimeSpan time = new TimeSpan(0, 0, 9, 0, 0);
             TimeSpan TimeSinceWindowsStart = TimeSpan.FromMilliseconds(GetTickCount64());
 
             if (TimeSinceWindowsStart <= time)
             {
-                return startedByWindows = true;
+                return true;
             }
-            else
-            {
-                return startedByWindows = false;
-            }
+            return false;
         }
 
         private void startInSystemTray()
@@ -179,7 +187,7 @@ namespace Internet_Check
             }
             else
             {
-                //Give the User an error if he enters no interval
+               //Give the User an error if he enters no interval
                this.ErrorMessage("Please enter an interval.");
             }
         }
@@ -412,7 +420,9 @@ namespace Internet_Check
         }
 
         //Opens connection_issues.txt and check if the file exists
+#pragma warning disable IDE1006 // Naming Styles
         private void buttonOpen_Click(object sender, EventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
         {
 
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"))
@@ -815,7 +825,7 @@ namespace Internet_Check
 
                 //Setup the versions
                 Version latestGitHubVersion = new Version(releases[0].TagName);
-                Version localVersion = new Version(localVersionNumber);
+                Version localVersion = new Version(getAssemblyFileVersion());
 
                 //Compare the Versions
                 //source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
