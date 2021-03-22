@@ -3,7 +3,7 @@
      <h1 align="center"> <img src="https://github.com/Rllyyy/Internet-Check/blob/master/Internet%20Check/icons/Internet-Check-Logo.png" height="35" alt="LogoText"> </h1>
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Rllyyy/Internet-Check/master/Internet%20Check/icons/InternetSymbolPNG.png" height="100">
+  <img src="https://raw.githubusercontent.com/Rllyyy/Internet-Check/master/.github/previewPic.png">
 </p>
 </div>
 <div class="Badges">
@@ -13,9 +13,6 @@
        </a>
       <a href="https://github.com/Rllyyy/Internet-Check/releases/latest">
           <img src="https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square" alt="GitHub All Releases">
-      </a>
-      <a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)" target="_blank">
-          <img src="https://img.shields.io/github/languages/top/Rllyyy/Internet-Check?color=%232C974B&style=flat-square" alt="GitHub top language"> 
       </a>
       <a href="https://github.com/Rllyyy/Internet-Check/blob/master/LICENSE" target="_blank">
           <img src="https://img.shields.io/github/license/rllyyy/Internet-Check?color=%232C974B&label=License&style=flat-square" alt="GitHub License">
