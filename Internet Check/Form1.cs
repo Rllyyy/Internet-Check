@@ -420,9 +420,7 @@ namespace Internet_Check
         }
 
         //Opens connection_issues.txt and check if the file exists
-#pragma warning disable IDE1006 // Naming Styles
         private void buttonOpen_Click(object sender, EventArgs e)
-#pragma warning restore IDE1006 // Naming Styles
         {
 
             if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"))
