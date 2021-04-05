@@ -147,6 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icons\SVG_Icon_red.ico" />
+    <None Include="icons\System Tray\InternetSymbolGreenSVG.ico" />
+    <None Include="icons\System Tray\InternetSymbolRedSVG.ico" />
+    <None Include="icons\System Tray\InternetSymbolYellowSVG.ico" />
     <Content Include="InternetSymbolPNG.ico" />
     <None Include="Resources\InternetCheckSVG.ico" />
     <None Include="Resources\InternetSymbolSVG.bmp" />

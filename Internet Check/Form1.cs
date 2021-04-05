@@ -76,6 +76,7 @@ namespace Internet_Check
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
             this.notifyIcon1.Visible = false;
             this.button1.Text = "Start";
+            this.notifyIcon1.Icon = Properties.Resources.InternetSymbolYellowSVG;
             this.userSettings1.SendToBack();
             this.userControlClearConfirm1.SendToBack();
             this.userControlErrorMessage1.SendToBack();
@@ -200,6 +201,7 @@ namespace Internet_Check
             this.textBoxInterval.Enabled = false;
             this.buttonClear.Enabled = false;
             this.labelRunning.Text = "Running . . .";
+            this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
 
             //Write starting info into the text file
             DateTime now = DateTime.Now;
@@ -242,6 +244,7 @@ namespace Internet_Check
             this.textBoxInterval.Enabled = true;
             this.buttonClear.Enabled = true;
             this.labelRunning.Text = "Waiting . . .";
+            this.notifyIcon1.Icon = Properties.Resources.InternetSymbolYellowSVG;
         }
 
         private void checkWithStandardPingProtocol(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, List<string> serverList, bool writeSuccessfulPings, int currentPositionInList)
@@ -268,15 +271,21 @@ namespace Internet_Check
         {
             bool serverPingedBack = ping(currentServer);
 
-            if (serverPingedBack == false)
+            if (!serverPingedBack)
             {
                 DateTime now = DateTime.Now;
                 File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
-            } 
-            else if (serverPingedBack == true && writeSuccessfulPings == true)
+                this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
+            }
+            else
             {
-                DateTime now = DateTime.Now;
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
+                this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
+
+                if (writeSuccessfulPings)
+                {
+                    DateTime now = DateTime.Now;
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
+                }
             }
         }
 
@@ -315,16 +324,23 @@ namespace Internet_Check
             {
                 bool serverPingedBack = pingWithWebClient();
 
-                if (serverPingedBack == false)
+                if (!serverPingedBack)
                 {
                     DateTime now = DateTime.Now;
                     File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
                 }
-                else if (serverPingedBack == true && writeSuccessfulPings == true)
+                else
                 {
-                    DateTime now = DateTime.Now;
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: www.google.com answered ping){Environment.NewLine}");
+                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
+
+                    if (writeSuccessfulPings)
+                    {
+                        DateTime now = DateTime.Now;
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: google.com answered ping){Environment.NewLine}");
+                    }
                 }
+
             }, writeSuccessfulPings, startTimeSpan, periodTimeSpan);
         }
 
