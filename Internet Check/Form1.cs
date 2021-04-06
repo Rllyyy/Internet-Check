@@ -655,7 +655,8 @@ namespace Internet_Check
                 this.button1.BeginInvoke((MethodInvoker)delegate () { this.button1.Enabled = false; ; });
                 this.buttonOpen.BeginInvoke((MethodInvoker)delegate () { this.buttonOpen.Enabled = false; ; });
                 Thread.CurrentThread.IsBackground = true;
-                WriteDataToNewFile();
+                //WriteDataToNewFile();
+                writeRelevantData();
                 Thread.Sleep(2000);
                 this.button1.BeginInvoke((MethodInvoker)delegate () { this.button1.Enabled = true; ; });
                 this.buttonOpen.BeginInvoke((MethodInvoker)delegate () { this.buttonOpen.Enabled = true; ; });
@@ -663,58 +664,57 @@ namespace Internet_Check
             }).Start();
         }
 
-        //Writes Data to new file if Clear Only Irrelevant Data is selected. Called from Form1.ClearOnlyIrrelevant()
-        private void WriteDataToNewFile() 
+        /// <summary>
+        /// Writes Data to new file if Clear Only Irrelevant Data is selected. Called from Form1.ClearOnlyIrrelevant()
+        /// https://stackoverflow.com/questions/7276158/skip-lines-that-contain-semi-colon-in-text-file
+        /// https://stackoverflow.com/questions/1245243/delete-specific-line-from-a-text-file#:~:text=The%20best%20way%20to%20do,line%20you%20want%20to%20delete.
+        /// https://stackoverflow.com/questions/6480058/remove-blank-lines-in-a-text-file
+        /// https://asp-net-example.blogspot.com/2013/10/c-example-string-starts-with-number.html
+        /// </summary>
+        private void writeRelevantData()
         {
-            //Copies lines starting with a number to backup file
-            //https://stackoverflow.com/questions/7276158/skip-lines-that-contain-semi-colon-in-text-file
-            //https://stackoverflow.com/questions/1245243/delete-specific-line-from-a-text-file#:~:text=The%20best%20way%20to%20do,line%20you%20want%20to%20delete.
-            //https://stackoverflow.com/questions/6480058/remove-blank-lines-in-a-text-file
-            //https://asp-net-example.blogspot.com/2013/10/c-example-string-starts-with-number.html
+            //connection_issues.txt save location
+            string connection_issuesSaveLocation = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
 
-            //Original file
-            using (var reader = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"))
+            //Create list with lines that don't contain a #, are empty or end with "answered ping)"
+            List<string> relevantData = new List<string>(getRelevantLines(connection_issuesSaveLocation));
 
-            //Temporary new file, Could also be a string or array
-            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "connection_issues - copy.txt"))
+            //Delete all (old) lines
+            File.WriteAllText(connection_issuesSaveLocation, String.Empty);
+
+            //Write relevantData list to .txt file
+            using (TextWriter writer = new StreamWriter(connection_issuesSaveLocation))
             {
-                while (!reader.EndOfStream)
+                foreach (String relevantLine in relevantData)
                 {
-                    string line = reader.ReadLine();
+                    writer.WriteLine(relevantLine);
+                }  
+            }
+        }
+
+        //Return a List with all lines in connection_issues.txt that don't begin with #, are empty or end with a successful ping. Called by Form1.writeRelevantData()
+        private List<string> getRelevantLines(string connection_issuesSaveLocation)
+        {
+            List<string> relevantData = new List<string>();
+            using (StreamReader reader = new StreamReader(connection_issuesSaveLocation))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
                     try
                     {
                         //If the line does not start with a # and the line is not empty, the writer writes the line into a new file
                         if (!line.StartsWith("#") && !string.IsNullOrEmpty(line) && !line.EndsWith("answered ping)"))
                         {
-                            writer.WriteLine(line);
+                            //push to List
+                            relevantData.Add(line);
                         }
                     }
                     catch
-                    {}
+                    { }
                 }
-
-                writer.Close();
-                reader.Close();
             }
-
-            DeleteOriginalFile();
-            RenameModifiedFileToNew();
-        }
-        //Deletes the old file connection issues. Called by WriteDataToNewFile().
-        private void DeleteOriginalFile()
-        {
-            string FilepathToDelete = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
-            File.Delete(FilepathToDelete);
-        }
-
-        //Renames the new file from "connection issues - copy.txt" to "connection issues.txt". Called by WriteDataToNewFile().
-        private void RenameModifiedFileToNew()
-        {
-            //source: https://stackoverflow.com/questions/3218910/rename-a-file-in-c-sharp
-            string oldFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection_issues - copy.txt";
-            string newFilePath = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
-            
-            File.Move(oldFilePath, newFilePath );
+            return relevantData;
         }
 
         //Gives the class UserControllErrorMessage the error Text and can be called from outside of this class.
@@ -809,7 +809,6 @@ namespace Internet_Check
                         try
                         {
                             returnValue = Int16.Parse(value);
-                            
                         }
                         catch
                         {
