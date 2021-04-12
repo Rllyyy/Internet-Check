@@ -112,7 +112,8 @@ namespace Internet_Check
         }
         
         /// <summary>
-        /// Check if the application was started by windows. https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
+        /// Check if the application was started by windows to disable the balloon tip if started with windows.
+        /// https://stackoverflow.com/questions/972105/retrieve-system-uptime-using-c-sharp
         /// </summary>
         /// <returns></returns>
         [DllImport("kernel32")]
@@ -213,16 +214,17 @@ namespace Internet_Check
             List<string> serverList = getServersFromXML();
             bool writeSuccessfulPings = boolAdvancedSettings("ShowAllPingResults", false);
             int currentPositionInList = 0;
+            string doubleCheckServer = stringAdvancedSettings("DoubleCheckServer", "None");
 
             bool useAlternativePingMethod = boolAdvancedSettings("UseAlternativePingMethod", false);
             //Decides which ping method is used. The standard
             if (!useAlternativePingMethod)
             {
-                checkWithStandardPingProtocol(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList);
+                checkWithStandardPingProtocol(startTimeSpan, periodTimeSpan, serverList, writeSuccessfulPings, currentPositionInList, doubleCheckServer);
             } 
             else
             {
-                checkWithWebClient(startTimeSpan, periodTimeSpan, writeSuccessfulPings);
+                checkWithWebClient(startTimeSpan, periodTimeSpan, writeSuccessfulPings, doubleCheckServer);
             }
         }
 
@@ -247,46 +249,87 @@ namespace Internet_Check
             this.notifyIcon1.Icon = Properties.Resources.InternetSymbolYellowSVG;
         }
 
-        private void checkWithStandardPingProtocol(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, List<string> serverList, bool writeSuccessfulPings, int currentPositionInList)
+        private void checkWithStandardPingProtocol(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, List<string> serverList, bool writeSuccessfulPings, int currentPositionInList, string doubleCheckServer)
         {
             //timer executes once every periodTimeSpan seconds
             //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
+            // Do not check the current value of the variables with multiple messageBoxes as that wont work
             timer = new System.Threading.Timer((d) =>
             {
-                //Give the CheckAndWrite method the current server as a string
-                CheckAndWrite(serverList[currentPositionInList], writeSuccessfulPings);
-
+                CheckAndWrite(serverList, currentPositionInList, writeSuccessfulPings, doubleCheckServer);
                 //Increment the value of currentPostionInList by one to get the next server
                 currentPositionInList++;
-
+                
                 //Go to the beginning of the list if the value is bigger than the length of the list
                 if (currentPositionInList >= serverList.Count())
                 {
                     currentPositionInList -= serverList.Count();
                 }
-            }, (currentPositionInList, serverList, writeSuccessfulPings), startTimeSpan, periodTimeSpan);
+            }, null, startTimeSpan, periodTimeSpan);
         }
 
-        private void CheckAndWrite(string currentServer, bool writeSuccessfulPings)
+        private void CheckAndWrite(List<string> serverList, int currentPositionInList, bool writeSuccessfulPings, string doubleCheckServer)
         {
-            bool serverPingedBack = ping(currentServer);
-
-            if (!serverPingedBack)
+            string currentServer = serverList[currentPositionInList];
+            if (!ping(currentServer))
             {
                 DateTime now = DateTime.Now;
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
-                this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
+
+                if (doubleCheckServer == "None")
+                {
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+                }
+                //Double check the SAME server to make sure the internet connection really is down.
+                else if (doubleCheckServer == "Same")
+                {
+                    if(!ping(currentServer))
+                    {
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+                    }
+                } 
+                else
+                {
+                    // aka doubleCheckServer == "Next"
+                    //Double check the NEXT server to make sure the internet connection really is down.
+                    string nextServer = getDoubleCheckNextServer(serverList, currentPositionInList);
+                    if (!ping(nextServer))
+                    {
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The servers did not respond. Your internet connection might be down! (Error: {currentServer} and {nextServer} failed ping){Environment.NewLine}");
+                    }
+                }
+                // This value is not double checked
+                if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolRedSVG)
+                {
+                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
+                }
             }
             else
             {
-                this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
+                //Only change the icon if it's hasn't changed already
+                if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolGreenSVG)
+                {
+                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
+                }
 
+                //Write Ping to internet_issues.txt if user has writeSuccesfullPings enabled in AdvancedSettings.xml
                 if (writeSuccessfulPings)
                 {
                     DateTime now = DateTime.Now;
                     File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
                 }
             }
+        }
+
+        private string getDoubleCheckNextServer(List<string> serverList, int positionInList)
+        {
+            int nextPositionInList = positionInList + 1;
+
+            //Go to the beginning of the list if the next value is bigger than the length of the list
+            if (nextPositionInList >= serverList.Count())
+            {
+                nextPositionInList -= serverList.Count();
+            }
+            return serverList[nextPositionInList];
         }
 
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
@@ -316,23 +359,46 @@ namespace Internet_Check
         }
 
         //This is the alternative to the check() method and combines it with the alternative to the CheckAndWrite Method.
-        private void checkWithWebClient(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, bool writeSuccessfulPings)
+        private void checkWithWebClient(TimeSpan startTimeSpan, TimeSpan periodTimeSpan, bool writeSuccessfulPings, string doubleCheckServer)
         {
             //timer executes once every periodTimeSpan seconds
             //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
             timer = new System.Threading.Timer((d) =>
             {
-                bool serverPingedBack = pingWithWebClient();
-
-                if (!serverPingedBack)
+                //bool serverPingedBack = pingWithWebClient();
+                if (!pingWithWebClient())
                 {
                     DateTime now = DateTime.Now;
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
-                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
+                    //Double Check
+                    if (doubleCheckServer == "None")
+                    {
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                    } else if (doubleCheckServer == "Same" && !pingWithWebClient())
+                    {
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                    }
+                    else if (doubleCheckServer == "Next")
+                    {
+                        //Invoke main UI thread as we are in a different thread
+                        //https://stackoverflow.com/questions/10170448/how-to-invoke-a-ui-method-from-another-thread
+                        this.BeginInvoke(new MethodInvoker(delegate
+                        {
+                            this.ErrorMessage("The alternative ping method can only ping the same Google server. Next on DoubleCheckServer in AdvancedSettings.xml is not supported.");
+                        }));
+                    }
+                    
+                    //This value doesn't need to be double checked because the system tray doesn't really matter
+                    if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolRedSVG)
+                    {
+                        this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
+                    }
                 }
                 else
                 {
-                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
+                    if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolGreenSVG)
+                    {
+                        this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
+                    }
 
                     if (writeSuccessfulPings)
                     {
@@ -340,8 +406,7 @@ namespace Internet_Check
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: google.com answered ping){Environment.NewLine}");
                     }
                 }
-
-            }, writeSuccessfulPings, startTimeSpan, periodTimeSpan);
+            }, null, startTimeSpan, periodTimeSpan);
         }
 
         //This is the alternative to the ping method which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the XML file to true.
@@ -655,7 +720,6 @@ namespace Internet_Check
                 this.button1.BeginInvoke((MethodInvoker)delegate () { this.button1.Enabled = false; ; });
                 this.buttonOpen.BeginInvoke((MethodInvoker)delegate () { this.buttonOpen.Enabled = false; ; });
                 Thread.CurrentThread.IsBackground = true;
-                //WriteDataToNewFile();
                 writeRelevantData();
                 Thread.Sleep(2000);
                 this.button1.BeginInvoke((MethodInvoker)delegate () { this.button1.Enabled = true; ; });
@@ -809,6 +873,62 @@ namespace Internet_Check
                         try
                         {
                             returnValue = Int16.Parse(value);
+                        }
+                        catch
+                        {
+                            this.ErrorMessage($"The value {value.ToString()} of ${settingNameInherited} in AdvancedSettings.xml is invalid. The standard value of ${standardValue.ToString()} days was used.");
+                        }
+                    }
+                    break;
+                }
+            }
+            reader.Dispose();
+            myData = null;
+            return returnValue;
+        }
+
+        private string stringAdvancedSettings(string settingNameInherited, string standardValue)
+        {
+            string returnValue = standardValue;
+
+            //https://stackoverflow.com/questions/2875674/how-to-ignore-comments-when-reading-a-xml-file-into-a-xmldocument
+            XmlReaderSettings readerSettings = new XmlReaderSettings();
+            readerSettings.IgnoreComments = true;
+
+            XmlReader reader = null;
+            XmlDocument myData = new XmlDocument();
+            try
+            {
+                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
+                myData.Load(reader);
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage(e.Message);
+                return standardValue;
+            }
+
+            //If the file is found, loop through it to find the relevant data
+            foreach (XmlNode node in myData.DocumentElement)
+            {
+                string settingName = node.Attributes[0].InnerText;
+                if (settingName == settingNameInherited)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        string value = child.InnerText;
+                        try
+                        {
+                            if (value == "None" || value == "Same" || value == "Next")
+                            {
+                                reader.Dispose();
+                                return value;
+                            } else
+                            {
+                                this.ErrorMessage($"The value {value} of {settingNameInherited} in AdvancesSettings.xml is invalid. The standard value of {standardValue} for this setting was used.");
+                                reader.Dispose();
+                                return standardValue;
+                            }
                         }
                         catch
                         {
