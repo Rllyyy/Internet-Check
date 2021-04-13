@@ -943,6 +943,7 @@ namespace Internet_Check
             return returnValue;
         }
 
+        //Check GitHub for new a new release with the octokit api. To Debug this move the relevant code to a method that is not async
         private async System.Threading.Tasks.Task CheckGitHubNewerVersionAsync()
         {
             int UpdateNotificationsLeft = intAdvancedSettings("UpdateNotificationsLeft", 0);
@@ -956,8 +957,15 @@ namespace Internet_Check
                 //Check the GitHub API rate limit
                 //GitHubAPIRateInformation(client);
 
+                //TagNames usually start with a "v" (for version). To compare Versions the character has to be removed.
+                string releaseTagName = releases[0].TagName;
+                if (releaseTagName.StartsWith("v")) 
+                {
+                    releaseTagName = releaseTagName.Substring(1, releaseTagName.Length - 1);
+                }
+
                 //Setup the versions
-                Version latestGitHubVersion = new Version(releases[0].TagName);
+                Version latestGitHubVersion = new Version(releaseTagName);
                 Version localVersion = new Version(getAssemblyFileVersion());
 
                 //Compare the Versions
