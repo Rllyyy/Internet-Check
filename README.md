@@ -1,6 +1,6 @@
 <div class="Head">
 <p>  
-     <h1 align="center"> <img src="https://github.com/Rllyyy/Internet-Check/blob/master/Internet%20Check/icons/Internet-Check-Logo.png" height="35" alt="LogoText"> </h1>
+     <h1 align="center"> <img src="https://github.com/Rllyyy/Internet-Check/blob/master/Internet%20Check/icons/Internet-Check-Logo.png" height="35" alt="Internet Check"> </h1>
 </p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/Rllyyy/Internet-Check/master/.github/previewPic.png">
@@ -62,26 +62,38 @@
   </p>
 </details>
 
-# In-App Settings (DarkMode, Windows Autostart, System Tray)
+# In-App Settings
 
-## DarkMode
+<!--DarkMode-->
+<details>
+  <summary><b>DarkMode</b></summary>
+  <ol>
+  <li><b>Tick the Checkbox "Use DarkMode".</b> The UI now switches to a darker colour pattern.</li>
+  </ol>
+  <span><i><b>Note:</b></i> The color of the title background may still appear white. These Windows settings can only be changed by the user. <a href="https://www.hellotech.com/guide/for/how-to-enable-dark-mode-in-windows-10">Here</a> is a quick guide.
+  </span>
+</details>
 
-1. Tick the **Checkbox "Use DarkMode"**. The UI now switches to a darker colour pattern.
+<!--Windows-Start-->
+<details>
+  <summary><b>Start Application on Windows Start-Up</b></summary>
+  <ol>
+  <li>Start the Application with admin rights.</li>
+  <li><b>Tick the Checkbox "Start with Windows" in the settings menu.</b></li>
+  </ol>
+  <span><i><b>Warning:</b></i> If both "Start with Windows" and "Show only in System Tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the System Tray or by running the .exe again.
+  </span>
+</details>
 
-**_Note:_** The color of the title background may still appear white. These Windows settings can only be changed by the user. [Here](https://www.hellotech.com/guide/for/how-to-enable-dark-mode-in-windows-10) is a quick guide.
-
-## Start Application on Windows Start-Up
-
-1. Start the Application with admin rights.
-1. Tick the **Checkbox "Start with Windows"** in the settings menu.
-
-**_Warning:_** If both "Start with Windows" and "Show only in system tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the System Tray or by running the .exe again.
-
-## Show only in System Tray
-
-1. Tick the **"Show only in system tray" Checkbox** if you want to hide the application when minimized.
-
-**_Warning:_** If both "Start with Windows" and "Show only in system tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the System Tray or by running the .exe again.
+<!--System Tray-->
+<details>
+  <summary><b>Show only in System Tray when minimized</b></summary>
+  <ol>
+  <li><b>Tick the "Show only in System Tray" Checkbox</b> if you want to hide the application when minimized.</li>
+  </ol>
+  <span><i><b>Warning:</b></i> If both "Start with Windows" and "Show only in System Tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the System Tray or by running the .exe again.
+  </span>
+</details>
 
 # FAQ
 
@@ -93,7 +105,7 @@
 
 <details>
   <summary><b>Why does the program sometimes show that the connection is disrupted?</b></summary>
-  <span>A failed ping is noted when the server doesn't respond within 2.5 seconds. Often this is the result of a packet loss within the users network. A very few servers may also not respond within the given time frame of 2.5 seconds or temporary block the users ip address (ping to death prevention). The severs that come with this program should respond within the time frame and won't block the user. The ping protocol doesn't use TCP which would resend data and instead is using ICMP.
+  <span>A failed ping is noted when two servers (depending on the method set in AdvancedSettings.xml) don't respond within 2.5 seconds. Often this is the result of a packet loss within the users network. A very few servers may also not respond within the given time frame of 2.5 seconds or temporary block the users ip address (ping to death prevention). The severs that come with this program should respond within the time frame and won't block the user. The ping protocol doesn't use TCP which would resend data and instead is using ICMP.
   </span>
 </details>
 <details>
@@ -111,7 +123,7 @@
 
 # Advanced Settings
 
-These settings allow to the advanced user to further change certain aspects of the application. Applying incorrect or incomplete settings may prevent the application from running. AdvancedSettings.xml lives inside the AppData folder and can be edited by any editor (notepad, notepad++ or VSCode).
+These settings allow to the advanced user to further change certain aspects of the application. Applying incorrect or incomplete settings may prevent the application from running. AdvancedSettings.xml lives inside the AppData folder and can be edited by any editor (e.g. notepad, notepad++ or VSCode).
 For the exact file location read "Where are the program files saved?" in the FAQ.
 
 <!--Servers-->
@@ -129,14 +141,32 @@ For the exact file location read "Where are the program files saved?" in the FAQ
 </setting>
 ```
 
+<!--Double Check Servers Method-->
+  </p>
+</details>
+
+<details>
+  <summary><b>Set the Action on a failed Ping event</b></summary>
+  <span>
+  Select what the program does if there is a failed ping.
+  The options are "None" for not double checking and just writing the failed ping to the .txt file, "Same" for ping the same server again and "Next" for pinging the next server in the defined xml list ("Servers").
+  Please write (without quotation marks) one of the following options into the value field: None, Same or Next. The default value is Next.
+  </span>
+  <p>
+
+```xml
+<setting name="DoubleCheckServer">
+  <value>Next</value>
+</setting>
+```
+
   </p>
 </details>
 
 <!--Ping Methods-->
 <details>
   <summary><b>Use alternative Ping Method</b></summary>
-  Set this value to true if you only get the message that the server did not respond although there is an active internet connection. This error might 
-  occur if the ping protocol is blocked by the router.
+  Set this value to true if you only get the message that the server did not respond although there is an active internet connection. This error might occur if the ping protocol is blocked by the router.
   Server from the node "Servers" will be ignored and the application now sends a request to google.com/generate_204. Save the XML file and click on start in Internet Check.
   <p>
 
