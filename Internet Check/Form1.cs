@@ -705,9 +705,13 @@ namespace Internet_Check
         private void button2_Click(object sender, EventArgs e)
         {
             //Opens the settings
+            AppSettings f2 = new AppSettings();
+            f2.ShowDialog();
+            /*
             this.userSettings1.BringToFront();
             this.userSettings1.Visible = true;
             this.userSettings1.Show();
+            */
         }
 
         //UI-Elements for ClearOnlyIrrelevant. Called from UserControlClearConfirm.cs

@@ -82,5 +82,101 @@ namespace Internet_Check.Properties {
                 this["SettingTask"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Next")]
+        public string SettingDoubleCheckServer {
+            get {
+                return ((string)(this["SettingDoubleCheckServer"]));
+            }
+            set {
+                this["SettingDoubleCheckServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingUseAlternativePingMethod {
+            get {
+                return ((bool)(this["SettingUseAlternativePingMethod"]));
+            }
+            set {
+                this["SettingUseAlternativePingMethod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxAllPingResults {
+            get {
+                return ((bool)(this["SettingCheckBoxAllPingResults"]));
+            }
+            set {
+                this["SettingCheckBoxAllPingResults"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SettingCheckBoxShowMinimizedInfo {
+            get {
+                return ((bool)(this["SettingCheckBoxShowMinimizedInfo"]));
+            }
+            set {
+                this["SettingCheckBoxShowMinimizedInfo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int SettingTextBoxTaskSchedulerStopTaskAfterDays {
+            get {
+                return ((int)(this["SettingTextBoxTaskSchedulerStopTaskAfterDays"]));
+            }
+            set {
+                this["SettingTextBoxTaskSchedulerStopTaskAfterDays"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxDisallowStartIfOnBatteries {
+            get {
+                return ((bool)(this["SettingCheckBoxDisallowStartIfOnBatteries"]));
+            }
+            set {
+                this["SettingCheckBoxDisallowStartIfOnBatteries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxStopIfGoingOnBatteries {
+            get {
+                return ((bool)(this["SettingCheckBoxStopIfGoingOnBatteries"]));
+            }
+            set {
+                this["SettingCheckBoxStopIfGoingOnBatteries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxStopOnIdleEnd {
+            get {
+                return ((bool)(this["SettingCheckBoxStopOnIdleEnd"]));
+            }
+            set {
+                this["SettingCheckBoxStopOnIdleEnd"] = value;
+            }
+        }
     }
 }
