@@ -74,13 +74,12 @@ namespace Internet_Check
                             td.Principal.RunLevel = TaskRunLevel.Highest;
 
                             //get the XML Settings. XML Reader is in form1; Interval XML reader is in this class (UserSettings.cs)
-                            td.Settings.DisallowStartIfOnBatteries = form1.boolAdvancedSettings("DisallowStartIfOnBatteries", false);
-                            td.Settings.StopIfGoingOnBatteries = form1.boolAdvancedSettings("StopIfGoingOnBatteries", false);
-                            td.Settings.IdleSettings.StopOnIdleEnd = form1.boolAdvancedSettings("StopOnIdleEnd", false);
-                            TimeSpan interval = new TimeSpan(form1.intAdvancedSettings("TaskSchedulerStopTaskAfterDays", 5), 0, 0, 0);
+                            td.Settings.DisallowStartIfOnBatteries = Properties.Settings.Default.SettingCheckBoxDisallowStartIfOnBatteries;
+                            td.Settings.StopIfGoingOnBatteries = Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries;
+                            td.Settings.IdleSettings.StopOnIdleEnd = Properties.Settings.Default.SettingCheckBoxStopOnIdleEnd;
+                            TimeSpan interval = new TimeSpan(Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays, 0, 0, 0);
                             td.Settings.ExecutionTimeLimit = interval;
                             ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
-
                         }
                         catch
                         {

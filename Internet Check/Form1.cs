@@ -212,11 +212,11 @@ namespace Internet_Check
             TimeSpan startTimeSpan = TimeSpan.Zero;
             TimeSpan periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
             List<string> serverList = getServersFromXML();
-            bool writeSuccessfulPings = boolAdvancedSettings("ShowAllPingResults", false);
+            bool writeSuccessfulPings = Properties.Settings.Default.SettingCheckBoxAllPingResults;
             int currentPositionInList = 0;
-            string doubleCheckServer = stringAdvancedSettings("DoubleCheckServer", "None");
+            string doubleCheckServer = Properties.Settings.Default.SettingDoubleCheckServer;
+            bool useAlternativePingMethod = Properties.Settings.Default.SettingUseAlternativePingMethod;
 
-            bool useAlternativePingMethod = boolAdvancedSettings("UseAlternativePingMethod", false);
             //Decides which ping method is used. The standard
             if (!useAlternativePingMethod)
             {
@@ -602,7 +602,7 @@ namespace Internet_Check
             {
                 this.Visible = false;
                 this.notifyIcon1.Visible = true;
-                if(boolAdvancedSettings("ShowMinimizedInfo",true) == true && StartedInLast9Minutes() == false)
+                if(Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo && StartedInLast9Minutes() == false)
                 {
                     this.notifyIcon1.ShowBalloonTip(17000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
                 }
@@ -798,52 +798,6 @@ namespace Internet_Check
             File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"), now.ToString());
         }
 
-        public bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
-        {
-            bool boolSetting = standardValue;
-
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlReader reader = null;
-            XmlDocument myData = new XmlDocument();
-
-            try
-            {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            } catch (Exception e)
-            {
-                this.ErrorMessage(e.Message);
-                return standardValue;
-            }
-
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == settingNameInherited)
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string settingValue = child.InnerText;
-                        try
-                        {
-                            boolSetting = bool.Parse(settingValue);
-                        }
-                        catch
-                        {
-                            this.ErrorMessage($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml is invalid. The standard value {standardValue.ToString().ToLower()} was used.");
-                        }
-                    }
-                    break;
-                }
-            }
-            readerSettings = null;
-            reader.Dispose();
-            myData = null;
-            return boolSetting;
-        }
-        //TaskSchedulerStopTaskAfterDays
         public int intAdvancedSettings(string settingNameInherited, int standardValue)
         {
             int returnValue = standardValue;
@@ -877,62 +831,6 @@ namespace Internet_Check
                         try
                         {
                             returnValue = Int16.Parse(value);
-                        }
-                        catch
-                        {
-                            this.ErrorMessage($"The value {value.ToString()} of ${settingNameInherited} in AdvancedSettings.xml is invalid. The standard value of ${standardValue.ToString()} days was used.");
-                        }
-                    }
-                    break;
-                }
-            }
-            reader.Dispose();
-            myData = null;
-            return returnValue;
-        }
-
-        private string stringAdvancedSettings(string settingNameInherited, string standardValue)
-        {
-            string returnValue = standardValue;
-
-            //https://stackoverflow.com/questions/2875674/how-to-ignore-comments-when-reading-a-xml-file-into-a-xmldocument
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlReader reader = null;
-            XmlDocument myData = new XmlDocument();
-            try
-            {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            }
-            catch (Exception e)
-            {
-                this.ErrorMessage(e.Message);
-                return standardValue;
-            }
-
-            //If the file is found, loop through it to find the relevant data
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == settingNameInherited)
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string value = child.InnerText;
-                        try
-                        {
-                            if (value == "None" || value == "Same" || value == "Next")
-                            {
-                                reader.Dispose();
-                                return value;
-                            } else
-                            {
-                                this.ErrorMessage($"The value {value} of {settingNameInherited} in AdvancesSettings.xml is invalid. The standard value of {standardValue} for this setting was used.");
-                                reader.Dispose();
-                                return standardValue;
-                            }
                         }
                         catch
                         {
