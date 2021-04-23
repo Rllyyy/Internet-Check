@@ -294,7 +294,7 @@
             this.checkBoxDisallowStartIfOnBatteries.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.checkBoxDisallowStartIfOnBatteries.Size = new System.Drawing.Size(335, 24);
             this.checkBoxDisallowStartIfOnBatteries.TabIndex = 21;
-            this.checkBoxDisallowStartIfOnBatteries.Text = "Task Scheduler Disallow start if on Batteries";
+            this.checkBoxDisallowStartIfOnBatteries.Text = "Task Scheduler disallow Start if on Batteries";
             this.checkBoxDisallowStartIfOnBatteries.UseVisualStyleBackColor = true;
             // 
             // checkBoxStopIfGoingOnBatteries
@@ -342,7 +342,6 @@
             this.tableLayoutPanel1.Controls.Add(this.labelTaskSchedulerStopTaskAfterDays, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.textBoxTaskSchedulerStopTaskAfterDays, 4, 5);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxHideWhenMin, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.labelAdvancedSettings, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxShowMinimizedInfo, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxAllPingResults, 0, 7);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxUseAlternativePingMethod, 0, 6);
@@ -351,6 +350,7 @@
             this.tableLayoutPanel1.Controls.Add(this.labelUserMessage, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxDisallowStartIfOnBatteries, 2, 6);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxStopIfGoingOnBatteries, 2, 7);
+            this.tableLayoutPanel1.Controls.Add(this.labelAdvancedSettings, 2, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";

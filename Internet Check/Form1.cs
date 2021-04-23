@@ -69,7 +69,6 @@ namespace Internet_Check
             this.Text += getAssemblyFileVersion();
 
             //Pass Form1 to the other classes
-            userSettings1.setForm1(this);
             userControlClearConfirm1.setForm1(this);
 
             //Prepare UI Elements
@@ -77,7 +76,6 @@ namespace Internet_Check
             this.notifyIcon1.Visible = false;
             this.button1.Text = "Start";
             this.notifyIcon1.Icon = Properties.Resources.InternetSymbolYellowSVG;
-            this.userSettings1.SendToBack();
             this.userControlClearConfirm1.SendToBack();
             this.userControlErrorMessage1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
@@ -195,7 +193,7 @@ namespace Internet_Check
         }
 
         private System.Threading.Timer timer;
-        private void startCollecting()
+        public void startCollecting()
         {
             //Prepare UI Elements
             this.button1.Text = "Stop";
@@ -228,7 +226,7 @@ namespace Internet_Check
             }
         }
 
-        private void stopCollecting ()
+        public void stopCollecting ()
         {
             //Dispose the timer created in checkWithStandardPingProtocol
             try
@@ -672,7 +670,6 @@ namespace Internet_Check
             this.userControlErrorMessage1.BackColor = Color.FromArgb(56, 55, 55);
             this.userControlErrorMessage1.ForeColor = Color.FromArgb(233, 233, 233);
             this.button2.ForeColor = Color.FromArgb(233, 233, 233);
-            this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);
             this.userControlClearConfirm1.UserControlClearConfirmDarkmodeForm();
         }
 
@@ -685,7 +682,6 @@ namespace Internet_Check
             this.buttonClear.ForeColor = Color.Black;
             this.userControlErrorMessage1.ForeColor = Color.Black;
             this.button2.ForeColor = Color.Black;
-            this.userSettings1.BackColor = Color.White;
             this.userControlErrorMessage1.BackColor = Color.White;
             this.userControlErrorMessage1.ForeColor = Color.Black;
             this.userControlClearConfirm1.BackColor = Color.White;
@@ -705,7 +701,7 @@ namespace Internet_Check
         private void button2_Click(object sender, EventArgs e)
         {
             //Opens the settings
-            AppSettings f2 = new AppSettings();
+            AppSettings f2 = new AppSettings(this);
             f2.ShowDialog();
             /*
             this.userSettings1.BringToFront();

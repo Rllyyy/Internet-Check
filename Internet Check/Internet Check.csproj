@@ -108,12 +108,6 @@
     <Compile Include="UserControlClearConfirm.Designer.cs">
       <DependentUpon>UserControlClearConfirm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserSettings.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserSettings.Designer.cs">
-      <DependentUpon>UserSettings.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="AppSettings.resx">
       <DependentUpon>AppSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -135,9 +129,6 @@
     </Compile>
     <EmbeddedResource Include="UserControlClearConfirm.resx">
       <DependentUpon>UserControlClearConfirm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserSettings.resx">
-      <DependentUpon>UserSettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />
