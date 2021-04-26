@@ -31,6 +31,14 @@ namespace Internet_Check
             public static bool CollectingSettingsChanged = false;
         }
 
+        private void checkIfStartWithDarkmode()
+        {
+            if (Properties.Settings.Default.SettingDarkmode)
+            {
+                AppSettingsDarkModeForm();
+            }
+        }
+
         private void setAppSettings()
         {
             //Load Settings
@@ -43,18 +51,10 @@ namespace Internet_Check
             this.checkBoxUseAlternativePingMethod.Checked = Properties.Settings.Default.SettingUseAlternativePingMethod;
             this.checkBoxAllPingResults.Checked = Properties.Settings.Default.SettingCheckBoxAllPingResults;
             this.checkBoxShowMinimizedInfo.Checked = Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo;
+            this.checkBoxUseCustomServers.Checked = Properties.Settings.Default.SettingUseCustomServers;
             this.textBoxTaskSchedulerStopTaskAfterDays.Text = Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays.ToString();
             this.checkBoxDisallowStartIfOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxDisallowStartIfOnBatteries;
             this.checkBoxStopIfGoingOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries;
-            this.checkBoxStopOnIdleEnd.Checked = Properties.Settings.Default.SettingCheckBoxStopOnIdleEnd;
-        }
-
-        private void checkIfStartWithDarkmode()
-        {
-            if (Properties.Settings.Default.SettingDarkmode)
-            {
-                AppSettingsDarkModeForm();
-            }
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -62,10 +62,14 @@ namespace Internet_Check
             
             checkDarkModeChanged();
             checkHideWhenMinChanged();
-
+            checkDoubleCheckServerChanged();
             checkUseAlternativePingMethodChanged();
+            checkAllPingResultsChanged();
+            checkShowMinimizedInfoChanged();
+            checkUseCustomServersChanged();
             checkTaskSchedulerStopTaskAfterDays();
-
+            checkDisallowStartIfOnBatteries();
+            checkStopIfGoingOnBatteries();
 
 
             AddOrRemoveTaskScheduler();
@@ -74,6 +78,7 @@ namespace Internet_Check
 
             
             this.Close();
+            this.Dispose();
         }
 
         //Define the default values. The user still needs to click Apply & Exit
@@ -92,12 +97,12 @@ namespace Internet_Check
             this.textBoxTaskSchedulerStopTaskAfterDays.Text = 5.ToString();
             this.checkBoxDisallowStartIfOnBatteries.Checked = false;
             this.checkBoxStopIfGoingOnBatteries.Checked = false;
-            this.checkBoxStopOnIdleEnd.Checked = false;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+            this.Dispose();
         }
 
         private void checkDarkModeChanged()
@@ -109,22 +114,20 @@ namespace Internet_Check
             }
         }
 
-        private void setColorInForm1()
-        {
-            if (this.checkBoxDarkmode.Checked)
-            {
-                f1.DarkmodeForm();
-            } else
-            {
-                f1.LightmodeForm();
-            }
-        }
-
         private void checkHideWhenMinChanged()
         {
             if (this.checkBoxHideWhenMin.Checked != Properties.Settings.Default.SettingHideWhenMin)
             {
                 Properties.Settings.Default.SettingHideWhenMin = this.checkBoxHideWhenMin.Checked;
+            }
+        }
+
+        private void checkDoubleCheckServerChanged()
+        {
+            if (comboBoxDoubleCheckServer.SelectedItem.ToString() != Properties.Settings.Default.SettingDoubleCheckServer)
+            {
+                Properties.Settings.Default.SettingDoubleCheckServer = comboBoxDoubleCheckServer.SelectedItem.ToString();
+                settingChanged.CollectingSettingsChanged = true;
             }
         }
 
@@ -141,6 +144,58 @@ namespace Internet_Check
                 {
                     Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays = 5;
                 }
+            }
+        }
+
+        private void checkUseAlternativePingMethodChanged()
+        {
+            if (this.checkBoxUseAlternativePingMethod.Checked != Properties.Settings.Default.SettingUseAlternativePingMethod)
+            {
+                Properties.Settings.Default.SettingUseAlternativePingMethod = this.checkBoxUseAlternativePingMethod.Checked;
+                settingChanged.CollectingSettingsChanged = true;
+            }
+        }
+
+        private void checkAllPingResultsChanged()
+        {
+            if (this.checkBoxAllPingResults.Checked != Properties.Settings.Default.SettingCheckBoxAllPingResults)
+            {
+                Properties.Settings.Default.SettingCheckBoxAllPingResults = this.checkBoxAllPingResults.Checked;
+                settingChanged.CollectingSettingsChanged = true;
+            }
+        }
+
+        private void checkShowMinimizedInfoChanged()
+        {
+            if (this.checkBoxShowMinimizedInfo.Checked != Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo)
+            {
+                Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo = this.checkBoxShowMinimizedInfo.Checked;
+            }
+        }
+
+        private void checkUseCustomServersChanged()
+        {
+            if (this.checkBoxUseCustomServers.Checked != Properties.Settings.Default.SettingUseCustomServers)
+            {
+                Properties.Settings.Default.SettingUseCustomServers = this.checkBoxUseCustomServers.Checked;
+            }
+        }
+
+        private void checkDisallowStartIfOnBatteries()
+        {
+            if (this.checkBoxDisallowStartIfOnBatteries.Checked != Properties.Settings.Default.SettingCheckBoxDisallowStartIfOnBatteries)
+            {
+                Properties.Settings.Default.SettingCheckBoxDisallowStartIfOnBatteries = this.checkBoxDisallowStartIfOnBatteries.Checked;
+                settingChanged.TaskSchedulerSettingsChanged = true;
+            }
+        }
+
+        private void checkStopIfGoingOnBatteries()
+        {
+            if (this.checkBoxStopIfGoingOnBatteries.Checked != Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries)
+            {
+                Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries = checkBoxStopIfGoingOnBatteries.Checked;
+                settingChanged.TaskSchedulerSettingsChanged = true;
             }
         }
 
@@ -166,7 +221,7 @@ namespace Internet_Check
                     //Get the Settings from the form
                     td.Settings.DisallowStartIfOnBatteries = this.checkBoxDisallowStartIfOnBatteries.Checked;
                     td.Settings.StopIfGoingOnBatteries = this.checkBoxStopIfGoingOnBatteries.Checked;
-                    td.Settings.IdleSettings.StopOnIdleEnd = this.checkBoxStopOnIdleEnd.Checked;
+                    td.Settings.IdleSettings.StopOnIdleEnd = false;
                     TimeSpan interval = new TimeSpan(Int32.Parse(this.textBoxTaskSchedulerStopTaskAfterDays.Text), 0, 0, 0);
                     td.Settings.ExecutionTimeLimit = interval;
                     ts.RootFolder.RegisterTaskDefinition(@"Internet-Check", td);
@@ -212,17 +267,6 @@ namespace Internet_Check
             {
                 Properties.Settings.Default.SettingWindowsStart = false;
                 Properties.Settings.Default.SettingTask = "";
-            }
-        }
-
-        private void checkUseAlternativePingMethodChanged()
-        {
-            if (this.checkBoxUseAlternativePingMethod.Checked != Properties.Settings.Default.SettingUseAlternativePingMethod)
-            {
-                Properties.Settings.Default.SettingUseAlternativePingMethod = this.checkBoxUseAlternativePingMethod.Checked;
-                settingChanged.CollectingSettingsChanged = true;
-                //Stop current ping
-                //form1 user message restart with alternative ping method
             }
         }
 
@@ -289,6 +333,18 @@ namespace Internet_Check
             }
         }
 
+        private void setColorInForm1()
+        {
+            if (this.checkBoxDarkmode.Checked)
+            {
+                f1.DarkmodeForm();
+            }
+            else
+            {
+                f1.LightmodeForm();
+            }
+        }
+
         private void checkCollectingSettingsChanged()
         {
             if (settingChanged.CollectingSettingsChanged)
@@ -307,11 +363,6 @@ namespace Internet_Check
             f1 = fe;
         }
 
-        private void doInForm1()
-        {
-            f1.ErrorMessage("Because some collecting parameters changed the collecting process was restarted with the new settings");
-        }
-
         private void AppSettingsDarkModeForm()
         {
             this.BackColor = customColors.backColorDark;
@@ -320,5 +371,25 @@ namespace Internet_Check
             customColors.redDark = Color.IndianRed;
         }
 
+        private void checkBoxUseCustomServers_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxUseCustomServers.Checked)
+            {
+                this.buttonEditServers.Visible = true;
+                //Remove the border when the button is clicked an the appSettings UI thread is paused
+                buttonEditServers.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
+            } else
+            {
+                this.buttonEditServers.Visible = false;
+            }
+        }
+
+        private void buttonEditServers_Click(object sender, EventArgs e)
+        {
+            FormEditServers f3 = new FormEditServers();
+            f3.ShowDialog();
+            //this.Height = 1000;
+            //Process.Start(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml");
+        }
     }
 }

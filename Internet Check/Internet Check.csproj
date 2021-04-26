@@ -60,6 +60,7 @@
     <Reference Include="Octokit, Version=0.50.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Octokit.0.50.0\lib\net46\Octokit.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -87,6 +88,12 @@
     <Compile Include="AppSettings.Designer.cs">
       <DependentUpon>AppSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormEditServers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEditServers.Designer.cs">
+      <DependentUpon>FormEditServers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="UserControlErrorMessage.cs">
       <SubType>UserControl</SubType>
@@ -110,6 +117,9 @@
     </Compile>
     <EmbeddedResource Include="AppSettings.resx">
       <DependentUpon>AppSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormEditServers.resx">
+      <DependentUpon>FormEditServers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlErrorMessage.resx">
       <DependentUpon>UserControlErrorMessage.cs</DependentUpon>

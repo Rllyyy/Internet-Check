@@ -209,7 +209,7 @@ namespace Internet_Check
             //Prepare variables for timer
             TimeSpan startTimeSpan = TimeSpan.Zero;
             TimeSpan periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-            List<string> serverList = getServersFromXML();
+            List<string> serverList = getServerList();
             bool writeSuccessfulPings = Properties.Settings.Default.SettingCheckBoxAllPingResults;
             int currentPositionInList = 0;
             string doubleCheckServer = Properties.Settings.Default.SettingDoubleCheckServer;
@@ -363,7 +363,6 @@ namespace Internet_Check
             //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
             timer = new System.Threading.Timer((d) =>
             {
-                //bool serverPingedBack = pingWithWebClient();
                 if (!pingWithWebClient())
                 {
                     DateTime now = DateTime.Now;
@@ -428,6 +427,17 @@ namespace Internet_Check
         {
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
+        }
+        private List<string> getServerList()
+        {
+            if (Properties.Settings.Default.SettingUseCustomServers)
+            {
+                return Properties.Settings.Default.SettingCustomServersCollection.Cast<string>().ToList();
+            }
+
+            //If CheckBoxUseCustomServers is not clicked
+            List<string> defaultServers = new List<string>{ "8.8.8.8", "8.8.4.4", "1.1.1.1" };
+            return defaultServers;
         }
 
         private List<string> getServersFromXML()
@@ -602,7 +612,7 @@ namespace Internet_Check
                 this.notifyIcon1.Visible = true;
                 if(Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo && StartedInLast9Minutes() == false)
                 {
-                    this.notifyIcon1.ShowBalloonTip(17000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
+                    this.notifyIcon1.ShowBalloonTip(14000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
                 }
             }
         }
@@ -703,11 +713,6 @@ namespace Internet_Check
             //Opens the settings
             AppSettings f2 = new AppSettings(this);
             f2.ShowDialog();
-            /*
-            this.userSettings1.BringToFront();
-            this.userSettings1.Visible = true;
-            this.userSettings1.Show();
-            */
         }
 
         //UI-Elements for ClearOnlyIrrelevant. Called from UserControlClearConfirm.cs

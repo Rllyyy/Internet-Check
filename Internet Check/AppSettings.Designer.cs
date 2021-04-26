@@ -47,9 +47,10 @@
             this.textBoxTaskSchedulerStopTaskAfterDays = new System.Windows.Forms.TextBox();
             this.checkBoxDisallowStartIfOnBatteries = new System.Windows.Forms.CheckBox();
             this.checkBoxStopIfGoingOnBatteries = new System.Windows.Forms.CheckBox();
-            this.checkBoxStopOnIdleEnd = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBoxUseCustomServers = new System.Windows.Forms.CheckBox();
             this.labelUserMessage = new System.Windows.Forms.Label();
+            this.buttonEditServers = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -130,29 +131,30 @@
             // 
             // checkBoxStartWithWindows
             // 
-            this.checkBoxStartWithWindows.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.checkBoxStartWithWindows.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.checkBoxStartWithWindows.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.checkBoxStartWithWindows, 2);
+            this.tableLayoutPanel1.SetColumnSpan(this.checkBoxStartWithWindows, 3);
             this.checkBoxStartWithWindows.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxStartWithWindows.Location = new System.Drawing.Point(10, 65);
-            this.checkBoxStartWithWindows.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.checkBoxStartWithWindows.Location = new System.Drawing.Point(572, 34);
+            this.checkBoxStartWithWindows.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.checkBoxStartWithWindows.Name = "checkBoxStartWithWindows";
-            this.checkBoxStartWithWindows.Size = new System.Drawing.Size(166, 24);
+            this.checkBoxStartWithWindows.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxStartWithWindows.Size = new System.Drawing.Size(286, 24);
             this.checkBoxStartWithWindows.TabIndex = 10;
-            this.checkBoxStartWithWindows.Text = "Start with Windows";
+            this.checkBoxStartWithWindows.Text = "Start with Windows (Task Scheduler)";
             this.checkBoxStartWithWindows.UseVisualStyleBackColor = true;
             this.checkBoxStartWithWindows.Click += new System.EventHandler(this.checkBoxStartWithWindows_Click);
             // 
             // checkBoxHideWhenMin
             // 
-            this.checkBoxHideWhenMin.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.checkBoxHideWhenMin.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.checkBoxHideWhenMin.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxHideWhenMin, 2);
             this.checkBoxHideWhenMin.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(664, 34);
-            this.checkBoxHideWhenMin.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.checkBoxHideWhenMin.Location = new System.Drawing.Point(10, 65);
+            this.checkBoxHideWhenMin.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.checkBoxHideWhenMin.Name = "checkBoxHideWhenMin";
-            this.checkBoxHideWhenMin.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxHideWhenMin.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.checkBoxHideWhenMin.Size = new System.Drawing.Size(194, 24);
             this.checkBoxHideWhenMin.TabIndex = 11;
             this.checkBoxHideWhenMin.Text = "Minimize to System Tray";
@@ -182,7 +184,7 @@
             this.labelAdvancedSettings.Font = new System.Drawing.Font("Century Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAdvancedSettings.Location = new System.Drawing.Point(320, 94);
             this.labelAdvancedSettings.Name = "labelAdvancedSettings";
-            this.labelAdvancedSettings.Size = new System.Drawing.Size(225, 54);
+            this.labelAdvancedSettings.Size = new System.Drawing.Size(225, 46);
             this.labelAdvancedSettings.TabIndex = 13;
             this.labelAdvancedSettings.Text = "Advanced Settings";
             this.labelAdvancedSettings.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -197,7 +199,7 @@
             "None",
             "Same",
             "Next"});
-            this.comboBoxDoubleCheckServer.Location = new System.Drawing.Point(187, 184);
+            this.comboBoxDoubleCheckServer.Location = new System.Drawing.Point(187, 148);
             this.comboBoxDoubleCheckServer.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.comboBoxDoubleCheckServer.Name = "comboBoxDoubleCheckServer";
             this.comboBoxDoubleCheckServer.Size = new System.Drawing.Size(71, 25);
@@ -208,7 +210,7 @@
             this.labelDoubleCheckServer.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.labelDoubleCheckServer.AutoSize = true;
             this.labelDoubleCheckServer.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDoubleCheckServer.Location = new System.Drawing.Point(6, 187);
+            this.labelDoubleCheckServer.Location = new System.Drawing.Point(6, 150);
             this.labelDoubleCheckServer.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
             this.labelDoubleCheckServer.Name = "labelDoubleCheckServer";
             this.labelDoubleCheckServer.Size = new System.Drawing.Size(166, 20);
@@ -222,20 +224,21 @@
             this.checkBoxUseAlternativePingMethod.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxUseAlternativePingMethod, 2);
             this.checkBoxUseAlternativePingMethod.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxUseAlternativePingMethod.Location = new System.Drawing.Point(10, 219);
+            this.checkBoxUseAlternativePingMethod.Location = new System.Drawing.Point(10, 185);
             this.checkBoxUseAlternativePingMethod.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.checkBoxUseAlternativePingMethod.Name = "checkBoxUseAlternativePingMethod";
-            this.checkBoxUseAlternativePingMethod.Size = new System.Drawing.Size(228, 24);
+            this.checkBoxUseAlternativePingMethod.Size = new System.Drawing.Size(237, 24);
             this.checkBoxUseAlternativePingMethod.TabIndex = 16;
-            this.checkBoxUseAlternativePingMethod.Text = "Use alternative Ping Metod";
+            this.checkBoxUseAlternativePingMethod.Text = "Use alternative Ping Method";
             this.checkBoxUseAlternativePingMethod.UseVisualStyleBackColor = true;
             // 
             // checkBoxAllPingResults
             // 
+            this.checkBoxAllPingResults.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.checkBoxAllPingResults.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxAllPingResults, 2);
             this.checkBoxAllPingResults.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxAllPingResults.Location = new System.Drawing.Point(10, 252);
+            this.checkBoxAllPingResults.Location = new System.Drawing.Point(10, 219);
             this.checkBoxAllPingResults.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.checkBoxAllPingResults.Name = "checkBoxAllPingResults";
             this.checkBoxAllPingResults.Size = new System.Drawing.Size(175, 24);
@@ -249,12 +252,12 @@
             this.checkBoxShowMinimizedInfo.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxShowMinimizedInfo, 2);
             this.checkBoxShowMinimizedInfo.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxShowMinimizedInfo.Location = new System.Drawing.Point(10, 288);
+            this.checkBoxShowMinimizedInfo.Location = new System.Drawing.Point(10, 254);
             this.checkBoxShowMinimizedInfo.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.checkBoxShowMinimizedInfo.Name = "checkBoxShowMinimizedInfo";
-            this.checkBoxShowMinimizedInfo.Size = new System.Drawing.Size(237, 24);
+            this.checkBoxShowMinimizedInfo.Size = new System.Drawing.Size(258, 24);
             this.checkBoxShowMinimizedInfo.TabIndex = 18;
-            this.checkBoxShowMinimizedInfo.Text = "Show Ballon Tip on Minimized";
+            this.checkBoxShowMinimizedInfo.Text = "Show Ballon Tip when minimized";
             this.checkBoxShowMinimizedInfo.UseVisualStyleBackColor = true;
             // 
             // labelTaskSchedulerStopTaskAfterDays
@@ -263,24 +266,26 @@
             this.labelTaskSchedulerStopTaskAfterDays.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.labelTaskSchedulerStopTaskAfterDays, 2);
             this.labelTaskSchedulerStopTaskAfterDays.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTaskSchedulerStopTaskAfterDays.Location = new System.Drawing.Point(544, 187);
+            this.labelTaskSchedulerStopTaskAfterDays.Location = new System.Drawing.Point(550, 150);
             this.labelTaskSchedulerStopTaskAfterDays.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.labelTaskSchedulerStopTaskAfterDays.Name = "labelTaskSchedulerStopTaskAfterDays";
             this.labelTaskSchedulerStopTaskAfterDays.Size = new System.Drawing.Size(262, 20);
             this.labelTaskSchedulerStopTaskAfterDays.TabIndex = 19;
             this.labelTaskSchedulerStopTaskAfterDays.Text = "Task Scheduler Stop Task after Days";
+            this.labelTaskSchedulerStopTaskAfterDays.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBoxTaskSchedulerStopTaskAfterDays
             // 
             this.textBoxTaskSchedulerStopTaskAfterDays.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.textBoxTaskSchedulerStopTaskAfterDays.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTaskSchedulerStopTaskAfterDays.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTaskSchedulerStopTaskAfterDays.Location = new System.Drawing.Point(815, 184);
+            this.textBoxTaskSchedulerStopTaskAfterDays.Location = new System.Drawing.Point(815, 147);
             this.textBoxTaskSchedulerStopTaskAfterDays.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
             this.textBoxTaskSchedulerStopTaskAfterDays.Name = "textBoxTaskSchedulerStopTaskAfterDays";
-            this.textBoxTaskSchedulerStopTaskAfterDays.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.textBoxTaskSchedulerStopTaskAfterDays.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.textBoxTaskSchedulerStopTaskAfterDays.Size = new System.Drawing.Size(43, 26);
             this.textBoxTaskSchedulerStopTaskAfterDays.TabIndex = 20;
+            this.textBoxTaskSchedulerStopTaskAfterDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // checkBoxDisallowStartIfOnBatteries
             // 
@@ -288,7 +293,7 @@
             this.checkBoxDisallowStartIfOnBatteries.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxDisallowStartIfOnBatteries, 3);
             this.checkBoxDisallowStartIfOnBatteries.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDisallowStartIfOnBatteries.Location = new System.Drawing.Point(523, 219);
+            this.checkBoxDisallowStartIfOnBatteries.Location = new System.Drawing.Point(523, 185);
             this.checkBoxDisallowStartIfOnBatteries.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.checkBoxDisallowStartIfOnBatteries.Name = "checkBoxDisallowStartIfOnBatteries";
             this.checkBoxDisallowStartIfOnBatteries.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -303,7 +308,7 @@
             this.checkBoxStopIfGoingOnBatteries.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.checkBoxStopIfGoingOnBatteries, 3);
             this.checkBoxStopIfGoingOnBatteries.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxStopIfGoingOnBatteries.Location = new System.Drawing.Point(540, 254);
+            this.checkBoxStopIfGoingOnBatteries.Location = new System.Drawing.Point(540, 219);
             this.checkBoxStopIfGoingOnBatteries.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
             this.checkBoxStopIfGoingOnBatteries.Name = "checkBoxStopIfGoingOnBatteries";
             this.checkBoxStopIfGoingOnBatteries.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -312,62 +317,62 @@
             this.checkBoxStopIfGoingOnBatteries.Text = "Task Scheduler Stop if going on Batteries";
             this.checkBoxStopIfGoingOnBatteries.UseVisualStyleBackColor = true;
             // 
-            // checkBoxStopOnIdleEnd
-            // 
-            this.checkBoxStopOnIdleEnd.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.checkBoxStopOnIdleEnd.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.checkBoxStopOnIdleEnd, 2);
-            this.checkBoxStopOnIdleEnd.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxStopOnIdleEnd.Location = new System.Drawing.Point(602, 288);
-            this.checkBoxStopOnIdleEnd.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.checkBoxStopOnIdleEnd.Name = "checkBoxStopOnIdleEnd";
-            this.checkBoxStopOnIdleEnd.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxStopOnIdleEnd.Size = new System.Drawing.Size(256, 24);
-            this.checkBoxStopOnIdleEnd.TabIndex = 23;
-            this.checkBoxStopOnIdleEnd.Text = "Task Scheduler Stop on Idle End";
-            this.checkBoxStopOnIdleEnd.UseVisualStyleBackColor = true;
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.54378F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.97696F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.64086F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.71286F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.991261F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.57275F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 14.9971F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 26.67668F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.52995F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 6.336406F));
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxUseCustomServers, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.labelSettings, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxStartWithWindows, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxDarkmode, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxStopOnIdleEnd, 3, 8);
-            this.tableLayoutPanel1.Controls.Add(this.labelTaskSchedulerStopTaskAfterDays, 2, 5);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxTaskSchedulerStopTaskAfterDays, 4, 5);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxHideWhenMin, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxShowMinimizedInfo, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxAllPingResults, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxUseAlternativePingMethod, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.labelDoubleCheckServer, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.comboBoxDoubleCheckServer, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.labelUserMessage, 0, 9);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxDisallowStartIfOnBatteries, 2, 6);
-            this.tableLayoutPanel1.Controls.Add(this.checkBoxStopIfGoingOnBatteries, 2, 7);
             this.tableLayoutPanel1.Controls.Add(this.labelAdvancedSettings, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.labelDoubleCheckServer, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.comboBoxDoubleCheckServer, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxUseAlternativePingMethod, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxAllPingResults, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxShowMinimizedInfo, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.labelTaskSchedulerStopTaskAfterDays, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxTaskSchedulerStopTaskAfterDays, 4, 4);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxDisallowStartIfOnBatteries, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxStopIfGoingOnBatteries, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.labelUserMessage, 0, 10);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxStartWithWindows, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxHideWhenMin, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.buttonEditServers, 1, 8);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 10;
+            this.tableLayoutPanel1.RowCount = 11;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 67F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(868, 363);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(868, 397);
             this.tableLayoutPanel1.TabIndex = 24;
+            // 
+            // checkBoxUseCustomServers
+            // 
+            this.checkBoxUseCustomServers.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.checkBoxUseCustomServers.AutoSize = true;
+            this.checkBoxUseCustomServers.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxUseCustomServers.Location = new System.Drawing.Point(10, 288);
+            this.checkBoxUseCustomServers.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.checkBoxUseCustomServers.Name = "checkBoxUseCustomServers";
+            this.checkBoxUseCustomServers.Size = new System.Drawing.Size(171, 24);
+            this.checkBoxUseCustomServers.TabIndex = 26;
+            this.checkBoxUseCustomServers.Text = "Use Custom Servers";
+            this.checkBoxUseCustomServers.UseVisualStyleBackColor = true;
+            this.checkBoxUseCustomServers.CheckedChanged += new System.EventHandler(this.checkBoxUseCustomServers_CheckedChanged);
             // 
             // labelUserMessage
             // 
@@ -376,13 +381,30 @@
             this.tableLayoutPanel1.SetColumnSpan(this.labelUserMessage, 5);
             this.labelUserMessage.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUserMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
-            this.labelUserMessage.Location = new System.Drawing.Point(377, 317);
+            this.labelUserMessage.Location = new System.Drawing.Point(377, 353);
             this.labelUserMessage.Name = "labelUserMessage";
             this.labelUserMessage.Size = new System.Drawing.Size(113, 20);
             this.labelUserMessage.TabIndex = 24;
             this.labelUserMessage.Text = "Error Message";
             this.labelUserMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelUserMessage.Visible = false;
+            // 
+            // buttonEditServers
+            // 
+            this.buttonEditServers.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonEditServers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonEditServers.FlatAppearance.BorderSize = 0;
+            this.buttonEditServers.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonEditServers.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonEditServers.Location = new System.Drawing.Point(187, 283);
+            this.buttonEditServers.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonEditServers.Name = "buttonEditServers";
+            this.buttonEditServers.Size = new System.Drawing.Size(130, 34);
+            this.buttonEditServers.TabIndex = 26;
+            this.buttonEditServers.Text = "Edit Servers";
+            this.buttonEditServers.UseVisualStyleBackColor = true;
+            this.buttonEditServers.Visible = false;
+            this.buttonEditServers.Click += new System.EventHandler(this.buttonEditServers_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -395,7 +417,7 @@
             this.tableLayoutPanel2.Controls.Add(this.panel1, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.buttonSave, 2, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 379);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 402);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
@@ -409,7 +431,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(868, 434);
+            this.ClientSize = new System.Drawing.Size(868, 457);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -448,9 +470,10 @@
         private System.Windows.Forms.TextBox textBoxTaskSchedulerStopTaskAfterDays;
         private System.Windows.Forms.CheckBox checkBoxDisallowStartIfOnBatteries;
         private System.Windows.Forms.CheckBox checkBoxStopIfGoingOnBatteries;
-        private System.Windows.Forms.CheckBox checkBoxStopOnIdleEnd;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label labelUserMessage;
+        private System.Windows.Forms.CheckBox checkBoxUseCustomServers;
+        private System.Windows.Forms.Button buttonEditServers;
     }
 }
