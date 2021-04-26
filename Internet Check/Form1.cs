@@ -309,7 +309,7 @@ namespace Internet_Check
                     this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
                 }
 
-                //Write Ping to internet_issues.txt if user has writeSuccesfullPings enabled in AdvancedSettings.xml
+                //Write Ping to internet_issues.txt if user has Show all Ping Results enabled in AppSettings.cs
                 if (writeSuccessfulPings)
                 {
                     DateTime now = DateTime.Now;
@@ -380,7 +380,7 @@ namespace Internet_Check
                         //https://stackoverflow.com/questions/10170448/how-to-invoke-a-ui-method-from-another-thread
                         this.BeginInvoke(new MethodInvoker(delegate
                         {
-                            this.ErrorMessage("The alternative ping method can only ping the same Google server. Next on DoubleCheckServer in AdvancedSettings.xml is not supported.");
+                            this.ErrorMessage("The alternative ping method can only ping the same Google server. The Option Next is therefore not Supported. Please this setting in the Settings.");
                         }));
                     }
                     
@@ -406,7 +406,7 @@ namespace Internet_Check
             }, null, startTimeSpan, periodTimeSpan);
         }
 
-        //This is the alternative to the ping method which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the XML file to true.
+        //This is the alternative to the ping method which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the Settings to true.
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
         private bool pingWithWebClient()
         {
@@ -440,59 +440,6 @@ namespace Internet_Check
             return defaultServers;
         }
 
-        private List<string> getServersFromXML()
-        {
-            List<string> xmlServerList = new List<string>();
-
-            //Define reader settings to ignore comments
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlDocument myData = new XmlDocument();
-            XmlReader reader;
-            try
-            {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            } catch
-            {
-                this.ErrorMessage("Could not find AdvancedSettings.xml.The following servers were used: 8.8.8.8, 8.8.4.4 and 1.1.1.1! Please reinstall the program or create the file yourself");
-                return xmlServerList = new List<string>{"8.8.8.8", "8.8.4.4", "1.1.1.1"};
-            }
-
-            //Search through the XML file if there is no error found
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == "Servers")
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string server = child.InnerText;
-                        if (!string.IsNullOrWhiteSpace(server))
-                        {
-                            try
-                            {
-                                xmlServerList.Add((string)server);
-                            }
-                            catch
-                            {
-                                this.ErrorMessage($"Could not add the server {server.ToString()} from XML file to internal server list. The server was ignored.");
-                            }
-                        } else
-                        {
-                            this.ErrorMessage($"There is an empty server inside the server list of AdvancedSettings.xml! The server was ignored.");
-                        }
-                    }
-                    //Break out of the loop if the value is found
-                    break;
-                }
-            }
-
-            myData = null;
-            reader.Dispose();
-            return xmlServerList;
-        }
 
         public void ClearEverything()
         {   
