@@ -40,7 +40,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
-            this.userSettings1 = new Internet_Check.UserSettings();
             this.userControlErrorMessage1 = new Internet_Check.UserControlErrorMessage();
             this.userControlClearConfirm1 = new Internet_Check.UserControlClearConfirm();
             this.panel1.SuspendLayout();
@@ -176,17 +175,6 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // userSettings1
-            // 
-            this.userSettings1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.userSettings1.BackColor = System.Drawing.Color.White;
-            this.userSettings1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userSettings1.Location = new System.Drawing.Point(0, 0);
-            this.userSettings1.Name = "userSettings1";
-            this.userSettings1.Size = new System.Drawing.Size(376, 129);
-            this.userSettings1.TabIndex = 12;
-            this.userSettings1.Visible = false;
-            // 
             // userControlErrorMessage1
             // 
             this.userControlErrorMessage1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -215,7 +203,6 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(375, 152);
-            this.Controls.Add(this.userSettings1);
             this.Controls.Add(this.userControlErrorMessage1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.userControlClearConfirm1);
@@ -252,7 +239,6 @@
         private UserControlClearConfirm userControlClearConfirm1;
         public System.Windows.Forms.Label labelRunning;
         private UserControlErrorMessage userControlErrorMessage1;
-        private UserSettings userSettings1;
     }
 }
 

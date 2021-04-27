@@ -69,7 +69,6 @@ namespace Internet_Check
             this.Text += getAssemblyFileVersion();
 
             //Pass Form1 to the other classes
-            userSettings1.setForm1(this);
             userControlClearConfirm1.setForm1(this);
 
             //Prepare UI Elements
@@ -77,7 +76,6 @@ namespace Internet_Check
             this.notifyIcon1.Visible = false;
             this.button1.Text = "Start";
             this.notifyIcon1.Icon = Properties.Resources.InternetSymbolYellowSVG;
-            this.userSettings1.SendToBack();
             this.userControlClearConfirm1.SendToBack();
             this.userControlErrorMessage1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
@@ -195,7 +193,7 @@ namespace Internet_Check
         }
 
         private System.Threading.Timer timer;
-        private void startCollecting()
+        public void startCollecting()
         {
             //Prepare UI Elements
             this.button1.Text = "Stop";
@@ -211,12 +209,12 @@ namespace Internet_Check
             //Prepare variables for timer
             TimeSpan startTimeSpan = TimeSpan.Zero;
             TimeSpan periodTimeSpan = TimeSpan.FromSeconds(Properties.Settings.Default.SettingInterval);
-            List<string> serverList = getServersFromXML();
-            bool writeSuccessfulPings = boolAdvancedSettings("ShowAllPingResults", false);
+            List<string> serverList = getServerList();
+            bool writeSuccessfulPings = Properties.Settings.Default.SettingCheckBoxAllPingResults;
             int currentPositionInList = 0;
-            string doubleCheckServer = stringAdvancedSettings("DoubleCheckServer", "None");
+            string doubleCheckServer = Properties.Settings.Default.SettingDoubleCheckServer;
+            bool useAlternativePingMethod = Properties.Settings.Default.SettingUseAlternativePingMethod;
 
-            bool useAlternativePingMethod = boolAdvancedSettings("UseAlternativePingMethod", false);
             //Decides which ping method is used. The standard
             if (!useAlternativePingMethod)
             {
@@ -228,7 +226,7 @@ namespace Internet_Check
             }
         }
 
-        private void stopCollecting ()
+        public void stopCollecting ()
         {
             //Dispose the timer created in checkWithStandardPingProtocol
             try
@@ -311,7 +309,7 @@ namespace Internet_Check
                     this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
                 }
 
-                //Write Ping to internet_issues.txt if user has writeSuccesfullPings enabled in AdvancedSettings.xml
+                //Write Ping to internet_issues.txt if user has Show all Ping Results enabled in AppSettings.cs
                 if (writeSuccessfulPings)
                 {
                     DateTime now = DateTime.Now;
@@ -365,7 +363,6 @@ namespace Internet_Check
             //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
             timer = new System.Threading.Timer((d) =>
             {
-                //bool serverPingedBack = pingWithWebClient();
                 if (!pingWithWebClient())
                 {
                     DateTime now = DateTime.Now;
@@ -383,7 +380,7 @@ namespace Internet_Check
                         //https://stackoverflow.com/questions/10170448/how-to-invoke-a-ui-method-from-another-thread
                         this.BeginInvoke(new MethodInvoker(delegate
                         {
-                            this.ErrorMessage("The alternative ping method can only ping the same Google server. Next on DoubleCheckServer in AdvancedSettings.xml is not supported.");
+                            this.ErrorMessage("The alternative ping method can only ping the same Google server. The Option Next is therefore not Supported. Please this setting in the Settings.");
                         }));
                     }
                     
@@ -409,7 +406,7 @@ namespace Internet_Check
             }, null, startTimeSpan, periodTimeSpan);
         }
 
-        //This is the alternative to the ping method which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the XML file to true.
+        //This is the alternative to the ping method which relies on the webClient instead of the ping protocol. Can be activated by setting UseAlternativePingMethod in the Settings to true.
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
         private bool pingWithWebClient()
         {
@@ -431,60 +428,18 @@ namespace Internet_Check
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
         }
-
-        private List<string> getServersFromXML()
+        private List<string> getServerList()
         {
-            List<string> xmlServerList = new List<string>();
-
-            //Define reader settings to ignore comments
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlDocument myData = new XmlDocument();
-            XmlReader reader;
-            try
+            if (Properties.Settings.Default.SettingUseCustomServers)
             {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            } catch
-            {
-                this.ErrorMessage("Could not find AdvancedSettings.xml.The following servers were used: 8.8.8.8, 8.8.4.4 and 1.1.1.1! Please reinstall the program or create the file yourself");
-                return xmlServerList = new List<string>{"8.8.8.8", "8.8.4.4", "1.1.1.1"};
+                return Properties.Settings.Default.SettingCustomServersCollection.Cast<string>().ToList();
             }
 
-            //Search through the XML file if there is no error found
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == "Servers")
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string server = child.InnerText;
-                        if (!string.IsNullOrWhiteSpace(server))
-                        {
-                            try
-                            {
-                                xmlServerList.Add((string)server);
-                            }
-                            catch
-                            {
-                                this.ErrorMessage($"Could not add the server {server.ToString()} from XML file to internal server list. The server was ignored.");
-                            }
-                        } else
-                        {
-                            this.ErrorMessage($"There is an empty server inside the server list of AdvancedSettings.xml! The server was ignored.");
-                        }
-                    }
-                    //Break out of the loop if the value is found
-                    break;
-                }
-            }
-
-            myData = null;
-            reader.Dispose();
-            return xmlServerList;
+            //If CheckBoxUseCustomServers is not clicked
+            List<string> defaultServers = new List<string>{ "8.8.8.8", "8.8.4.4", "1.1.1.1" };
+            return defaultServers;
         }
+
 
         public void ClearEverything()
         {   
@@ -602,9 +557,9 @@ namespace Internet_Check
             {
                 this.Visible = false;
                 this.notifyIcon1.Visible = true;
-                if(boolAdvancedSettings("ShowMinimizedInfo",true) == true && StartedInLast9Minutes() == false)
+                if(Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo && StartedInLast9Minutes() == false)
                 {
-                    this.notifyIcon1.ShowBalloonTip(17000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
+                    this.notifyIcon1.ShowBalloonTip(14000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);
                 }
             }
         }
@@ -672,7 +627,6 @@ namespace Internet_Check
             this.userControlErrorMessage1.BackColor = Color.FromArgb(56, 55, 55);
             this.userControlErrorMessage1.ForeColor = Color.FromArgb(233, 233, 233);
             this.button2.ForeColor = Color.FromArgb(233, 233, 233);
-            this.userSettings1.BackColor = Color.FromArgb(56, 55, 55);
             this.userControlClearConfirm1.UserControlClearConfirmDarkmodeForm();
         }
 
@@ -685,7 +639,6 @@ namespace Internet_Check
             this.buttonClear.ForeColor = Color.Black;
             this.userControlErrorMessage1.ForeColor = Color.Black;
             this.button2.ForeColor = Color.Black;
-            this.userSettings1.BackColor = Color.White;
             this.userControlErrorMessage1.BackColor = Color.White;
             this.userControlErrorMessage1.ForeColor = Color.Black;
             this.userControlClearConfirm1.BackColor = Color.White;
@@ -705,9 +658,8 @@ namespace Internet_Check
         private void button2_Click(object sender, EventArgs e)
         {
             //Opens the settings
-            this.userSettings1.BringToFront();
-            this.userSettings1.Visible = true;
-            this.userSettings1.Show();
+            AppSettings f2 = new AppSettings(this);
+            f2.ShowDialog();
         }
 
         //UI-Elements for ClearOnlyIrrelevant. Called from UserControlClearConfirm.cs
@@ -794,52 +746,6 @@ namespace Internet_Check
             File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"), now.ToString());
         }
 
-        public bool boolAdvancedSettings(string settingNameInherited, bool standardValue)
-        {
-            bool boolSetting = standardValue;
-
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlReader reader = null;
-            XmlDocument myData = new XmlDocument();
-
-            try
-            {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            } catch (Exception e)
-            {
-                this.ErrorMessage(e.Message);
-                return standardValue;
-            }
-
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == settingNameInherited)
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string settingValue = child.InnerText;
-                        try
-                        {
-                            boolSetting = bool.Parse(settingValue);
-                        }
-                        catch
-                        {
-                            this.ErrorMessage($"The value {settingValue.ToString()} of {settingNameInherited} in AdvancedSettings.xml is invalid. The standard value {standardValue.ToString().ToLower()} was used.");
-                        }
-                    }
-                    break;
-                }
-            }
-            readerSettings = null;
-            reader.Dispose();
-            myData = null;
-            return boolSetting;
-        }
-        //TaskSchedulerStopTaskAfterDays
         public int intAdvancedSettings(string settingNameInherited, int standardValue)
         {
             int returnValue = standardValue;
@@ -873,62 +779,6 @@ namespace Internet_Check
                         try
                         {
                             returnValue = Int16.Parse(value);
-                        }
-                        catch
-                        {
-                            this.ErrorMessage($"The value {value.ToString()} of ${settingNameInherited} in AdvancedSettings.xml is invalid. The standard value of ${standardValue.ToString()} days was used.");
-                        }
-                    }
-                    break;
-                }
-            }
-            reader.Dispose();
-            myData = null;
-            return returnValue;
-        }
-
-        private string stringAdvancedSettings(string settingNameInherited, string standardValue)
-        {
-            string returnValue = standardValue;
-
-            //https://stackoverflow.com/questions/2875674/how-to-ignore-comments-when-reading-a-xml-file-into-a-xmldocument
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlReader reader = null;
-            XmlDocument myData = new XmlDocument();
-            try
-            {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            }
-            catch (Exception e)
-            {
-                this.ErrorMessage(e.Message);
-                return standardValue;
-            }
-
-            //If the file is found, loop through it to find the relevant data
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == settingNameInherited)
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string value = child.InnerText;
-                        try
-                        {
-                            if (value == "None" || value == "Same" || value == "Next")
-                            {
-                                reader.Dispose();
-                                return value;
-                            } else
-                            {
-                                this.ErrorMessage($"The value {value} of {settingNameInherited} in AdvancesSettings.xml is invalid. The standard value of {standardValue} for this setting was used.");
-                                reader.Dispose();
-                                return standardValue;
-                            }
                         }
                         catch
                         {

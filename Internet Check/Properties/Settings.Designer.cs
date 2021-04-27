@@ -12,7 +12,7 @@ namespace Internet_Check.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -80,6 +80,127 @@ namespace Internet_Check.Properties {
             }
             set {
                 this["SettingTask"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Next")]
+        public string SettingDoubleCheckServer {
+            get {
+                return ((string)(this["SettingDoubleCheckServer"]));
+            }
+            set {
+                this["SettingDoubleCheckServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingUseAlternativePingMethod {
+            get {
+                return ((bool)(this["SettingUseAlternativePingMethod"]));
+            }
+            set {
+                this["SettingUseAlternativePingMethod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxAllPingResults {
+            get {
+                return ((bool)(this["SettingCheckBoxAllPingResults"]));
+            }
+            set {
+                this["SettingCheckBoxAllPingResults"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SettingCheckBoxShowMinimizedInfo {
+            get {
+                return ((bool)(this["SettingCheckBoxShowMinimizedInfo"]));
+            }
+            set {
+                this["SettingCheckBoxShowMinimizedInfo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int SettingTextBoxTaskSchedulerStopTaskAfterDays {
+            get {
+                return ((int)(this["SettingTextBoxTaskSchedulerStopTaskAfterDays"]));
+            }
+            set {
+                this["SettingTextBoxTaskSchedulerStopTaskAfterDays"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxDisallowStartIfOnBatteries {
+            get {
+                return ((bool)(this["SettingCheckBoxDisallowStartIfOnBatteries"]));
+            }
+            set {
+                this["SettingCheckBoxDisallowStartIfOnBatteries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxStopIfGoingOnBatteries {
+            get {
+                return ((bool)(this["SettingCheckBoxStopIfGoingOnBatteries"]));
+            }
+            set {
+                this["SettingCheckBoxStopIfGoingOnBatteries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingCheckBoxStopOnIdleEnd {
+            get {
+                return ((bool)(this["SettingCheckBoxStopOnIdleEnd"]));
+            }
+            set {
+                this["SettingCheckBoxStopOnIdleEnd"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingUseCustomServers {
+            get {
+                return ((bool)(this["SettingUseCustomServers"]));
+            }
+            set {
+                this["SettingUseCustomServers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />")]
+        public global::System.Collections.Specialized.StringCollection SettingCustomServersCollection {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["SettingCustomServersCollection"]));
+            }
+            set {
+                this["SettingCustomServersCollection"] = value;
             }
         }
     }
