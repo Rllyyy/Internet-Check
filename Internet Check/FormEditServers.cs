@@ -12,6 +12,38 @@ namespace Internet_Check
             InitializeComponent();
             this.textBoxEnterServer.Select();
             fillServerList();
+            checkIfDarkMode();
+        }
+
+        public static class customColors
+        {
+            //public static Color redDark = Color.FromArgb(135, 0, 2);
+            //public static Color text = Color.Black;
+            public static Color hightlightColor = Color.FromArgb(51, 144, 255);
+            public static Color backColor = Color.White;
+            //public static Color foreColorLight = 
+
+        }
+
+        private void checkIfDarkMode()
+        {
+            if(Properties.Settings.Default.SettingDarkmode)
+            {
+                AppSettingsDarkModeForm();
+            }
+        }
+
+        private void AppSettingsDarkModeForm()
+        {
+            //customColors.backColorDark = Color.FromArgb(56, 55, 55)
+            customColors.hightlightColor = Color.FromArgb(7, 101, 213);
+            customColors.backColor = Color.FromArgb(56, 55, 55);
+
+            this.BackColor = Color.FromArgb(56, 55, 55);
+            this.ForeColor = Color.FromArgb(233, 233, 233);
+            this.tableLayoutPanelServers.BackColor = Color.FromArgb(56, 55, 55);
+            //customColors.text = Color.FromArgb(233, 233, 233);
+            //customColors.redDark = Color.IndianRed;
         }
 
         private void fillServerList()
@@ -50,13 +82,13 @@ namespace Internet_Check
         private void lbl_Click(object sender, EventArgs e)
         {
             Label lbl = (Label)sender;
-            if (lbl.BackColor == Color.White)
+            if (lbl.BackColor == customColors.backColor)
             {
-                lbl.BackColor = Color.LightBlue;
+                lbl.BackColor = customColors.hightlightColor;
                 this.buttonDelete.Enabled = true;
             } else
             {
-                lbl.BackColor = Color.White;
+                lbl.BackColor = customColors.backColor;
                 if (intGetCurrentHighlighted() == 0)
                 {
                     this.buttonDelete.Enabled = false;
@@ -70,7 +102,7 @@ namespace Internet_Check
             int highlightedServers = 0;
             foreach(Control lbl in tableLayoutPanelServers.Controls)
             {
-                if (lbl is System.Windows.Forms.Label && lbl.BackColor == Color.LightBlue)
+                if (lbl is System.Windows.Forms.Label && lbl.BackColor == customColors.hightlightColor)
                 {
                     highlightedServers++;
                 }
@@ -99,7 +131,7 @@ namespace Internet_Check
             //Add all Servers that aren't selected blue and shouldn't be deleted to the list serverList
             foreach (Control ctr in this.tableLayoutPanelServers.Controls)
             {
-                if (ctr.BackColor != Color.LightBlue && ctr is Label && ctr.Name.StartsWith("labelServer"))
+                if (ctr.BackColor != customColors.hightlightColor && ctr is Label && ctr.Name.StartsWith("labelServer"))
                 {
                     serverList.Add(ctr.Text);
                 }
@@ -138,6 +170,9 @@ namespace Internet_Check
                 tableLayoutPanelServers.SetRow(textBoxEnterServer, tableLayoutPanelServers.RowCount - 1);
                 this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
             }
+            this.textBoxEnterServer.Select();
+            this.textBoxEnterServer.Focus();
+            this.buttonDelete.Enabled = false;
             serverList = null;
         }
 
