@@ -8,7 +8,6 @@ using System.Linq;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Xml;
 using System.Net;
 using Octokit;
 using System.Reflection;
@@ -746,111 +745,47 @@ namespace Internet_Check
             File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"), now.ToString());
         }
 
-        public int intAdvancedSettings(string settingNameInherited, int standardValue)
-        {
-            int returnValue = standardValue;
-
-            //https://stackoverflow.com/questions/2875674/how-to-ignore-comments-when-reading-a-xml-file-into-a-xmldocument
-            XmlReaderSettings readerSettings = new XmlReaderSettings();
-            readerSettings.IgnoreComments = true;
-
-            XmlReader reader = null;
-            XmlDocument myData = new XmlDocument();
-            try
-            {
-                reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml", readerSettings);
-                myData.Load(reader);
-            }
-            catch (Exception e)
-            {
-                this.ErrorMessage(e.Message);
-                return standardValue;
-            }
-
-            //If the file is found, loop through it to find the relevant data
-            foreach (XmlNode node in myData.DocumentElement)
-            {
-                string settingName = node.Attributes[0].InnerText;
-                if (settingName == settingNameInherited)
-                {
-                    foreach (XmlNode child in node.ChildNodes)
-                    {
-                        string value = child.InnerText;
-                        try
-                        {
-                            returnValue = Int16.Parse(value);
-                        }
-                        catch
-                        {
-                            this.ErrorMessage($"The value {value.ToString()} of ${settingNameInherited} in AdvancedSettings.xml is invalid. The standard value of ${standardValue.ToString()} days was used.");
-                        }
-                    }
-                    break;
-                }
-            }
-            reader.Dispose();
-            myData = null;
-            return returnValue;
-        }
-
         //Check GitHub for new a new release with the octokit api. To Debug this move the relevant code to a method that is not async
         private async System.Threading.Tasks.Task CheckGitHubNewerVersionAsync()
         {
-            int UpdateNotificationsLeft = intAdvancedSettings("UpdateNotificationsLeft", 0);
-            if (UpdateNotificationsLeft > 0)
+            //Downloading all GitHub releases from one repository
+            //https://octokitnet.readthedocs.io/en/latest/getting-started/
+            GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
+            IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("Rllyyy", "Internet-Check");
+
+            //Check the GitHub API rate limit
+            //GitHubAPIRateInformation(client);
+
+            //TagNames usually start with a "v" (for version). To compare Versions the character has to be removed.
+            string releaseTagName = releases[0].TagName;
+            if (releaseTagName.StartsWith("v")) 
             {
-                //Downloading all GitHub releases from one repository
-                //https://octokitnet.readthedocs.io/en/latest/getting-started/
-                GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
-                IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("Rllyyy", "Internet-Check");
-
-                //Check the GitHub API rate limit
-                //GitHubAPIRateInformation(client);
-
-                //TagNames usually start with a "v" (for version). To compare Versions the character has to be removed.
-                string releaseTagName = releases[0].TagName;
-                if (releaseTagName.StartsWith("v")) 
-                {
-                    releaseTagName = releaseTagName.Substring(1, releaseTagName.Length - 1);
-                }
-
-                //Setup the versions
-                Version latestGitHubVersion = new Version(releaseTagName);
-                Version localVersion = new Version(getAssemblyFileVersion());
-
-                //Compare the Versions
-                //source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
-                int versionComparison = localVersion.CompareTo(latestGitHubVersion);
-                if (versionComparison < 0)
-                {
-                    DecreaseUpdateNotifcationsLeft(UpdateNotificationsLeft);
-                    //The Version on GitHub is more up to date. Prompt the user to update. This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
-                    this.ErrorMessage($"Please visit www.github.com/Rllyyy/Internet-Check/releases/latest to update to the latest version ({latestGitHubVersion}). \n This notification will be shown {UpdateNotificationsLeft-1} more times.");
-                }
-                else if (versionComparison > 0)
-                {
-                    //localVersion is greater than the Version on GitHub. No action needed.
-                }
-                else
-                {
-                    //This local Version and the Version on GitHub are equal
-                }
+                releaseTagName = releaseTagName.Substring(1, releaseTagName.Length - 1);
             }
-        }
 
-        private void DecreaseUpdateNotifcationsLeft(int UpdateNotificationsLeft)
-        {
-            //Decrease variable
-            UpdateNotificationsLeft -= 1;
-            
-            //Open and load XML File
-            XmlDocument document = new XmlDocument();
-            document.Load(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml");
+            //Setup the versions
+            Version latestGitHubVersion = new Version(releaseTagName);
+            Version localVersion = new Version(getAssemblyFileVersion());
 
-            //Update inner Text and save
-            document.SelectSingleNode("//setting[@name='UpdateNotificationsLeft']/value").InnerText = UpdateNotificationsLeft.ToString();
-            document.Save(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml");
-            document = null;
+            //Compare the Versions
+            //source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
+            int versionComparison = localVersion.CompareTo(latestGitHubVersion);
+            if (versionComparison < 0)
+            {
+                //The Version on GitHub is more up to date. 
+                //Guard to check if user has update notifications disabled
+                if (Properties.Settings.Default.SettingDisableUpdateNotifications) return;
+                //Prompt the user to update.This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
+                this.ErrorMessage($"Please visit www.github.com/Rllyyy/Internet-Check/releases/latest to update to the latest version ({latestGitHubVersion}). \n You can disable this notification in the settings menu");
+            }
+            else if (versionComparison > 0)
+            {
+                //localVersion is greater than the Version on GitHub. No action needed.
+            }
+            else
+            {
+                //This local Version and the Version on GitHub are equal
+            }
         }
 
         private void GitHubAPIRateInformation(GitHubClient client)

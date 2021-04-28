@@ -203,5 +203,17 @@ namespace Internet_Check.Properties {
                 this["SettingCustomServersCollection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SettingDisableUpdateNotifications {
+            get {
+                return ((bool)(this["SettingDisableUpdateNotifications"]));
+            }
+            set {
+                this["SettingDisableUpdateNotifications"] = value;
+            }
+        }
     }
 }

@@ -55,6 +55,7 @@ namespace Internet_Check
             this.textBoxTaskSchedulerStopTaskAfterDays.Text = Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays.ToString();
             this.checkBoxDisallowStartIfOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxDisallowStartIfOnBatteries;
             this.checkBoxStopIfGoingOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries;
+            this.checkBoxDisableUpdateNotifications.Checked = Properties.Settings.Default.SettingDisableUpdateNotifications;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -62,6 +63,7 @@ namespace Internet_Check
             
             checkDarkModeChanged();
             checkHideWhenMinChanged();
+            checkDisableUpdateNotificationsChanged();
             checkDoubleCheckServerChanged();
             checkUseAlternativePingMethodChanged();
             checkAllPingResultsChanged();
@@ -119,6 +121,14 @@ namespace Internet_Check
             if (this.checkBoxHideWhenMin.Checked != Properties.Settings.Default.SettingHideWhenMin)
             {
                 Properties.Settings.Default.SettingHideWhenMin = this.checkBoxHideWhenMin.Checked;
+            }
+        }
+
+        private void checkDisableUpdateNotificationsChanged()
+        {
+            if (this.checkBoxDisableUpdateNotifications.Checked != Properties.Settings.Default.SettingDisableUpdateNotifications)
+            {
+                Properties.Settings.Default.SettingDisableUpdateNotifications = this.checkBoxDisableUpdateNotifications.Checked;
             }
         }
 
@@ -391,5 +401,7 @@ namespace Internet_Check
             //this.Height = 1000;
             //Process.Start(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml");
         }
+
+
     }
 }

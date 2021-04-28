@@ -51,12 +51,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6E7F124481C04E6AB273A6D83A30A106"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_73E498D1B3854768ACE3EF608CE32B77"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -357,26 +351,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6E7F124481C04E6AB273A6D83A30A106"
-            {
-            "SourcePath" = "8:..\\Internet Check\\bin\\Debug\\AdvancedSettings.xml"
-            "TargetName" = "8:AdvancedSettings.xml"
-            "Tag" = "8:"
-            "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73E498D1B3854768ACE3EF608CE32B77"
