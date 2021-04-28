@@ -17,12 +17,8 @@ namespace Internet_Check
 
         public static class customColors
         {
-            //public static Color redDark = Color.FromArgb(135, 0, 2);
-            //public static Color text = Color.Black;
             public static Color hightlightColor = Color.FromArgb(51, 144, 255);
             public static Color backColor = Color.White;
-            //public static Color foreColorLight = 
-
         }
 
         private void checkIfDarkMode()
@@ -30,6 +26,10 @@ namespace Internet_Check
             if(Properties.Settings.Default.SettingDarkmode)
             {
                 AppSettingsDarkModeForm();
+            } else
+            {
+                customColors.hightlightColor = Color.FromArgb(51, 144, 255);
+                customColors.backColor = Color.White;
             }
         }
 

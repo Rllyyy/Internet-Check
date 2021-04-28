@@ -36,6 +36,9 @@ namespace Internet_Check
             if (Properties.Settings.Default.SettingDarkmode)
             {
                 AppSettingsDarkModeForm();
+            } else
+            {
+                customColors.text = Color.FromArgb(0, 0, 0);
             }
         }
 
@@ -282,6 +285,7 @@ namespace Internet_Check
 
         private void checkBoxHideWhenMin_Click(object sender, EventArgs e)
         {
+            //Show Warning if booth hide when minimized and start with windows are checked
             if (this.checkBoxHideWhenMin.Checked && this.checkBoxStartWithWindows.Checked)
             {
                 startWithWindowsAndHideWhenMinActive();
@@ -290,9 +294,26 @@ namespace Internet_Check
 
         private void checkBoxStartWithWindows_Click(object sender, EventArgs e)
         {
+            //Show Warning if booth hide when minimized and start with windows are checked
             if (this.checkBoxHideWhenMin.Checked && this.checkBoxStartWithWindows.Checked)
             {
                 startWithWindowsAndHideWhenMinActive();
+            }
+
+            //Enable or disable task scheduler settings for the user
+            if (this.checkBoxStartWithWindows.Checked)
+            {
+                //Activate settings
+                this.textBoxTaskSchedulerStopTaskAfterDays.Enabled = true;
+                this.checkBoxDisallowStartIfOnBatteries.Enabled = true;
+                this.checkBoxStopIfGoingOnBatteries.Enabled = true;
+                this.labelTaskSchedulerStopTaskAfterDays.Enabled = true;
+            } else
+            {
+                //Disable settings
+                this.textBoxTaskSchedulerStopTaskAfterDays.Enabled = false;
+                this.checkBoxDisallowStartIfOnBatteries.Enabled = false;
+                this.checkBoxStopIfGoingOnBatteries.Enabled = false;
             }
         }
 
@@ -306,8 +327,8 @@ namespace Internet_Check
                 this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.redDark; });
                 this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.checkBoxHideWhenMin.ForeColor = customColors.redDark; });
 
-                //Pause the thread for 10 seconds to show the message
-                Thread.Sleep(18000);
+                //Pause the thread for 18 seconds to show the message
+                Thread.Sleep(5000);
 
                 //Catch Error if the user closes the form before thread returned from sleep
                 try
@@ -328,18 +349,15 @@ namespace Internet_Check
             {
                 removeTaskScheduler();
                 addTaskScheduler();
-                MessageBox.Show("Removed and Added Task Scheduler");
 
             }
             else if (!settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
             {
                 addTaskScheduler();
-                MessageBox.Show("Added Task Scheduler");
             }
             else if (!this.checkBoxStartWithWindows.Checked && this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
             {
                 removeTaskScheduler();
-                MessageBox.Show("Removed Task Scheduler");
             }
         }
 
