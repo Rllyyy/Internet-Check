@@ -51,8 +51,8 @@
             this.checkBoxUseCustomServers = new System.Windows.Forms.CheckBox();
             this.labelUserMessage = new System.Windows.Forms.Label();
             this.buttonEditServers = new System.Windows.Forms.Button();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.checkBoxDisableUpdateNotifications = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -408,6 +408,21 @@
             this.buttonEditServers.Visible = false;
             this.buttonEditServers.Click += new System.EventHandler(this.buttonEditServers_Click);
             // 
+            // checkBoxDisableUpdateNotifications
+            // 
+            this.checkBoxDisableUpdateNotifications.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.checkBoxDisableUpdateNotifications.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.checkBoxDisableUpdateNotifications, 2);
+            this.checkBoxDisableUpdateNotifications.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBoxDisableUpdateNotifications.Location = new System.Drawing.Point(623, 65);
+            this.checkBoxDisableUpdateNotifications.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.checkBoxDisableUpdateNotifications.Name = "checkBoxDisableUpdateNotifications";
+            this.checkBoxDisableUpdateNotifications.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxDisableUpdateNotifications.Size = new System.Drawing.Size(235, 24);
+            this.checkBoxDisableUpdateNotifications.TabIndex = 27;
+            this.checkBoxDisableUpdateNotifications.Text = "Disable Update Notifications";
+            this.checkBoxDisableUpdateNotifications.UseVisualStyleBackColor = true;
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 3;
@@ -426,21 +441,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(868, 55);
             this.tableLayoutPanel2.TabIndex = 25;
-            // 
-            // checkBoxDisableUpdateNotifications
-            // 
-            this.checkBoxDisableUpdateNotifications.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.checkBoxDisableUpdateNotifications.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.checkBoxDisableUpdateNotifications, 2);
-            this.checkBoxDisableUpdateNotifications.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBoxDisableUpdateNotifications.Location = new System.Drawing.Point(623, 65);
-            this.checkBoxDisableUpdateNotifications.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.checkBoxDisableUpdateNotifications.Name = "checkBoxDisableUpdateNotifications";
-            this.checkBoxDisableUpdateNotifications.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxDisableUpdateNotifications.Size = new System.Drawing.Size(235, 24);
-            this.checkBoxDisableUpdateNotifications.TabIndex = 27;
-            this.checkBoxDisableUpdateNotifications.Text = "Disable Update Notifications";
-            this.checkBoxDisableUpdateNotifications.UseVisualStyleBackColor = true;
             // 
             // AppSettings
             // 

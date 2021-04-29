@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32.TaskScheduler;
 using System;
 using System.Drawing;
+using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -294,7 +295,36 @@ namespace Internet_Check
 
         private void checkBoxStartWithWindows_Click(object sender, EventArgs e)
         {
-            //Show Warning if booth hide when minimized and start with windows are checked
+            //Guard
+            if (!isAdministrator()) 
+            {
+                //Reset the Checkbox to the original state
+                this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
+                //Show User message and highlight checkBox on thread for 18 seconds
+                new Thread(() =>
+                {
+                    //Set UI elements for message
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Please restart the application with Admin privileges"; });
+                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.redDark; });
+
+                    //Pause the thread for 18 seconds to show the message
+                    Thread.Sleep(18000);
+
+                    //Catch Error if the user closes the form before thread returned from sleep
+                    try
+                    {
+                        //Reset the colors
+                        this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.text; });
+                        this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                    }
+                    catch
+                    { }
+                }).Start();
+                return;
+            }
+            
+            //Show Warning if booth hide when minimized and start with windows are checked and the user has admin privileges
             if (this.checkBoxHideWhenMin.Checked && this.checkBoxStartWithWindows.Checked)
             {
                 startWithWindowsAndHideWhenMinActive();
@@ -328,7 +358,7 @@ namespace Internet_Check
                 this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.checkBoxHideWhenMin.ForeColor = customColors.redDark; });
 
                 //Pause the thread for 18 seconds to show the message
-                Thread.Sleep(5000);
+                Thread.Sleep(18000);
 
                 //Catch Error if the user closes the form before thread returned from sleep
                 try
@@ -416,10 +446,21 @@ namespace Internet_Check
         {
             FormEditServers f3 = new FormEditServers();
             f3.ShowDialog();
-            //this.Height = 1000;
-            //Process.Start(AppDomain.CurrentDomain.BaseDirectory + "AdvancedSettings.xml");
         }
 
+        /// <summary>
+        /// Return if user has started process with admin privileges
+        /// https://stackoverflow.com/questions/3600322/check-if-the-current-user-is-administrator
+        /// </summary>
+        /// <returns></returns>
+        private bool isAdministrator()
+        {
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
 
     }
 }
