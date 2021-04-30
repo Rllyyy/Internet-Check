@@ -35,15 +35,12 @@ namespace Internet_Check
 
         private void AppSettingsDarkModeForm()
         {
-            //customColors.backColorDark = Color.FromArgb(56, 55, 55)
             customColors.hightlightColor = Color.FromArgb(7, 101, 213);
             customColors.backColor = Color.FromArgb(56, 55, 55);
 
             this.BackColor = Color.FromArgb(56, 55, 55);
             this.ForeColor = Color.FromArgb(233, 233, 233);
             this.tableLayoutPanelServers.BackColor = Color.FromArgb(56, 55, 55);
-            //customColors.text = Color.FromArgb(233, 233, 233);
-            //customColors.redDark = Color.IndianRed;
         }
 
         private void fillServerList()
@@ -52,6 +49,7 @@ namespace Internet_Check
             {
                 tableLayoutPanelServers.Height += 30;
                 this.Height += 30;
+                this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
                 tableLayoutPanelServers.RowCount++;
                 tableLayoutPanelServers.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
                 tableLayoutPanelServers.Controls.Add(customLabel(serverName), 0, tableLayoutPanelServers.RowCount - 2);
@@ -67,6 +65,7 @@ namespace Internet_Check
             if (textBoxEnterServer.Text == "") return;
             tableLayoutPanelServers.Height += 30;
             this.Height += 30;
+            this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
             tableLayoutPanelServers.RowCount++;
             tableLayoutPanelServers.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
             tableLayoutPanelServers.Controls.Add(customLabel(textBoxEnterServer.Text), 0, tableLayoutPanelServers.RowCount - 2);
@@ -155,15 +154,17 @@ namespace Internet_Check
             //Reset the tablelayout to 2 rows
             this.tableLayoutPanelServers.SetRow(textBoxEnterServer, 1);
             this.tableLayoutPanelServers.RowCount = 2;
-            this.tableLayoutPanelServers.Height = this.tableLayoutPanelServers.Height - (serversBefore * 30);
+            this.tableLayoutPanelServers.Height -= (serversBefore * 30);
+            this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height - (30 * serversBefore)); //Change the minimum height before changing the height
             this.Height -= (serversBefore * 30);
-            this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y + (15*serversBefore));
+            this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y + (15 * serversBefore));
 
             //Add all items form the serverList to the tablelayout 
             foreach (string serverName in serverList)
             {
                 tableLayoutPanelServers.Height += 30;
                 this.Height += 30;
+                this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
                 tableLayoutPanelServers.RowCount++;
                 tableLayoutPanelServers.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
                 tableLayoutPanelServers.Controls.Add(customLabel(serverName), 0, tableLayoutPanelServers.RowCount - 2);
