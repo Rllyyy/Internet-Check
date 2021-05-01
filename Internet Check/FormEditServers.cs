@@ -7,19 +7,43 @@ namespace Internet_Check
 {
     public partial class FormEditServers : Form
     {
-        public FormEditServers()
+        Form1 f1;
+        public FormEditServers(Form1 fe)
         {
             InitializeComponent();
+            setForm1(fe);
+            setDefaults();
             this.textBoxEnterServer.Select();
             fillServerList();
             checkIfDarkMode();
         }
 
+        private void setForm1(Form1 fe)
+        {
+            f1 = fe;
+        }
+        private void setDefaults()
+        {
+            //Default Colors
+            customColors.hightlightColor = Color.FromArgb(51, 144, 255);
+            customColors.backColor = Color.White;
+
+            //Default settings Changed
+            //settingsChanged.serversChanged = false;
+        }
+
         public static class customColors
         {
-            public static Color hightlightColor = Color.FromArgb(51, 144, 255);
-            public static Color backColor = Color.White;
+            public static Color hightlightColor;
+            public static Color backColor;
         }
+
+        public static class settingsChanged
+        {
+            //public static bool serversChanged;
+        }
+
+        public bool serversChanged = false;
 
         private void checkIfDarkMode()
         {
@@ -74,6 +98,7 @@ namespace Internet_Check
             textBoxEnterServer.Text = "";
             
             this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
+            serversChanged = true;
             this.textBoxEnterServer.Select();
             this.textBoxEnterServer.Focus();
         }
@@ -171,6 +196,7 @@ namespace Internet_Check
                 tableLayoutPanelServers.SetRow(textBoxEnterServer, tableLayoutPanelServers.RowCount - 1);
                 this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
             }
+            serversChanged = true;
             this.textBoxEnterServer.Select();
             this.textBoxEnterServer.Focus();
             this.buttonDelete.Enabled = false;
@@ -193,7 +219,14 @@ namespace Internet_Check
                     Properties.Settings.Default.SettingCustomServersCollection.Add(lbl.Text);
                 }
             }
+
             Properties.Settings.Default.Save();
+            if (Properties.Settings.Default.SettingUseCustomServers && f1.labelRunning.Text == "Running . . ." && serversChanged)
+            {
+                f1.stopCollecting();
+                f1.startCollecting();
+                f1.ErrorMessage("Because some servers changed the collecting process was restarted with the new servers");
+            }
             this.Close();
             this.Dispose();
         }

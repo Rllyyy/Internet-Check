@@ -748,8 +748,12 @@ namespace Internet_Check
         //Check GitHub for new a new release with the octokit api. To Debug this move the relevant code to a method that is not async
         private async System.Threading.Tasks.Task CheckGitHubNewerVersionAsync()
         {
+            //Guard to check if user has update notifications disabled
+            if (Properties.Settings.Default.SettingDisableUpdateNotifications) return;
+
             //Downloading all GitHub releases from one repository
             //https://octokitnet.readthedocs.io/en/latest/getting-started/
+
             GitHubClient client = new GitHubClient(new ProductHeaderValue("Internet-Check"));
             IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("Rllyyy", "Internet-Check");
 
@@ -773,8 +777,6 @@ namespace Internet_Check
             if (versionComparison < 0)
             {
                 //The Version on GitHub is more up to date. 
-                //Guard to check if user has update notifications disabled
-                if (Properties.Settings.Default.SettingDisableUpdateNotifications) return;
                 //Prompt the user to update.This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
                 this.ErrorMessage($"Please visit www.github.com/Rllyyy/Internet-Check/releases/latest to update to the latest version ({latestGitHubVersion}). \n You can disable this notification in the settings menu");
             }

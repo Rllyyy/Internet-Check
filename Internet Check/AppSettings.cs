@@ -13,23 +13,37 @@ namespace Internet_Check
         public AppSettings(Form1 fe)
         {
             InitializeComponent();
+            setDefaults();
             setAppSettings();
             accessForm1(fe);
             checkIfStartWithDarkmode();
         }
 
+        private void setDefaults()
+        {
+            //custom Colors
+            customColors.redDark = Color.FromArgb(135, 0, 2);
+            customColors.text = Color.Black;
+            customColors.backColorDark = Color.FromArgb(56, 55, 55);
+            customColors.foreColorLight = Color.FromArgb(233, 233, 233);
+
+            //Settings Changed
+            settingChanged.TaskSchedulerSettingsChanged = false;
+            settingChanged.CollectingSettingsChanged = false;
+    }
+
         public static class customColors
         {
-            public static Color redDark = Color.FromArgb(135, 0, 2);
-            public static Color text = Color.Black;
-            public static Color backColorDark = Color.FromArgb(56, 55, 55);
-            public static Color foreColorLight = Color.FromArgb(233, 233, 233);
+            public static Color redDark;
+            public static Color text;
+            public static Color backColorDark;
+            public static Color foreColorLight;
         }
 
         public static class settingChanged
         {
-            public static bool TaskSchedulerSettingsChanged = false;
-            public static bool CollectingSettingsChanged = false;
+            public static bool TaskSchedulerSettingsChanged;
+            public static bool CollectingSettingsChanged;
         }
 
         private void checkIfStartWithDarkmode()
@@ -192,6 +206,7 @@ namespace Internet_Check
             if (this.checkBoxUseCustomServers.Checked != Properties.Settings.Default.SettingUseCustomServers)
             {
                 Properties.Settings.Default.SettingUseCustomServers = this.checkBoxUseCustomServers.Checked;
+                settingChanged.CollectingSettingsChanged = true;
             }
         }
 
@@ -444,7 +459,7 @@ namespace Internet_Check
 
         private void buttonEditServers_Click(object sender, EventArgs e)
         {
-            FormEditServers f3 = new FormEditServers();
+            FormEditServers f3 = new FormEditServers(f1);
             f3.ShowDialog();
         }
 
@@ -461,6 +476,5 @@ namespace Internet_Check
                 return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
         }
-
     }
 }
