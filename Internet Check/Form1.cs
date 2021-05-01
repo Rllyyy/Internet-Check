@@ -411,7 +411,7 @@ namespace Internet_Check
         {
             try
             {
-                using (var client = new WebClient()) 
+                using (WebClient client = new WebClient()) 
                 using (client.OpenRead("http://google.com/generate_204")) 
                     client.Dispose();
                 return true;
@@ -427,14 +427,23 @@ namespace Internet_Check
             this.userControlClearConfirm1.BringToFront();
             this.userControlClearConfirm1.Visible = true;
         }
+
         private List<string> getServerList()
         {
             if (Properties.Settings.Default.SettingUseCustomServers)
             {
-                return Properties.Settings.Default.SettingCustomServersCollection.Cast<string>().ToList();
+                List<string> serverList = Properties.Settings.Default.SettingCustomServersCollection.Cast<string>().ToList();
+                //Check if the list is not empty
+                if (serverList.Count >= 1)
+                {
+                    return serverList;
+                } else
+                {
+                    this.ErrorMessage("Because there were no custom servers defined the default servers (8.8.8.8, 8.8.4.4 and 1.1.1.1) were used");
+                }
             }
 
-            //If CheckBoxUseCustomServers is not clicked
+            //If CheckBoxUseCustomServers is not clicked or the list is empty
             List<string> defaultServers = new List<string>{ "8.8.8.8", "8.8.4.4", "1.1.1.1" };
             return defaultServers;
         }
