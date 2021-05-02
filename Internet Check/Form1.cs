@@ -283,7 +283,14 @@ namespace Internet_Check
                     {
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
                     }
-                } 
+                }
+                else if (doubleCheckServer == "Google")
+                {
+                    if(!ping("8.8.8.8"))
+                    {
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} and 8.8.8.8 (Google) failed ping){Environment.NewLine}");
+                    }
+                }
                 else
                 {
                     // aka doubleCheckServer == "Next"
@@ -330,7 +337,7 @@ namespace Internet_Check
         }
 
         //https://stackoverflow.com/questions/2031824/what-is-the-best-way-to-check-for-internet-connectivity-using-net
-        private bool ping(string currentServer)
+        private bool ping(string server)
         {
             //This is the standard ping method which uses the ping protocol
             try
@@ -341,7 +348,7 @@ namespace Internet_Check
                 byte[] buffer = new byte[1];
                 //server has 2500 ms to respond
                 int timeout = 2500;
-                String host = currentServer;
+                String host = server;
 
                 PingOptions pingOptions = new PingOptions();
                 PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
@@ -369,12 +376,23 @@ namespace Internet_Check
                     if (doubleCheckServer == "None")
                     {
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
-                    } else if (doubleCheckServer == "Same" && !pingWithWebClient())
+                    } else if (doubleCheckServer == "Same")
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                        if (!pingWithWebClient())
+                        {
+                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
+                        }
+                        
+                    } else if (doubleCheckServer == "Google")
+                    {
+                        if (!pingWithWebClient())
+                        {
+                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
+                        }
                     }
                     else if (doubleCheckServer == "Next")
                     {
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
                         //Invoke main UI thread as we are in a different thread
                         //https://stackoverflow.com/questions/10170448/how-to-invoke-a-ui-method-from-another-thread
                         this.BeginInvoke(new MethodInvoker(delegate

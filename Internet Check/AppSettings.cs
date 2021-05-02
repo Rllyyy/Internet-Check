@@ -13,8 +13,8 @@ namespace Internet_Check
         public AppSettings(Form1 fe)
         {
             InitializeComponent();
-            setDefaults();
             setAppSettings();
+            setDefaults();
             accessForm1(fe);
             checkIfStartWithDarkmode();
         }
@@ -30,7 +30,12 @@ namespace Internet_Check
             //Settings Changed
             settingChanged.TaskSchedulerSettingsChanged = false;
             settingChanged.CollectingSettingsChanged = false;
-    }
+
+            //UIs
+            //Remove the border when the button is clicked an the appSettings UI thread is paused
+            buttonEditServers.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
+            if (this.checkBoxUseCustomServers.Checked) this.buttonEditServers.Visible = true;
+        }
 
         public static class customColors
         {
@@ -78,7 +83,6 @@ namespace Internet_Check
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            
             checkDarkModeChanged();
             checkHideWhenMinChanged();
             checkDisableUpdateNotificationsChanged();
@@ -443,17 +447,19 @@ namespace Internet_Check
             customColors.text = Color.FromArgb(233, 233, 233);
             customColors.redDark = Color.IndianRed;
         }
-
-        private void checkBoxUseCustomServers_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxUseCustomServers_Click(object sender, EventArgs e)
         {
             if (checkBoxUseCustomServers.Checked)
             {
                 this.buttonEditServers.Visible = true;
-                //Remove the border when the button is clicked an the appSettings UI thread is paused
-                buttonEditServers.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
-            } else
+            }
+            else
             {
                 this.buttonEditServers.Visible = false;
+                if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
+                {
+                    customServersGoogleError();
+                }
             }
         }
 
@@ -475,6 +481,61 @@ namespace Internet_Check
                 WindowsPrincipal principal = new WindowsPrincipal(identity);
                 return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
+        }
+
+        /// <summary>
+        /// SelectionChangeCommitted only fires when the user makes changes in the combo box not if done programmatically
+        /// Source: https://stackoverflow.com/questions/1066057/c-sharp-combo-box-value-change-what-event-should-i-use-to-write-update-the-regi
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBoxDoubleCheckServer_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
+            {
+                if (!Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
+                {
+                    customServersGoogleError();
+
+                } else if (Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
+                {
+                    customServersGoogleError();
+                }
+
+                
+                //return??
+            }
+
+
+
+            //Settings changed
+        }
+
+        private void customServersGoogleError()
+        {
+            this.comboBoxDoubleCheckServer.SelectedItem = "None";
+            new Thread(() =>
+            {
+                //Set UI elements for message
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Double checking Google servers is only allowed when using custom servers "; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.redDark; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.redDark; });
+
+                //Pause the thread for 18 seconds to show the message
+                Thread.Sleep(18000);
+
+                //Catch Error if the user closes the form before thread returned from sleep
+                try
+                {
+                    //Reset the colors
+                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.text; });
+                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.text; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                }
+                catch
+                { }
+            }).Start();
         }
     }
 }

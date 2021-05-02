@@ -192,19 +192,21 @@
             // 
             // comboBoxDoubleCheckServer
             // 
-            this.comboBoxDoubleCheckServer.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.comboBoxDoubleCheckServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxDoubleCheckServer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDoubleCheckServer.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxDoubleCheckServer.FormattingEnabled = true;
             this.comboBoxDoubleCheckServer.Items.AddRange(new object[] {
             "None",
             "Same",
+            "Google",
             "Next"});
-            this.comboBoxDoubleCheckServer.Location = new System.Drawing.Point(187, 148);
-            this.comboBoxDoubleCheckServer.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.comboBoxDoubleCheckServer.Location = new System.Drawing.Point(207, 148);
+            this.comboBoxDoubleCheckServer.Margin = new System.Windows.Forms.Padding(20, 3, 20, 3);
             this.comboBoxDoubleCheckServer.Name = "comboBoxDoubleCheckServer";
-            this.comboBoxDoubleCheckServer.Size = new System.Drawing.Size(71, 25);
+            this.comboBoxDoubleCheckServer.Size = new System.Drawing.Size(90, 25);
             this.comboBoxDoubleCheckServer.TabIndex = 14;
+            this.comboBoxDoubleCheckServer.SelectionChangeCommitted += new System.EventHandler(this.comboBoxDoubleCheckServer_SelectionChangeCommitted);
             // 
             // labelDoubleCheckServer
             // 
@@ -374,7 +376,7 @@
             this.checkBoxUseCustomServers.TabIndex = 26;
             this.checkBoxUseCustomServers.Text = "Use Custom Servers";
             this.checkBoxUseCustomServers.UseVisualStyleBackColor = true;
-            this.checkBoxUseCustomServers.CheckedChanged += new System.EventHandler(this.checkBoxUseCustomServers_CheckedChanged);
+            this.checkBoxUseCustomServers.Click += new System.EventHandler(this.checkBoxUseCustomServers_Click);
             // 
             // labelUserMessage
             // 
