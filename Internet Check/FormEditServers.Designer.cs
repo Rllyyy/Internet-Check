@@ -181,6 +181,7 @@ namespace Internet_Check
             this.textBoxEnterServer.Size = new System.Drawing.Size(387, 26);
             this.textBoxEnterServer.TabIndex = 3;
             this.textBoxEnterServer.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxEnterServer.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxEnterServer_KeyDown);
             // 
             // labelEditServers
             // 

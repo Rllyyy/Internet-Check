@@ -86,7 +86,28 @@ namespace Internet_Check
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
+            addServer();
+        }
+
+        /// <summary>
+        /// On Enter Event add server
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBoxEnterServer_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == (char)Keys.Enter)
+            {
+                addServer();
+            }
+        }
+
+        private void addServer()
+        {
+            //Guard
             if (textBoxEnterServer.Text == "") return;
+
+            //Adjust UI and add new server
             tableLayoutPanelServers.Height += 30;
             this.Height += 30;
             this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
@@ -96,7 +117,7 @@ namespace Internet_Check
             tableLayoutPanelServers.SetRow(textBoxEnterServer, tableLayoutPanelServers.RowCount - 1);
 
             textBoxEnterServer.Text = "";
-            
+
             this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
             serversChanged = true;
             this.textBoxEnterServer.Select();
