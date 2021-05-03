@@ -79,9 +79,10 @@ namespace Internet_Check
             this.userControlErrorMessage1.SendToBack();
             this.userControlClearConfirm1.Visible = false;
 
-            //removes the border from buttonOpen/button1 (startButton) on click event
+            //removes the border from buttonOpen/button1/settings (startButton) on click event
             buttonOpen.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
             button1.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
+            button2.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
 
             //Highlight the interval Box
             //this.textBoxInterval.TabStop = false; //to disable the highlight in textBoxInterval
@@ -157,37 +158,45 @@ namespace Internet_Check
 
         private void checkIfIntervallCorrect()
         {
-            if (!string.IsNullOrEmpty(this.textBoxInterval.Text))
+            //No need to check the interval for error if it's the same as in the settings. If true method exit
+            if (this.textBoxInterval.Text == Properties.Settings.Default.SettingInterval.ToString())
             {
-                if (this.textBoxInterval.Text != Properties.Settings.Default.SettingInterval.ToString())
-                {
-                    //Give the user an Error if the interval that was provided is a not number, bigger than 32767 or smaller than 4
-                    if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 4)
-                    {
-                        this.ErrorMessage("Please enter only positive numbers that are in-between 4 and 32766");
-                        textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            Properties.Settings.Default.SettingInterval = Int16.Parse(this.textBoxInterval.Text);
-                            Properties.Settings.Default.Save();
-                        }
-                        catch
-                        {}
-                        startCollecting();
-                    }
-                }
-                else
-                {
-                    startCollecting();
-                }
+                startCollecting();
+                return;
+            }
+
+            //Guard to show error if text box is empty and exit method
+            if (string.IsNullOrEmpty(this.textBoxInterval.Text)) 
+            {
+                this.ErrorMessage("Please enter an interval.");
+                return;
+            }
+
+            //Give the user an Error if the interval that was provided is a not number, bigger than 32767 or smaller than 1
+            if (System.Text.RegularExpressions.Regex.IsMatch(textBoxInterval.Text, "[^0-9]") || Int32.Parse(textBoxInterval.Text) >= 32767 || Int32.Parse(textBoxInterval.Text) <= 1)
+            {
+                this.ErrorMessage("Please enter only positive numbers that are in between 1 and 32766");
+                //Remove the last character of the text box and exit this method
+                textBoxInterval.Text = textBoxInterval.Text.Remove(textBoxInterval.Text.Length - 1);
+                return;
             }
             else
             {
-               //Give the User an error if he enters no interval
-               this.ErrorMessage("Please enter an interval.");
+                try
+                {
+                    Properties.Settings.Default.SettingInterval = Int16.Parse(this.textBoxInterval.Text);
+                    Properties.Settings.Default.Save();
+                }
+                catch (Exception e){
+                    this.ErrorMessage(e.ToString());
+                }
+                startCollecting();
+            }
+
+            //Show Message if the text box value is in between 1 and 30
+            if (Int32.Parse(textBoxInterval.Text) >= 1 && Int32.Parse(textBoxInterval.Text) < 30)
+            {
+                this.ErrorMessage("When pinging in an interval smaller than 30 seconds the server may block your IP (Ping of Death prevention)");
             }
         }
 
@@ -203,7 +212,7 @@ namespace Internet_Check
 
             //Write starting info into the text file
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program started at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program started at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 
             //Prepare variables for timer
             TimeSpan startTimeSpan = TimeSpan.Zero;
@@ -236,7 +245,7 @@ namespace Internet_Check
 
             //Write text if clicked on stop
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
 
             //Reset the UI elements to starting values
             this.button1.Text = "Start";
@@ -274,21 +283,21 @@ namespace Internet_Check
 
                 if (doubleCheckServer == "None")
                 {
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
                 }
                 //Double check the SAME server to make sure the internet connection really is down.
                 else if (doubleCheckServer == "Same")
                 {
                     if(!ping(currentServer))
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
                     }
                 }
                 else if (doubleCheckServer == "Google")
                 {
                     if(!ping("8.8.8.8"))
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: {currentServer} and 8.8.8.8 (Google) failed ping){Environment.NewLine}");
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} and 8.8.8.8 (Google) failed ping){Environment.NewLine}");
                     }
                 }
                 else
@@ -298,7 +307,7 @@ namespace Internet_Check
                     string nextServer = getDoubleCheckNextServer(serverList, currentPositionInList);
                     if (!ping(nextServer))
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The servers did not respond. Your internet connection might be down! (Error: {currentServer} and {nextServer} failed ping){Environment.NewLine}");
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The servers did not respond. Your internet connection might be down! (Error: {currentServer} and {nextServer} failed ping){Environment.NewLine}");
                     }
                 }
                 // This value is not double checked
@@ -319,7 +328,7 @@ namespace Internet_Check
                 if (writeSuccessfulPings)
                 {
                     DateTime now = DateTime.Now;
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
+                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
                 }
             }
         }
@@ -346,8 +355,8 @@ namespace Internet_Check
 
                 //bytesitze = 1 Byte or 8 Bits
                 byte[] buffer = new byte[1];
-                //server has 2500 ms to respond
-                int timeout = 2500;
+                //server has 900 ms to respond
+                int timeout = 900;
                 String host = server;
 
                 PingOptions pingOptions = new PingOptions();
@@ -375,24 +384,24 @@ namespace Internet_Check
                     //Double Check
                     if (doubleCheckServer == "None")
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
                     } else if (doubleCheckServer == "Same")
                     {
                         if (!pingWithWebClient())
                         {
-                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
+                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
                         }
                         
                     } else if (doubleCheckServer == "Google")
                     {
                         if (!pingWithWebClient())
                         {
-                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
+                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
                         }
                     }
                     else if (doubleCheckServer == "Next")
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
                         //Invoke main UI thread as we are in a different thread
                         //https://stackoverflow.com/questions/10170448/how-to-invoke-a-ui-method-from-another-thread
                         this.BeginInvoke(new MethodInvoker(delegate
@@ -417,7 +426,7 @@ namespace Internet_Check
                     if (writeSuccessfulPings)
                     {
                         DateTime now = DateTime.Now;
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now.ToString()} The server did respond. Your internet connection is working fine! (Message: google.com answered ping){Environment.NewLine}");
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did respond. Your internet connection is working fine! (Message: google.com answered ping){Environment.NewLine}");
                     }
                 }
             }, null, startTimeSpan, periodTimeSpan);
@@ -550,7 +559,7 @@ namespace Internet_Check
                 //gets the Time of now 
                 DateTime now = DateTime.Now;
 
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now.ToString()} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
                 try
                 {
                     timer.Dispose();
