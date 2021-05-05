@@ -1,9 +1,9 @@
 <div class="Head">
-<p>  
-     <h1 align="center"> <img src="https://github.com/Rllyyy/Internet-Check/blob/master/Internet%20Check/icons/Internet-Check-Logo.png" height="35" alt="Internet Check"> </h1>
+<p align="center" id="title">  
+  <img src="./.github/Logo.png">
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Rllyyy/Internet-Check/master/.github/previewPic.png">
+  <img src="./.github/previewPic.png">
 </p>
 </div>
 <div class="Badges">
