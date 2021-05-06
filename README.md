@@ -31,7 +31,7 @@
        </a>
    </p>
 </div>
-<div class = "Description"> <p align = "center"><b><i>This program periodically checks if the computer is connected to the internet and logs offline time.</i></b></p></div>
+<div class = "Description"> <p align = "center"><b><i>This program periodically checks if the computer is connected to the internet and logs offline time. It can also be used to check custom servers. Ping and packet lost are not measured.</i></b></p></div>
 
 # User Guide
 
@@ -48,8 +48,11 @@
 
 # Install Guide & System Requirements
 
-1. <b>[Visit the download page](https://github.com/Rllyyy/Internet-Check/releases/latest)</b>, open the setup and follow the instructions.
-2. Start InternetCheck.exe from either the Desktop or the appData folder.
+1. <b>[Visit the Download page](https://github.com/Rllyyy/Internet-Check/releases/latest)</b> and <b>Download <i>Internet-Check.Setup.msi</i></b> or <b>[Download the latest version directly](https://github.com/Rllyyy/Internet-Check/releases/download/v1.6.3/Internet-Check.Setup.msi)</b>
+2. Start the Setup
+3. If the message "Windows protected your PC" pops up, click on "More info" and then "Run Anyway"
+4. Follow the instructions in the Setup
+5. Start InternetCheck.exe from either the Desktop or the appData folder.
 
 <details>
   <summary><b><i>View System Requirements</i></b></summary>
@@ -64,19 +67,31 @@
 
 # In-App Settings
 
+### Basic Settings
+
 <!--DarkMode-->
 <details>
   <summary><b>DarkMode</b></summary>
   <ol>
-  <li><b>Tick the Checkbox "Use DarkMode".</b> The UI now switches to a darker colour pattern.</li>
+  <li><b>Tick the Checkbox "Use DarkMode".</b> The UI now switches to a darker colour pattern. </li>
   </ol>
   <span><i><b>Note:</b></i> The color of the title background may still appear white. These Windows settings can only be changed by the user. <a href="https://www.hellotech.com/guide/for/how-to-enable-dark-mode-in-windows-10">Here</a> is a quick guide.
   </span>
 </details>
 
+<!--System Tray-->
+<details>
+  <summary><b>Show only in System Tray when minimized</b></summary>
+  <ol>
+  <li><b>Tick the "Show only in System Tray" Checkbox</b> if you want to hide the application when minimized. </li>
+  </ol>
+  <span><i><b>Warning:</b></i> If both "Start with Windows" and "Show only in System Tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the System Tray or by running the .exe again.
+  </span>
+</details>
+
 <!--Windows-Start-->
 <details>
-  <summary><b>Start Application on Windows Start-Up</b></summary>
+  <summary><b>Start with Windows (Task Scheduler)</b></summary>
   <ol>
   <li>Start the Application with admin rights.</li>
   <li><b>Tick the Checkbox "Start with Windows" in the settings menu.</b></li>
@@ -85,13 +100,88 @@
   </span>
 </details>
 
-<!--System Tray-->
+<!--Update Notifications-->
 <details>
-  <summary><b>Show only in System Tray when minimized</b></summary>
+  <summary><b>Disable Update Notifications</b></summary>
   <ol>
-  <li><b>Tick the "Show only in System Tray" Checkbox</b> if you want to hide the application when minimized.</li>
+  <li><b>Tick the "Show only in System Tray" Checkbox</b> if you don't want to receive any update notifications</li>
   </ol>
-  <span><i><b>Warning:</b></i> If both "Start with Windows" and "Show only in System Tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the System Tray or by running the .exe again.
+</details>
+
+### Advanced Settings
+
+<!--Double Check Servers Method-->
+<details>
+  <summary><b>Set the Action on a failed Ping event (Double Check Server)</b></summary>
+  <span>
+  Select what the program does if there is a failed ping.
+  <ul>
+    <li><b>None</b>: No double check just write the failed ping to the .txt file.</li>
+    <li><b>Same</b>: Double check the same server again and on second fail write to the .txt file.</li>
+    <li><b>Google</b>: Double check Google server (8.8.8.8) and note a failed ping if original server didn't respond but Google did. Can only be set if custom servers are used.</li>
+    <li><b>Next</b>: Double check the next server and on second fail write the failed ping to the .txt file.</li>
+  <ul>
+  </span>
+</details>
+
+<!--Alternative Ping Methods-->
+<details>
+  <summary><b>Use alternative Ping Method</b></summary>
+  <span>
+  Set this value to true if you only get the message that the server didn't respond although there is an active internet connection. This error might occur if the ping protocol is blocked by the router or host.
+  Request will be send to google.com/generate_204.
+  </span>
+</details>
+
+<!--Show all Ping Results-->
+<details>
+  <summary><b>Show all Ping Results</b></summary>
+  <span>
+  If this value is set to true both successful and unsuccessful pings will be noted. If set to false (default) only unsuccessful pings are recorded.
+  </span>
+</details>
+
+<!--Show Minimized Info-->
+<details>
+  <summary><b>Show Ballon tip when minimized</b></summary>
+  <p>
+  Set this value to false if the balloon item that shows up if the application is minimized to the system tray should not be displayed.
+  </p>
+  <p>
+  <img src=".\.github\balloonTip.png" alt="BallonTip">
+  </p>
+</details>
+
+<!--Use Custom Servers-->
+<details>
+  <summary><b>Use Custom Servers</b></summary>
+  <span>
+   Activate this setting if you want to check specific servers. Servers can only be edited if the option is enabled. Only add IP addresses to this list and not domain names (like www.example.com) so the router or DNS server doesn't return a false value. Server can be deleted by highlighting them (with a click) and clicking "Delete". The list can be saved and closed with "Save". "Cancel" will not save the settings. If the program is collecting Data and the servers are changed the collecting process will automatically restart.
+   </span>
+</details>
+
+### Task Scheduler
+
+<!--Stop application after X days-->
+<details>
+  <summary><b>Stop the Application after X days</b></summary>
+  <span>
+  This setting stops the task if the pc is running longer than the value in days. This only applies if the option "Start with Windows" is selected and the application was started by windows itself. If the program is started by the user this setting will not be applied.
+  </span>
+</details>
+
+<!--Disallow start if on batteries-->
+<details>
+  <summary><b>Disallow Start if on Batteries</b></summary>
+  <span>If this setting is set to true the app will not be launched by the Task Scheduler if the pc is not connected to a power source and is instead running on batteries. Only applies to laptops.
+  </span>
+</details>
+
+<!--Stop If Going On Batteries-->
+<details>
+  <summary><b>Stop if going on Batteries</b></summary>
+  <span>
+  If this setting is set to true the app will stop if the power source is disconnected (running on battery) and the program was started with Windows.
   </span>
 </details>
 
@@ -109,6 +199,12 @@
   </span>
 </details>
 <details>
+  <summary><b>How do I use this program to check my servers</b></summary>
+  <span>In the settings check the Checkbox "Use Custom Servers". Click the button "Edit Servers". Write the IP address into the textbox and click "Add". Highlight servers to delete them. When using custom servers you can check against google servers. Meaning that a failed ping is only noted if your server (defined in Custom Servers) failed a ping but Google didn't. This can be used to rule out the case that just the computer (on which this program is running) lost connection.
+  Make sure to click "Save" in both the "Edit Server" and Settings form to apply the new settings.
+  </span>
+</details>
+<details>
   <summary><b>I found a bug, have a feature request or want to make a proposition for a code change. Where can they be reported?</b></summary>
   <span>Bugs, feature request or code changes can be submitted to GitHub under the <a href="https://github.com/Rllyyy/Internet-Check/issues/new/choose">"Issues"</a> tab.
   </span>
@@ -119,187 +215,6 @@
   To make the setup work we sadly had to save the application inside the users appData folder which is not visible by default.
   <a href="https://cybertext.wordpress.com/2012/05/29/cant-see-the-appdata-folder/">Here</a> is a guide to make the appData folder visible.
   </span>
-</details>
-
-# Advanced Settings
-
-These settings allow to the advanced user to further change certain aspects of the application. Applying incorrect or incomplete settings may prevent the application from running. AdvancedSettings.xml lives inside the AppData folder and can be edited by any editor (e.g. notepad, notepad++ or VSCode).
-For the exact file location read "Where are the program files saved?" in the FAQ.
-
-<!--Servers-->
-<details>
-  <summary><b>Edit Servers that are Pinged</b></summary>
-  Create a value tag and write the IP address inside. Only add IP addresses to this list and not domain names (like www.example.com) so the router or DNS server doesn't return a false value. The application automatically detects if a server has been added or removed when the user clicks on the start button. Please make sure to save the XML file in beforehand.
-  <p>
-
-```xml
-<setting name="Servers">
-  <value>8.8.8.8</value>
-  <value>8.8.4.4</value>
-  <value>1.1.1.1</value>
-  <value>Your.New.IP.Address</value>
-</setting>
-```
-
-<!--Double Check Servers Method-->
-  </p>
-</details>
-
-<details>
-  <summary><b>Set the Action on a failed Ping event</b></summary>
-  <span>
-  Select what the program does if there is a failed ping.
-  The options are "None" for not double checking and just writing the failed ping to the .txt file, "Same" for ping the same server again and "Next" for pinging the next server in the defined xml list ("Servers").
-  Please write (without quotation marks) one of the following options into the value field: None, Same or Next. The default value is Next.
-  </span>
-  <p>
-
-```xml
-<setting name="DoubleCheckServer">
-  <value>Next</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--Ping Methods-->
-<details>
-  <summary><b>Use alternative Ping Method</b></summary>
-  Set this value to true if you only get the message that the server did not respond although there is an active internet connection. This error might occur if the ping protocol is blocked by the router.
-  Server from the node "Servers" will be ignored and the application now sends a request to google.com/generate_204. Save the XML file and click on start in Internet Check.
-  <p>
-
-```xml
-<setting name="UseAlternativePingMethod">
-  <value>true</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--Show all Ping Results-->
-<details>
-  <summary><b>Show all Ping Results</b></summary>
-  If this value is set to true both successful and unsuccessful pings will be noted. If set to false only unsuccessful pings are recorded. Please click on start again in the application to apply the change and make sure that the XML file was saved beforehand.
-  <p>
-
-```xml
-<setting name="ShowAllPingResults">
-  <value>true</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--Show Minimized Info-->
-<details>
-  <summary><b>Show minimized Info Notification</b></summary>
-  <p>
-  Set this value to false if the balloon item that shows up if the application is minimized and "show only in System Tray" is active should  not be displayed. This setting will be applied the next time the application is minimized. Make sure to save AdvancedSettings.xml! The standard value is true.
-  </p>
-  <p>
-  <img src=".\.github\balloonTip.png" alt="BallonTip">
-  </p>
-  <p>
-
-```xml
-<setting name="ShowMinimizedInfo">
-  <value>true</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--UpdateNotificationsLeft-->
-<details>
-  <summary><b>Edit Update Notifications left</b></summary>
-  This setting controls how many update notifications the user has left. The value in this setting is decreased by the program if there's a newer version on GitHub and a update notification was shown. If you don't want to receive any notifications set this value to 0.
-  The setting gets reset to 3 after each update.
-  The standard value is 3.
-  <p>
-
-```xml
-<setting name="UpdateNotificationsLeft">
-  <value>3</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--Stop application after X days-->
-<details>
-  <summary><b>Stop the Application after X days (Task Scheduler)</b></summary>
-  This setting stops the task if the pc is running longer than the value in days. This only applies if the option "start with windows" is selected and the application was therefore started by windows itself. If the program is started by the user this setting will not be applied.
-  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows".
-  <p>
-
-```xml
-<setting name="TaskSchedulerStopTaskAfterDays">
-  <value>5</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--Disallow start if on batteries-->
-<details>
-  <summary><b>Disallow Start if on Batteries (Task Scheduler)</b></summary>
-  <p>If this setting is set to true the app will not be launched by the Task Scheduler if the pc is not connected to a power source and is instead running on batteries.
-  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows". The standard value is false.
-  </p>
-  <p>
-
-```xml
-<setting name="DisallowStartIfOnBatteries">
-  <value>true</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--Stop If Going On Batteries-->
-<details>
-  <summary><b>Stop if going on Batteries (Task Scheduler)</b></summary>
-  
-  <p>If this setting is set to true the app will stop if it was launched by the Task Scheduler and the pc is just running from the battery.
-    After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows".
-    The standard value is false.
-  </p>
-  <p>
-
-```xml
-<setting name="StopIfGoingOnBatteries">
-  <value>true</value>
-</setting>
-```
-
-  </p>
-</details>
-
-<!--Stop On Idle End-->
-<details>
-  <summary><b>Stop the program if returning from an Idle State (Task Scheduler)</b></summary>
-  
-  <p>If this setting is set to true the app will stop if it was launched by the Task Scheduler and the pc is returning from an idle state (i.e. if the laptop returns from sleep mode).
-  After changing this value in the XML file and the setting was already active value, please deselect the checkbox and select the option "Start with Windows" again. If the setting was not active it will be applied if the user ticks the checkbox "Start with Windows".
-  The standard value is false.
-  </p>
-  <p>
-
-```xml
-<setting name="StopOnIdleEnd">
-  <value>true</value>
-</setting>
-```
-
-  </p>
 </details>
 
 # Legal Note
