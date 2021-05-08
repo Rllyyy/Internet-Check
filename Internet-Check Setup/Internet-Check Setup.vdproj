@@ -265,6 +265,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B78220C0A5D84DE289567E02BB61AFB6"
+            {
+            "Name" = "8:Primary output from Internet Check (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_2928089558984888B95F35DE520FBE9C"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_5D21FF54_D6CA_4B63_9786_1F689799C03F"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
+            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_CB980F7FB6CD44618C57A7C93B9F9494"
             {
             "Name" = "8:Primary output from Internet Check (Active)"
@@ -805,7 +819,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Internet-Check"
         "ProductCode" = "8:{63154BBB-C829-465A-9E53-F7609CBA40DC}"
-        "PackageCode" = "8:{7D715145-EDA6-4E02-A00B-A154A71DB506}"
+        "PackageCode" = "8:{8BAA1AAC-BAE5-491C-98C7-6FDEFDF60938}"
         "UpgradeCode" = "8:{D7A6B721-0937-4229-9E2E-B1AC14F6D1C2}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

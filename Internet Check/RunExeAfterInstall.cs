@@ -6,6 +6,7 @@ using System.Configuration.Install;
 using System.Linq;
 using System.Diagnostics;
 using System.Security.Permissions;
+using System.IO;
 
 namespace Internet_Check
 {
@@ -24,6 +25,14 @@ namespace Internet_Check
             System.Diagnostics.Process.Start(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.exe");
             //move temp files
             base.Dispose();
+        }
+
+        public override void Uninstall(IDictionary savedState)
+        {
+            base.Uninstall(savedState);
+            File.Delete(AppDomain.CurrentDomain.BaseDirectory + "Internet Check.InstallState");
+            base.Dispose();
+            //base.Uninstall(savedState);
         }
     }
 }
