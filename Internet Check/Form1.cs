@@ -25,6 +25,9 @@ namespace Internet_Check
             CheckIfStartedByTaskScheduler();
         }
 
+        //Global variables
+        public bool globalHadInternet = true;
+
         private void checkForMultipleInstances()
         {
             //Get the amount of instances running and exit if the count is greater than 1
@@ -72,7 +75,6 @@ namespace Internet_Check
 
             //Prepare UI Elements
             this.textBoxInterval.Text = Properties.Settings.Default.SettingInterval.ToString();
-            this.notifyIcon1.Visible = false;
             this.button1.Text = "Start";
             this.notifyIcon1.Icon = Properties.Resources.InternetSymbolYellowSVG;
             this.userControlClearConfirm1.SendToBack();
@@ -277,7 +279,8 @@ namespace Internet_Check
         private void CheckAndWrite(List<string> serverList, int currentPositionInList, bool writeSuccessfulPings, string doubleCheckServer)
         {
             string currentServer = serverList[currentPositionInList];
-            if (!ping(currentServer))
+            bool serverAnswered = ping(currentServer);
+            if (!serverAnswered)
             {
                 DateTime now = DateTime.Now;
 
@@ -288,7 +291,9 @@ namespace Internet_Check
                 //Double check the SAME server to make sure the internet connection really is down.
                 else if (doubleCheckServer == "Same")
                 {
-                    if(!ping(currentServer))
+                    //Call the same server again
+                    serverAnswered = ping(currentServer);
+                    if (!serverAnswered)
                     {
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
                     }
@@ -305,30 +310,44 @@ namespace Internet_Check
                     // aka doubleCheckServer == "Next"
                     //Double check the NEXT server to make sure the internet connection really is down.
                     string nextServer = getDoubleCheckNextServer(serverList, currentPositionInList);
-                    if (!ping(nextServer))
+                    serverAnswered = ping(nextServer);
+                    if (!serverAnswered)
                     {
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The servers did not respond. Your internet connection might be down! (Error: {currentServer} and {nextServer} failed ping){Environment.NewLine}");
                     }
                 }
                 // This value is not double checked
-                if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolRedSVG)
-                {
-                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
-                }
+                checkPingStatusChange(serverAnswered);
+                globalHadInternet = serverAnswered;
             }
             else
             {
-                //Only change the icon if it's hasn't changed already
-                if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolGreenSVG)
-                {
-                    this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
-                }
-
                 //Write Ping to internet_issues.txt if user has Show all Ping Results enabled in AppSettings.cs
                 if (writeSuccessfulPings)
                 {
                     DateTime now = DateTime.Now;
                     File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
+                }
+                checkPingStatusChange(serverAnswered);
+                globalHadInternet = true;
+            }
+        }
+
+        private void checkPingStatusChange(bool serverAnswered)
+        {
+            if (!serverAnswered && globalHadInternet)
+            {
+                this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
+                if (Properties.Settings.Default.SettingConnectionNotification)
+                {
+                    this.notifyIcon1.ShowBalloonTip(12000, "Lost Connection", " ", ToolTipIcon.None);
+                }
+            } else if (serverAnswered && !globalHadInternet)
+            {
+                this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
+                if (Properties.Settings.Default.SettingConnectionNotification)
+                {
+                    this.notifyIcon1.ShowBalloonTip(10000, "Connection established", " ", ToolTipIcon.None);
                 }
             }
         }
@@ -573,12 +592,19 @@ namespace Internet_Check
         //Maximizes the application if click on in the System Tray
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            this.TopMost = true;
-            Show();
-            WindowState = FormWindowState.Normal;
+            this.Visible = true;
+            this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
-            this.TopMost = false;
-            this.notifyIcon1.Visible = false;
+            this.Show();
+            this.Activate();
+        }
+        private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
+        {
+            this.Visible = true;
+            this.WindowState = FormWindowState.Normal;
+            this.ShowInTaskbar = true;
+            this.Show();
+            this.Activate();
         }
 
         /// <summary>
@@ -591,7 +617,6 @@ namespace Internet_Check
             if (Properties.Settings.Default.SettingHideWhenMin == true && WindowState == FormWindowState.Minimized)
             {
                 this.Visible = false;
-                this.notifyIcon1.Visible = true;
                 if(Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo && StartedInLast9Minutes() == false)
                 {
                     this.notifyIcon1.ShowBalloonTip(14000, "Internet Check minimized", "The application was moved to the System Tray and will continue running in the background.", ToolTipIcon.None);

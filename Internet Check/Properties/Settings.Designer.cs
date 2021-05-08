@@ -215,5 +215,17 @@ namespace Internet_Check.Properties {
                 this["SettingDisableUpdateNotifications"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SettingConnectionNotification {
+            get {
+                return ((bool)(this["SettingConnectionNotification"]));
+            }
+            set {
+                this["SettingConnectionNotification"] = value;
+            }
+        }
     }
 }

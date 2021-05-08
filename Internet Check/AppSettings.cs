@@ -67,40 +67,45 @@ namespace Internet_Check
             //Load Settings
             this.checkBoxDarkmode.Checked = Properties.Settings.Default.SettingDarkmode;
             this.checkBoxHideWhenMin.Checked = Properties.Settings.Default.SettingHideWhenMin;
+            this.checkBoxShowMinimizedInfo.Checked = Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo;
             this.checkBoxStartWithWindows.Checked = Properties.Settings.Default.SettingWindowsStart;
+            this.checkBoxConnectionNotification.Checked = Properties.Settings.Default.SettingConnectionNotification;
+            this.checkBoxDisableUpdateNotifications.Checked = Properties.Settings.Default.SettingDisableUpdateNotifications;
 
             //Load advanced Settings
             this.comboBoxDoubleCheckServer.SelectedItem = Properties.Settings.Default.SettingDoubleCheckServer;
             this.checkBoxUseAlternativePingMethod.Checked = Properties.Settings.Default.SettingUseAlternativePingMethod;
             this.checkBoxAllPingResults.Checked = Properties.Settings.Default.SettingCheckBoxAllPingResults;
-            this.checkBoxShowMinimizedInfo.Checked = Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo;
             this.checkBoxUseCustomServers.Checked = Properties.Settings.Default.SettingUseCustomServers;
             this.textBoxTaskSchedulerStopTaskAfterDays.Text = Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays.ToString();
             this.checkBoxDisallowStartIfOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxDisallowStartIfOnBatteries;
-            this.checkBoxStopIfGoingOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries;
-            this.checkBoxDisableUpdateNotifications.Checked = Properties.Settings.Default.SettingDisableUpdateNotifications;
+            this.checkBoxStopIfGoingOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries; 
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            //Basic Settings apart from Task Scheduler
             checkDarkModeChanged();
             checkHideWhenMinChanged();
+            checkShowMinimizedInfoChanged();
+            checkConnectionNotificationChanged();
             checkDisableUpdateNotificationsChanged();
+
+            //Advanced Settings
             checkDoubleCheckServerChanged();
             checkUseAlternativePingMethodChanged();
             checkAllPingResultsChanged();
-            checkShowMinimizedInfoChanged();
             checkUseCustomServersChanged();
+
+            //Task Scheduler Settings
             checkTaskSchedulerStopTaskAfterDays();
             checkDisallowStartIfOnBatteries();
             checkStopIfGoingOnBatteries();
-
 
             AddOrRemoveTaskScheduler();
             checkCollectingSettingsChanged();
             Properties.Settings.Default.Save();
 
-            
             this.Close();
             this.Dispose();
         }
@@ -111,13 +116,18 @@ namespace Internet_Check
             //Set default Settings
             this.checkBoxDarkmode.Checked = false;
             this.checkBoxHideWhenMin.Checked = false;
+            this.checkBoxShowMinimizedInfo.Checked = true;
             this.checkBoxStartWithWindows.Checked = false;
+            this.checkBoxConnectionNotification.Checked = true;
+            this.checkBoxDisableUpdateNotifications.Checked = false;
 
             //Set default advanced Settings
             this.comboBoxDoubleCheckServer.SelectedItem = "Next";
             this.checkBoxUseAlternativePingMethod.Checked = false;
             this.checkBoxAllPingResults.Checked = false;
-            this.checkBoxShowMinimizedInfo.Checked = true;
+            this.checkBoxUseCustomServers.Checked = false;
+            
+            //Set default Task Scheduler Settings
             this.textBoxTaskSchedulerStopTaskAfterDays.Text = 5.ToString();
             this.checkBoxDisallowStartIfOnBatteries.Checked = false;
             this.checkBoxStopIfGoingOnBatteries.Checked = false;
@@ -146,6 +156,22 @@ namespace Internet_Check
             }
         }
 
+        private void checkShowMinimizedInfoChanged()
+        {
+            if (this.checkBoxShowMinimizedInfo.Checked != Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo)
+            {
+                Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo = this.checkBoxShowMinimizedInfo.Checked;
+            }
+        }
+
+        private void checkConnectionNotificationChanged()
+        {
+            if (this.checkBoxConnectionNotification.Checked != Properties.Settings.Default.SettingConnectionNotification)
+            {
+                Properties.Settings.Default.SettingConnectionNotification = this.checkBoxConnectionNotification.Checked;
+            }
+        }
+
         private void checkDisableUpdateNotificationsChanged()
         {
             if (this.checkBoxDisableUpdateNotifications.Checked != Properties.Settings.Default.SettingDisableUpdateNotifications)
@@ -163,21 +189,7 @@ namespace Internet_Check
             }
         }
 
-        private void checkTaskSchedulerStopTaskAfterDays()
-        {
-            if (this.textBoxTaskSchedulerStopTaskAfterDays.Text != Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays.ToString())
-            {
-                settingChanged.TaskSchedulerSettingsChanged = true;
 
-                try
-                {
-                    Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays = Int32.Parse(this.textBoxTaskSchedulerStopTaskAfterDays.Text);
-                } catch
-                {
-                    Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays = 5;
-                }
-            }
-        }
 
         private void checkUseAlternativePingMethodChanged()
         {
@@ -197,20 +209,29 @@ namespace Internet_Check
             }
         }
 
-        private void checkShowMinimizedInfoChanged()
-        {
-            if (this.checkBoxShowMinimizedInfo.Checked != Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo)
-            {
-                Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo = this.checkBoxShowMinimizedInfo.Checked;
-            }
-        }
-
         private void checkUseCustomServersChanged()
         {
             if (this.checkBoxUseCustomServers.Checked != Properties.Settings.Default.SettingUseCustomServers)
             {
                 Properties.Settings.Default.SettingUseCustomServers = this.checkBoxUseCustomServers.Checked;
                 settingChanged.CollectingSettingsChanged = true;
+            }
+        }
+
+        private void checkTaskSchedulerStopTaskAfterDays()
+        {
+            if (this.textBoxTaskSchedulerStopTaskAfterDays.Text != Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays.ToString())
+            {
+                settingChanged.TaskSchedulerSettingsChanged = true;
+
+                try
+                {
+                    Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays = Int32.Parse(this.textBoxTaskSchedulerStopTaskAfterDays.Text);
+                }
+                catch
+                {
+                    Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays = 5;
+                }
             }
         }
 
@@ -501,14 +522,7 @@ namespace Internet_Check
                 {
                     customServersGoogleError();
                 }
-
-                
-                //return??
             }
-
-
-
-            //Settings changed
         }
 
         private void customServersGoogleError()
