@@ -300,9 +300,10 @@ namespace Internet_Check
                 }
                 else if (doubleCheckServer == "Google")
                 {
-                    if(!ping("8.8.8.8"))
+                    //Write a failed ping if custom server (Option Google is only available when using custom servers) failed ping but Google was successful.
+                    if (ping("8.8.8.8"))
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} and 8.8.8.8 (Google) failed ping){Environment.NewLine}");
+                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond but Google responded! (Error: 8.8.8.8 (Google) answered but {currentServer} failed){Environment.NewLine}");
                     }
                 }
                 else
@@ -411,13 +412,7 @@ namespace Internet_Check
                             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
                         }
                         
-                    } else if (doubleCheckServer == "Google")
-                    {
-                        if (!pingWithWebClient())
-                        {
-                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
-                        }
-                    }
+                    } //No need to double check Google as is not allowed
                     else if (doubleCheckServer == "Next")
                     {
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
