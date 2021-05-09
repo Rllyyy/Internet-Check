@@ -398,7 +398,8 @@ namespace Internet_Check
             //https://stackoverflow.com/questions/6381878/how-to-pass-the-multiple-parameters-to-the-system-threading-timer
             timer = new System.Threading.Timer((d) =>
             {
-                if (!pingWithWebClient())
+                bool serverAnswered = pingWithWebClient();
+                if (!serverAnswered)
                 {
                     DateTime now = DateTime.Now;
                     //Double Check
@@ -407,7 +408,9 @@ namespace Internet_Check
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
                     } else if (doubleCheckServer == "Same")
                     {
-                        if (!pingWithWebClient())
+                        //call the method again
+                        serverAnswered = pingWithWebClient();
+                        if (!serverAnswered)
                         {
                             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
                         }
@@ -423,25 +426,19 @@ namespace Internet_Check
                             this.ErrorMessage("The alternative ping method can only ping the same Google server. The Option Next is therefore not Supported. Please this setting in the Settings.");
                         }));
                     }
-                    
-                    //This value doesn't need to be double checked because the system tray doesn't really matter
-                    if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolRedSVG)
-                    {
-                        this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
-                    }
+
+                    checkPingStatusChange(serverAnswered);
+                    globalHadInternet = serverAnswered;
                 }
                 else
                 {
-                    if (this.notifyIcon1.Icon != Properties.Resources.InternetSymbolGreenSVG)
-                    {
-                        this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
-                    }
-
                     if (writeSuccessfulPings)
                     {
                         DateTime now = DateTime.Now;
                         File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did respond. Your internet connection is working fine! (Message: google.com answered ping){Environment.NewLine}");
                     }
+                    checkPingStatusChange(serverAnswered);
+                    globalHadInternet = true;
                 }
             }, null, startTimeSpan, periodTimeSpan);
         }
