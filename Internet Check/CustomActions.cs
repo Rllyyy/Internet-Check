@@ -7,13 +7,14 @@ using System.Linq;
 using System.Diagnostics;
 using System.Security.Permissions;
 using System.IO;
+using System.Windows;
 
 namespace Internet_Check
 {
     [RunInstaller(true)]
-    public partial class RunExeAfterInstall : System.Configuration.Install.Installer
+    public partial class CustomActions : System.Configuration.Install.Installer
     {
-        public RunExeAfterInstall()
+        public CustomActions()
         {
             InitializeComponent();
         }
@@ -23,16 +24,38 @@ namespace Internet_Check
         {
             base.Commit(savedState);
             System.Diagnostics.Process.Start(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.exe");
-            //move temp files
+            //remove temp files
             base.Dispose();
         }
 
         public override void Uninstall(IDictionary savedState)
         {
             base.Uninstall(savedState);
-            File.Delete(AppDomain.CurrentDomain.BaseDirectory + "Internet Check.InstallState");
+            File.Delete(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.InstallState");
             base.Dispose();
-            //base.Uninstall(savedState);
+        }
+
+        protected override void OnBeforeUninstall(IDictionary savedState)
+        {
+            base.OnBeforeUninstall(savedState);
+            closeProcessIfActive();
+            base.Dispose();
+        }
+
+        private void closeProcessIfActive()
+        {
+            foreach (var process in Process.GetProcessesByName("Internet Check"))
+            {
+                try
+                {
+                    process.Kill();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                }               
+                   
+            }
         }
     }
 }

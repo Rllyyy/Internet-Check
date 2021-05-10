@@ -112,11 +112,11 @@
     <Compile Include="FormEditServers.Designer.cs">
       <DependentUpon>FormEditServers.cs</DependentUpon>
     </Compile>
-    <Compile Include="RunExeAfterInstall.cs">
+    <Compile Include="CustomActions.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="RunExeAfterInstall.Designer.cs">
-      <DependentUpon>RunExeAfterInstall.cs</DependentUpon>
+    <Compile Include="CustomActions.Designer.cs">
+      <DependentUpon>CustomActions.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="UserControlErrorMessage.cs">

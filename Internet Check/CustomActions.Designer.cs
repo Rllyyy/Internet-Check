@@ -1,7 +1,7 @@
 ﻿
 namespace Internet_Check
 {
-    partial class RunExeAfterInstall
+    partial class CustomActions
     {
         /// <summary>
         /// Required designer variable.

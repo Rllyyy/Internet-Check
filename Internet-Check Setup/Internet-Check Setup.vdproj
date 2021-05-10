@@ -277,7 +277,7 @@
             "Sequence" = "3:1"
             "Identifier" = "8:_5D21FF54_D6CA_4B63_9786_1F689799C03F"
             "InstallerClass" = "11:TRUE"
-            "CustomActionData" = "8:"
+            "CustomActionData" = "8:/TARGETDIR=\"[TARGETDIR]\\\""
             }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_CB980F7FB6CD44618C57A7C93B9F9494"
             {
