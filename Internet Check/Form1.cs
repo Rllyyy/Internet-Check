@@ -27,6 +27,8 @@ namespace Internet_Check
 
         //Global variables
         public bool globalHadInternet = true;
+        public string newerDownloadLink;
+        public string githubLatestReleaseTag;
 
         private void checkForMultipleInstances()
         {
@@ -103,7 +105,7 @@ namespace Internet_Check
         /// Get the assembly FileVersion from Properties/assemblyInfo.cs
         /// </summary>
         /// <returns></returns>
-        private string getAssemblyFileVersion()
+        public string getAssemblyFileVersion()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -814,14 +816,14 @@ namespace Internet_Check
             //GitHubAPIRateInformation(client);
 
             //TagNames usually start with a "v" (for version). To compare Versions the character has to be removed.
-            string releaseTagName = releases[0].TagName;
-            if (releaseTagName.StartsWith("v")) 
+            githubLatestReleaseTag = releases[0].TagName;
+            if (githubLatestReleaseTag.StartsWith("v")) 
             {
-                releaseTagName = releaseTagName.Substring(1, releaseTagName.Length - 1);
+                githubLatestReleaseTag = githubLatestReleaseTag.Substring(1, githubLatestReleaseTag.Length - 1);
             }
 
             //Setup the versions
-            Version latestGitHubVersion = new Version(releaseTagName);
+            Version latestGitHubVersion = new Version(githubLatestReleaseTag);
             Version localVersion = new Version(getAssemblyFileVersion());
 
             //Compare the Versions
@@ -831,11 +833,12 @@ namespace Internet_Check
             {
                 //The Version on GitHub is more up to date. 
                 //Prompt the user to update.This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
-                this.ErrorMessage($"Please visit www.github.com/Rllyyy/Internet-Check/releases/latest to update to the latest version ({latestGitHubVersion}). \n You can disable this notification in the settings menu");
+                this.ErrorMessage($"Please visit the settings page to update to the latest version ({latestGitHubVersion}). \n This notification can also be disabled in the settings menu.");
             }
             else if (versionComparison > 0)
             {
                 //localVersion is greater than the Version on GitHub. No action needed.
+                newerDownloadLink = releases[0].Assets[0].BrowserDownloadUrl; //Move this to top
             }
             else
             {

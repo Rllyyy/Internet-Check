@@ -1,6 +1,10 @@
 ﻿using Microsoft.Win32.TaskScheduler;
 using System;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
@@ -14,8 +18,8 @@ namespace Internet_Check
         {
             InitializeComponent();
             setAppSettings();
-            setDefaults();
             accessForm1(fe);
+            setDefaults();
             checkIfStartWithDarkmode();
         }
 
@@ -35,6 +39,8 @@ namespace Internet_Check
             //Remove the border when the button is clicked an the appSettings UI thread is paused
             buttonEditServers.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
             if (this.checkBoxUseCustomServers.Checked) this.buttonEditServers.Visible = true;
+            setLinkLabelDownloadLateste();
+
         }
 
         public static class customColors
@@ -49,6 +55,17 @@ namespace Internet_Check
         {
             public static bool TaskSchedulerSettingsChanged;
             public static bool CollectingSettingsChanged;
+        }
+
+        private void setLinkLabelDownloadLateste()
+        {
+            this.linkLabelDownloadLatest.Text = $"Local Version: {f1.getAssemblyFileVersion()}";
+            if (!String.IsNullOrEmpty(f1.newerDownloadLink))
+            {
+                int lenghtBefore = this.linkLabelDownloadLatest.Text.Length;
+                this.linkLabelDownloadLatest.Text += $" | Install latest Update ({f1.githubLatestReleaseTag})";
+                this.linkLabelDownloadLatest.LinkArea = new LinkArea(lenghtBefore + 3, this.linkLabelDownloadLatest.Text.Length);
+            }
         }
 
         private void checkIfStartWithDarkmode()
@@ -532,7 +549,7 @@ namespace Internet_Check
             {
                 //Set UI elements for message
                 this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
-                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Double checking Google servers is only allowed when using custom servers "; });
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Double checking Google servers is only allowed when using custom servers"; });
                 this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.redDark; });
                 this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.redDark; });
 
@@ -550,6 +567,66 @@ namespace Internet_Check
                 catch
                 { }
             }).Start();
+        }
+
+        private void linkLabelDownloadLatest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string updateDirectory = AppDomain.CurrentDomain.BaseDirectory + @"\Updates";
+
+            if (!Directory.Exists(updateDirectory))
+            {
+                Directory.CreateDirectory(updateDirectory);
+            }
+
+            downloadFileAsync(updateDirectory);
+        }
+
+        private async System.Threading.Tasks.Task downloadFileAsync(string updateDirectory)
+        {
+            bool downloadError = false;
+            try
+            {
+                using (WebClient client = new WebClient())
+                {
+                    byte[] bytes = await client.DownloadDataTaskAsync(new Uri(f1.newerDownloadLink));
+                    File.WriteAllBytes(updateDirectory + $@"\Internet-Check-v{f1.githubLatestReleaseTag}.Setup.msi", bytes);
+                }
+            }
+            catch
+            {
+                //Show Error message on exception if file failed to download (18 sec.)
+                new Thread(() =>
+                {
+                    //Set UI elements for message
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Failed to download the Update"; });
+
+                    //Pause the thread for 18 seconds to show the message
+                    Thread.Sleep(18000);
+
+                    //Catch Error if the user closes the form before thread returned from sleep
+                    try
+                    {
+                        //Hide the userMessage error
+                        this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                    }
+                    catch
+                    { }
+                }).Start();
+
+                downloadError = true;
+            }
+
+            if (!downloadError)
+            {
+                startSetup(updateDirectory);
+            }
+        }
+
+        private void startSetup(string updateDirectory)
+        {
+            Process.Start(updateDirectory + $@"\Internet-Check-v{f1.githubLatestReleaseTag}.Setup.msi");
+            //The (old) application will exit and close if the new version is installed. After Installation the new application will be automatically opened. 
         }
     }
 }

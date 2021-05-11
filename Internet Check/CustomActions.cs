@@ -24,21 +24,34 @@ namespace Internet_Check
         {
             base.Commit(savedState);
             System.Diagnostics.Process.Start(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.exe");
-            //remove temp files
+            //Remove temp files
             base.Dispose();
         }
 
+        //Close the (old) Application on install if it hasn't been closed by the user. (Happens when updating from the app). 
+        public override void Install(IDictionary stateSaver)
+        {
+            base.Install(stateSaver);
+            closeProcessIfActive();
+            //Remove temp files
+            base.Dispose();
+        }
+
+        //Delete the file Internet Check.InstallState (created when using custom actions in setup)
         public override void Uninstall(IDictionary savedState)
         {
             base.Uninstall(savedState);
             File.Delete(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.InstallState");
+            //Remove temp files
             base.Dispose();
         }
 
+        //Close process for the rare case that the uninstaller doesn't catch the open process
         protected override void OnBeforeUninstall(IDictionary savedState)
         {
             base.OnBeforeUninstall(savedState);
             closeProcessIfActive();
+            //Remove temp files
             base.Dispose();
         }
 
@@ -50,10 +63,8 @@ namespace Internet_Check
                 {
                     process.Kill();
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.ToString());
-                }               
+                catch
+                {}               
                    
             }
         }

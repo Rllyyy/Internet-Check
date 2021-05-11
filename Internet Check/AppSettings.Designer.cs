@@ -53,6 +53,7 @@
             this.checkBoxDisableUpdateNotifications = new System.Windows.Forms.CheckBox();
             this.checkBoxUseCustomServers = new System.Windows.Forms.CheckBox();
             this.buttonEditServers = new System.Windows.Forms.Button();
+            this.linkLabelDownloadLatest = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -348,6 +349,7 @@
             this.tableLayoutPanel1.Controls.Add(this.checkBoxShowMinimizedInfo, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxUseCustomServers, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.buttonEditServers, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.linkLabelDownloadLatest, 2, 8);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -362,6 +364,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(839, 333);
             this.tableLayoutPanel1.TabIndex = 24;
             // 
@@ -441,6 +444,27 @@
             this.buttonEditServers.Visible = false;
             this.buttonEditServers.Click += new System.EventHandler(this.buttonEditServers_Click);
             // 
+            // linkLabelDownloadLatest
+            // 
+            this.linkLabelDownloadLatest.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.linkLabelDownloadLatest.AutoSize = true;
+            this.linkLabelDownloadLatest.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel1.SetColumnSpan(this.linkLabelDownloadLatest, 3);
+            this.linkLabelDownloadLatest.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelDownloadLatest.LinkArea = new System.Windows.Forms.LinkArea(17, 40);
+            this.linkLabelDownloadLatest.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.linkLabelDownloadLatest.Location = new System.Drawing.Point(796, 251);
+            this.linkLabelDownloadLatest.Margin = new System.Windows.Forms.Padding(3, 3, 8, 3);
+            this.linkLabelDownloadLatest.Name = "linkLabelDownloadLatest";
+            this.linkLabelDownloadLatest.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.linkLabelDownloadLatest.Size = new System.Drawing.Size(35, 24);
+            this.linkLabelDownloadLatest.TabIndex = 28;
+            this.linkLabelDownloadLatest.Text = "Text";
+            this.linkLabelDownloadLatest.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.linkLabelDownloadLatest.UseCompatibleTextRendering = true;
+            this.linkLabelDownloadLatest.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.linkLabelDownloadLatest.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelDownloadLatest_LinkClicked);
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 3;
@@ -512,5 +536,6 @@
         private System.Windows.Forms.Button buttonEditServers;
         private System.Windows.Forms.CheckBox checkBoxDisableUpdateNotifications;
         private System.Windows.Forms.CheckBox checkBoxConnectionNotification;
+        private System.Windows.Forms.LinkLabel linkLabelDownloadLatest;
     }
 }
