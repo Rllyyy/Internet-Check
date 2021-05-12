@@ -206,8 +206,6 @@ namespace Internet_Check
             }
         }
 
-
-
         private void checkUseAlternativePingMethodChanged()
         {
             if (this.checkBoxUseAlternativePingMethod.Checked != Properties.Settings.Default.SettingUseAlternativePingMethod)
@@ -482,6 +480,7 @@ namespace Internet_Check
         {
             this.BackColor = customColors.backColorDark;
             this.ForeColor = customColors.foreColorLight;
+            this.linkLabelDownloadLatest.LinkColor = Color.FromArgb(57, 132, 221);
             customColors.text = Color.FromArgb(233, 233, 233);
             customColors.redDark = Color.IndianRed;
         }
