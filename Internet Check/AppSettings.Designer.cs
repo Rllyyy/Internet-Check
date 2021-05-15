@@ -451,7 +451,7 @@
             this.linkLabelDownloadLatest.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel1.SetColumnSpan(this.linkLabelDownloadLatest, 3);
             this.linkLabelDownloadLatest.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelDownloadLatest.LinkArea = new System.Windows.Forms.LinkArea(17, 40);
+            this.linkLabelDownloadLatest.LinkArea = new System.Windows.Forms.LinkArea(40, 40);
             this.linkLabelDownloadLatest.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabelDownloadLatest.Location = new System.Drawing.Point(796, 251);
             this.linkLabelDownloadLatest.Margin = new System.Windows.Forms.Padding(3, 3, 8, 3);

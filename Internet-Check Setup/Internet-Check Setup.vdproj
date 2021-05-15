@@ -130,12 +130,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E91EB6435AAE7F4444C85F16C40C0EB0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4CF9E3505AA7C44BAD56106E9200B135"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -154,6 +148,18 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5D1CDB3A380AE3DB10497726BC395CD4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E91EB6435AAE7F4444C85F16C40C0EB0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_384C3C673A0E986875AA79953055ADC4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -161,12 +167,6 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_ABB68E1E60DC5CEA437195A35EF84C6A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5D1CDB3A380AE3DB10497726BC395CD4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -265,6 +265,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_1E1FFECDAF90435182652D43D9D5AAB6"
+            {
+            "Name" = "8:Primary output from Internet Check (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_2928089558984888B95F35DE520FBE9C"
+            "FileType" = "3:2"
+            "InstallAction" = "3:3"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_5F497567_DC60_44BB_8C32_6914552EF9B4"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:/TARGETDIR=\"[TARGETDIR]\\\""
+            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_B78220C0A5D84DE289567E02BB61AFB6"
             {
             "Name" = "8:Primary output from Internet Check (Active)"
@@ -818,8 +832,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Internet-Check"
-        "ProductCode" = "8:{63154BBB-C829-465A-9E53-F7609CBA40DC}"
-        "PackageCode" = "8:{115D81D4-2619-4C00-B33F-ED5D80E5FF41}"
+        "ProductCode" = "8:{C92C0028-70CA-44C2-8659-4D278C0A9C36}"
+        "PackageCode" = "8:{BADBA450-E6A1-468B-B399-D1005DA59CB4}"
         "UpgradeCode" = "8:{D7A6B721-0937-4229-9E2E-B1AC14F6D1C2}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

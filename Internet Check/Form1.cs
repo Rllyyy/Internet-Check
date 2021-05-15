@@ -835,7 +835,6 @@ namespace Internet_Check
                 //Prompt the user to update.This is done by the ErrorMessage class as all user Messages are delivered by that class. Kinda ugly :/
                 this.ErrorMessage($"Please visit the settings page to update to the latest version ({latestGitHubVersion}). \n This notification can also be disabled in the settings menu.");
                 newerDownloadLink = releases[0].Assets[0].BrowserDownloadUrl;
-
             }
             else if (versionComparison > 0)
             {
