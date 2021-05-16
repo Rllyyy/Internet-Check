@@ -500,6 +500,23 @@ namespace Internet_Check
             }
         }
 
+        private void checkBoxUseAlternativePingMethod_Click(object sender, EventArgs e)
+        {
+            //Check if next Next or "Google"
+            if (checkBoxUseAlternativePingMethod.Checked)
+            {
+                checkIfUsingGoogleOrNext();
+            }
+        }
+
+        private void checkIfUsingGoogleOrNext()
+        {
+            if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google" || this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Next")
+            {
+                alternativePingSelectedDoubleCheckError();
+            }
+        }
+
         private void buttonEditServers_Click(object sender, EventArgs e)
         {
             FormEditServers f3 = new FormEditServers(f1);
@@ -530,6 +547,12 @@ namespace Internet_Check
         {
             if (comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
             {
+                if (this.checkBoxUseAlternativePingMethod.Checked)
+                {
+                    alternativePingSelectedDoubleCheckError();
+                    return;
+                }
+
                 if (!Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
                 {
                     customServersGoogleError();
@@ -537,6 +560,13 @@ namespace Internet_Check
                 } else if (Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
                 {
                     customServersGoogleError();
+                }
+            }
+            else if (comboBoxDoubleCheckServer.SelectedItem.ToString() == "Next")
+            {
+                if (this.checkBoxUseAlternativePingMethod.Checked)
+                {
+                    alternativePingSelectedDoubleCheckError();
                 }
             }
         }
@@ -626,6 +656,34 @@ namespace Internet_Check
         {
             Process.Start(updateDirectory + $@"\Internet-Check-v{f1.githubLatestReleaseTag}.Setup.msi");
             //The (old) application will exit and close if the new version is installed. After Installation the new application will be automatically opened. 
+        }
+
+        private void alternativePingSelectedDoubleCheckError()
+        {
+            string prevSelectedItem = this.comboBoxDoubleCheckServer.SelectedItem.ToString();
+            this.comboBoxDoubleCheckServer.SelectedItem = "None";
+            new Thread(() =>
+            {
+                //Set UI elements for message
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = $"Double checking {prevSelectedItem} is not allowed when using the alternative ping method. Read the documentation for more information."; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.redDark; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseAlternativePingMethod.ForeColor = customColors.redDark; });
+
+                //Pause the thread for 20 seconds to show the message
+                Thread.Sleep(20000);
+
+                //Catch Error if the user closes the form before thread returned from sleep
+                try
+                {
+                    //Hide the userMessage error
+                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.text; });
+                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseAlternativePingMethod.ForeColor = customColors.text; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                }
+                catch
+                { }
+            }).Start();
         }
     }
 }

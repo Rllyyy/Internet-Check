@@ -417,17 +417,7 @@ namespace Internet_Check
                             File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
                         }
                         
-                    } //No need to double check Google as is not allowed
-                    else if (doubleCheckServer == "Next")
-                    {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
-                        //Invoke main UI thread as we are in a different thread
-                        //https://stackoverflow.com/questions/10170448/how-to-invoke-a-ui-method-from-another-thread
-                        this.BeginInvoke(new MethodInvoker(delegate
-                        {
-                            this.ErrorMessage("The alternative ping method can only ping the same Google server. The Option Next is therefore not Supported. Please this setting in the Settings.");
-                        }));
-                    }
+                    } //No need to double check Google or value "Next" as it is not allowed
 
                     checkPingStatusChange(serverAnswered);
                     globalHadInternet = serverAnswered;

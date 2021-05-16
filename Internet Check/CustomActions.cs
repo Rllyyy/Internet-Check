@@ -42,6 +42,14 @@ namespace Internet_Check
         {
             base.Uninstall(savedState);
             File.Delete(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.InstallState");
+            try
+            {
+                Directory.Delete(Context.Parameters["TARGETDIR"].ToString() + @"\Update", true);
+            }
+            catch
+            {
+            }
+            
             //Remove temp files
             base.Dispose();
         }

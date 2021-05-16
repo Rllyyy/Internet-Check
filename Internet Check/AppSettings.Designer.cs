@@ -195,6 +195,7 @@
             // comboBoxDoubleCheckServer
             // 
             this.comboBoxDoubleCheckServer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxDoubleCheckServer.BackColor = System.Drawing.Color.White;
             this.comboBoxDoubleCheckServer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDoubleCheckServer.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxDoubleCheckServer.FormattingEnabled = true;
@@ -236,6 +237,7 @@
             this.checkBoxUseAlternativePingMethod.TabIndex = 16;
             this.checkBoxUseAlternativePingMethod.Text = "Use alternative Ping Method";
             this.checkBoxUseAlternativePingMethod.UseVisualStyleBackColor = true;
+            this.checkBoxUseAlternativePingMethod.Click += new System.EventHandler(this.checkBoxUseAlternativePingMethod_Click);
             // 
             // checkBoxAllPingResults
             // 
@@ -376,6 +378,7 @@
             this.labelUserMessage.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUserMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(0)))), ((int)(((byte)(3)))));
             this.labelUserMessage.Location = new System.Drawing.Point(363, 278);
+            this.labelUserMessage.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.labelUserMessage.Name = "labelUserMessage";
             this.labelUserMessage.Size = new System.Drawing.Size(113, 20);
             this.labelUserMessage.TabIndex = 24;
