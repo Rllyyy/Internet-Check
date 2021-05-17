@@ -353,29 +353,7 @@ namespace Internet_Check
             //Guard
             if (!isAdministrator()) 
             {
-                //Reset the Checkbox to the original state
-                this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
-                //Show User message and highlight checkBox on thread for 18 seconds
-                new Thread(() =>
-                {
-                    //Set UI elements for message
-                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
-                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Please restart the application with Admin privileges"; });
-                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.redDark; });
-
-                    //Pause the thread for 18 seconds to show the message
-                    Thread.Sleep(18000);
-
-                    //Catch Error if the user closes the form before thread returned from sleep
-                    try
-                    {
-                        //Reset the colors
-                        this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.text; });
-                        this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
-                    }
-                    catch
-                    { }
-                }).Start();
+                missingAdministratorError();
                 return;
             }
             
@@ -486,6 +464,14 @@ namespace Internet_Check
         }
         private void checkBoxUseCustomServers_Click(object sender, EventArgs e)
         {
+
+            if (this.checkBoxUseAlternativePingMethod.Checked)
+            {
+                this.checkBoxUseCustomServers.Checked = false;
+                alternativePingCustomServersError();
+                return;
+            }
+
             if (checkBoxUseCustomServers.Checked)
             {
                 this.buttonEditServers.Visible = true;
@@ -495,6 +481,7 @@ namespace Internet_Check
                 this.buttonEditServers.Visible = false;
                 if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
                 {
+                    this.checkBoxUseCustomServers.Checked = false;
                     customServersGoogleError();
                 }
             }
@@ -503,9 +490,16 @@ namespace Internet_Check
         private void checkBoxUseAlternativePingMethod_Click(object sender, EventArgs e)
         {
             //Check if next Next or "Google"
-            if (checkBoxUseAlternativePingMethod.Checked)
+            if (this.checkBoxUseAlternativePingMethod.Checked)
             {
                 checkIfUsingGoogleOrNext();
+            }
+
+            //Check if using custom servers
+            if (this.checkBoxUseCustomServers.Checked && this.checkBoxUseAlternativePingMethod.Checked)
+            {
+                this.checkBoxUseAlternativePingMethod.Checked = false;
+                alternativePingCustomServersError();
             }
         }
 
@@ -514,6 +508,7 @@ namespace Internet_Check
             if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google" || this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Next")
             {
                 alternativePingSelectedDoubleCheckError();
+                this.checkBoxUseAlternativePingMethod.Checked = false;
             }
         }
 
@@ -550,16 +545,19 @@ namespace Internet_Check
                 if (this.checkBoxUseAlternativePingMethod.Checked)
                 {
                     alternativePingSelectedDoubleCheckError();
+                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
                     return;
                 }
 
                 if (!Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
                 {
                     customServersGoogleError();
+                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
 
                 } else if (Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
                 {
                     customServersGoogleError();
+                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
                 }
             }
             else if (comboBoxDoubleCheckServer.SelectedItem.ToString() == "Next")
@@ -567,35 +565,9 @@ namespace Internet_Check
                 if (this.checkBoxUseAlternativePingMethod.Checked)
                 {
                     alternativePingSelectedDoubleCheckError();
+                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
                 }
             }
-        }
-
-        private void customServersGoogleError()
-        {
-            this.comboBoxDoubleCheckServer.SelectedItem = "None";
-            new Thread(() =>
-            {
-                //Set UI elements for message
-                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
-                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Double checking Google servers is only allowed when using custom servers"; });
-                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.redDark; });
-                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.redDark; });
-
-                //Pause the thread for 18 seconds to show the message
-                Thread.Sleep(18000);
-
-                //Catch Error if the user closes the form before thread returned from sleep
-                try
-                {
-                    //Reset the colors
-                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.text; });
-                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.text; });
-                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
-                }
-                catch
-                { }
-            }).Start();
         }
 
         private void linkLabelDownloadLatest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -658,10 +630,64 @@ namespace Internet_Check
             Application.Exit();
         }
 
+        //Custom Errors
+        private void missingAdministratorError()
+        {
+            //Reset the Checkbox to the original state
+            this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
+            //Show User message and highlight checkBox on thread for 18 seconds
+            new Thread(() =>
+            {
+                //Set UI elements for message
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Please restart the application with Admin privileges"; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.redDark; });
+
+                //Pause the thread for 18 seconds to show the message
+                Thread.Sleep(18000);
+
+                //Catch Error if the user closes the form before thread returned from sleep
+                try
+                {
+                    //Reset the colors
+                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.text; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                }
+                catch
+                { }
+            }).Start();
+        }
+
+        private void customServersGoogleError()
+        {
+            new Thread(() =>
+            {
+                //Set UI elements for message
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Double checking Google servers is only allowed when using custom servers"; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.redDark; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.redDark; });
+
+                //Pause the thread for 18 seconds to show the message
+                Thread.Sleep(18000);
+
+                //Catch Error if the user closes the form before thread returned from sleep
+                try
+                {
+                    //Reset the colors
+                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.text; });
+                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.text; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                }
+                catch
+                { }
+            }).Start();
+        }
+
         private void alternativePingSelectedDoubleCheckError()
         {
             string prevSelectedItem = this.comboBoxDoubleCheckServer.SelectedItem.ToString();
-            this.comboBoxDoubleCheckServer.SelectedItem = "None";
+            
             new Thread(() =>
             {
                 //Set UI elements for message
@@ -679,6 +705,32 @@ namespace Internet_Check
                     //Hide the userMessage error
                     this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelDoubleCheckServer.ForeColor = customColors.text; });
                     this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseAlternativePingMethod.ForeColor = customColors.text; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                }
+                catch
+                { }
+            }).Start();
+        }
+
+        private void alternativePingCustomServersError()
+        {
+            new Thread(() =>
+            {
+                //Set UI elements for message
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "The alternative ping method can't be used at the same time as custom servers. See the documentation for more information."; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseAlternativePingMethod.ForeColor = customColors.redDark; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.redDark; });
+
+                //Pause the thread for 18 seconds to show the message
+                Thread.Sleep(18000);
+
+                //Catch Error if the user closes the form before thread returned from sleep
+                try
+                {
+                    //Reset the colors
+                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseCustomServers.ForeColor = customColors.text; });
+                    this.checkBoxHideWhenMin.BeginInvoke((MethodInvoker)delegate () { this.checkBoxUseAlternativePingMethod.ForeColor = customColors.text; });
                     this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
                 }
                 catch
