@@ -44,7 +44,7 @@ namespace Internet_Check
             File.Delete(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.InstallState");
             try
             {
-                Directory.Delete(Context.Parameters["TARGETDIR"].ToString() + @"\Update", true);
+                Directory.Delete(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\4PointsInteractive\Internet-Check\Updates", true);
             }
             catch
             {

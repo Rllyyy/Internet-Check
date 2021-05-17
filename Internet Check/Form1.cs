@@ -29,6 +29,7 @@ namespace Internet_Check
         public bool globalHadInternet = true;
         public string newerDownloadLink;
         public string githubLatestReleaseTag;
+        public string connection_issuesDocumentPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Internet-Check\connection_issues.txt";
 
         private void checkForMultipleInstances()
         {
@@ -46,7 +47,7 @@ namespace Internet_Check
             else
             {
                 //Begin to watch the MultipleInstancesDetected file, if it changes this program will come to front again
-                watchFiles(AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt");
+                watchFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Internet-Check" + @"\MultipleInstancesDetected.txt");
             }
         }
 
@@ -216,7 +217,7 @@ namespace Internet_Check
 
             //Write starting info into the text file
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program started at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
+            File.AppendAllText(connection_issuesDocumentPath, $"############ Program started at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}");
                 
             //Prepare variables for timer
             TimeSpan startTimeSpan = TimeSpan.Zero;
@@ -249,7 +250,7 @@ namespace Internet_Check
 
             //Write text if clicked on stop
             DateTime now = DateTime.Now;
-            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+            File.AppendAllText(connection_issuesDocumentPath, $"############ Program stopped at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
 
             //Reset the UI elements to starting values
             this.button1.Text = "Start";
@@ -288,7 +289,7 @@ namespace Internet_Check
 
                 if (doubleCheckServer == "None")
                 {
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+                    File.AppendAllText(connection_issuesDocumentPath, $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
                 }
                 //Double check the SAME server to make sure the internet connection really is down.
                 else if (doubleCheckServer == "Same")
@@ -297,7 +298,7 @@ namespace Internet_Check
                     serverAnswered = ping(currentServer);
                     if (!serverAnswered)
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
+                        File.AppendAllText(connection_issuesDocumentPath, $"{now} The server did not respond. Your internet connection might be down! (Error: {currentServer} failed ping){Environment.NewLine}");
                     }
                 }
                 else if (doubleCheckServer == "Google")
@@ -305,7 +306,7 @@ namespace Internet_Check
                     //Write a failed ping if custom server (Option Google is only available when using custom servers) failed ping but Google was successful.
                     if (ping("8.8.8.8"))
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond but Google responded! (Error: 8.8.8.8 (Google) answered but {currentServer} failed){Environment.NewLine}");
+                        File.AppendAllText(connection_issuesDocumentPath, $"{now} The server did not respond but Google responded! (Error: 8.8.8.8 (Google) answered but {currentServer} failed){Environment.NewLine}");
                     }
                 }
                 else
@@ -316,7 +317,7 @@ namespace Internet_Check
                     serverAnswered = ping(nextServer);
                     if (!serverAnswered)
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The servers did not respond. Your internet connection might be down! (Error: {currentServer} and {nextServer} failed ping){Environment.NewLine}");
+                        File.AppendAllText(connection_issuesDocumentPath, $"{now} The servers did not respond. Your internet connection might be down! (Error: {currentServer} and {nextServer} failed ping){Environment.NewLine}");
                     }
                 }
                 // This value is not double checked
@@ -329,7 +330,7 @@ namespace Internet_Check
                 if (writeSuccessfulPings)
                 {
                     DateTime now = DateTime.Now;
-                    File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
+                    File.AppendAllText(connection_issuesDocumentPath, $"{now} The server did respond. Your internet connection is working fine! (Message: {currentServer} answered ping){Environment.NewLine}");
                 }
                 checkPingStatusChange(serverAnswered);
                 globalHadInternet = true;
@@ -407,14 +408,14 @@ namespace Internet_Check
                     //Double Check
                     if (doubleCheckServer == "None")
                     {
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
+                        File.AppendAllText(connection_issuesDocumentPath, $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping){Environment.NewLine}");
                     } else if (doubleCheckServer == "Same")
                     {
                         //call the method again
                         serverAnswered = pingWithWebClient();
                         if (!serverAnswered)
                         {
-                            File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
+                            File.AppendAllText(connection_issuesDocumentPath, $"{now} The server did not respond. Your internet connection might be down! (Error: www.google.com failed ping twice){Environment.NewLine}");
                         }
                         
                     } //No need to double check Google or value "Next" as it is not allowed
@@ -427,7 +428,7 @@ namespace Internet_Check
                     if (writeSuccessfulPings)
                     {
                         DateTime now = DateTime.Now;
-                        File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"{now} The server did respond. Your internet connection is working fine! (Message: google.com answered ping){Environment.NewLine}");
+                        File.AppendAllText(connection_issuesDocumentPath, $"{now} The server did respond. Your internet connection is working fine! (Message: google.com answered ping){Environment.NewLine}");
                     }
                     checkPingStatusChange(serverAnswered);
                     globalHadInternet = true;
@@ -487,7 +488,7 @@ namespace Internet_Check
             {
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = "Clearing . . ."; ; });
                 Thread.CurrentThread.IsBackground = true;
-                File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"), String.Empty);
+                File.WriteAllText(connection_issuesDocumentPath, String.Empty);
                 Thread.Sleep(2500);
                 this.labelRunning.BeginInvoke((MethodInvoker)delegate () { this.labelRunning.Text = originalText; ; });
             }).Start();
@@ -497,15 +498,16 @@ namespace Internet_Check
         private void buttonOpen_Click(object sender, EventArgs e)
         {
 
-            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt"))
+            if (File.Exists(connection_issuesDocumentPath))
             {
                 CheckEditorAlreadyOpen();
                 //Editor is opened where it was last closed
-                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
+                Process.Start("notepad.exe", connection_issuesDocumentPath);
+
                 /*
                 Process foo = new Process();
                 foo.StartInfo.UseShellExecute = true;
-                foo.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
+                foo.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Internet -Check\" + "connection_issues.txt";
                 //foo.StartInfo.Arguments = "code";
                 foo.Start();
                 */
@@ -516,8 +518,8 @@ namespace Internet_Check
             else
             {   
                 //If the text file doesn't exists, the program creates one, disposes the file-creator and opens the text file
-                File.CreateText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt").Dispose();
-                Process.Start("notepad.exe", AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt");
+                File.CreateText(connection_issuesDocumentPath).Dispose();
+                Process.Start("notepad.exe", connection_issuesDocumentPath);
                 //Go to the end of the document
                 GoToEndOfConnectionIssueTXT();
             } 
@@ -562,7 +564,7 @@ namespace Internet_Check
                 //gets the Time of now 
                 DateTime now = DateTime.Now;
 
-                File.AppendAllText(AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt", $"############ Program stopped at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
+                File.AppendAllText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Internet-Check\" + "connection_issues.txt", $"############ Program stopped at {now} with an interval of {this.textBoxInterval.Text} seconds ############{Environment.NewLine}{Environment.NewLine}");
                 try
                 {
                     timer.Dispose();
@@ -619,9 +621,9 @@ namespace Internet_Check
         /// <param name="path"></param>
         public void watchFiles(string path)
         {
-            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"))
+            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Internet-Check" + @"\MultipleInstancesDetected.txt"))
             {
-                File.CreateText("MultipleInstancesDetected.txt").Dispose();
+                File.CreateText(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Internet-Check" + @"\MultipleInstancesDetected.txt").Dispose();
             }
 
             new Thread(() =>
@@ -734,7 +736,7 @@ namespace Internet_Check
         private void writeRelevantData()
         {
             //connection_issues.txt save location
-            string connection_issuesSaveLocation = AppDomain.CurrentDomain.BaseDirectory + "connection_issues.txt";
+            string connection_issuesSaveLocation = connection_issuesDocumentPath;
 
             //Create list with lines that don't contain a #, are empty or end with "answered ping)"
             List<string> relevantData = new List<string>(getRelevantLines(connection_issuesSaveLocation));
@@ -787,7 +789,7 @@ namespace Internet_Check
         private void MultipleInstancesDetected()
         {
             DateTime now = DateTime.Now;
-            File.WriteAllText((AppDomain.CurrentDomain.BaseDirectory + "MultipleInstancesDetected.txt"), now.ToString());
+            File.WriteAllText((Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Internet-Check" + @"\MultipleInstancesDetected.txt"), now.ToString());
         }
 
         //Check GitHub for new a new release with the octokit api. To Debug this move the relevant code to a method that is not async

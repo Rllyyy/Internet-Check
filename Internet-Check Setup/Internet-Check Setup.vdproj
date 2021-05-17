@@ -51,12 +51,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_689BD2738DF04A9FB92E0EA5EBEA6139"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_6A95400F28F418E9A288B9124DDBCF0D"
         "OwnerKey" = "8:_2928089558984888B95F35DE520FBE9C"
         "MsmSig" = "8:_UNDEFINED"
@@ -130,6 +124,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_E91EB6435AAE7F4444C85F16C40C0EB0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4CF9E3505AA7C44BAD56106E9200B135"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -148,18 +148,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_5D1CDB3A380AE3DB10497726BC395CD4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E91EB6435AAE7F4444C85F16C40C0EB0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_384C3C673A0E986875AA79953055ADC4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -167,6 +155,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_ABB68E1E60DC5CEA437195A35EF84C6A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5D1CDB3A380AE3DB10497726BC395CD4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -468,26 +462,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_689BD2738DF04A9FB92E0EA5EBEA6139"
-            {
-            "SourcePath" = "8:..\\Internet Check\\bin\\Debug\\connection_issues.txt"
-            "TargetName" = "8:connection_issues.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6A95400F28F418E9A288B9124DDBCF0D"
             {
             "AssemblyRegister" = "3:1"
@@ -750,7 +724,7 @@
             "SourcePath" = "8:..\\Internet Check\\bin\\Debug\\MultipleInstancesDetected.txt"
             "TargetName" = "8:MultipleInstancesDetected.txt"
             "Tag" = "8:"
-            "Folder" = "8:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
+            "Folder" = "8:_71147660C3C04EF7AFDE29BC2F35A3E3"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -795,7 +769,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_8BF1A2B1627E430FBCFA9EFC669AA6A6"
             {
-            "DefaultLocation" = "8:[LocalAppDataFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -816,6 +790,28 @@
                 {
                 }
             }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_BB067EBBBBBF43E08A9080E6C73A7010"
+            {
+            "Name" = "8:#1918"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:PersonalFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_71147660C3C04EF7AFDE29BC2F35A3E3"
+                    {
+                    "Name" = "8:Internet-Check"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E723742EECFB4CB9B3E3F47B31C8BF7A"
+                        "Folders"
+                        {
+                        }
+                    }
+                }
+            }
         }
         "LaunchCondition"
         {
@@ -833,7 +829,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Internet-Check"
         "ProductCode" = "8:{C92C0028-70CA-44C2-8659-4D278C0A9C36}"
-        "PackageCode" = "8:{BADBA450-E6A1-468B-B399-D1005DA59CB4}"
+        "PackageCode" = "8:{0A53E650-58A8-47AA-9367-8497706EADF8}"
         "UpgradeCode" = "8:{D7A6B721-0937-4229-9E2E-B1AC14F6D1C2}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

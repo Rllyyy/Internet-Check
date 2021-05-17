@@ -600,7 +600,7 @@ namespace Internet_Check
 
         private void linkLabelDownloadLatest_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string updateDirectory = AppDomain.CurrentDomain.BaseDirectory + @"\Updates";
+            string updateDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\4PointsInteractive\Internet-Check\Updates";
 
             if (!Directory.Exists(updateDirectory))
             {
@@ -655,7 +655,7 @@ namespace Internet_Check
         private void startSetup(string updateDirectory)
         {
             Process.Start(updateDirectory + $@"\Internet-Check-v{f1.githubLatestReleaseTag}.Setup.msi");
-            //The (old) application will exit and close if the new version is installed. After Installation the new application will be automatically opened. 
+            Application.Exit();
         }
 
         private void alternativePingSelectedDoubleCheckError()
