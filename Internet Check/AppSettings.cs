@@ -40,7 +40,6 @@ namespace Internet_Check
             buttonEditServers.FlatAppearance.BorderColor = Color.FromArgb(0, 255, 255, 255);
             if (this.checkBoxUseCustomServers.Checked) this.buttonEditServers.Visible = true;
             setLinkLabelDownloadLateste();
-
         }
 
         public static class customColors
@@ -235,6 +234,13 @@ namespace Internet_Check
 
         private void checkTaskSchedulerStopTaskAfterDays()
         {
+            //Guards for negative numbers
+            if (System.Text.RegularExpressions.Regex.IsMatch(this.textBoxTaskSchedulerStopTaskAfterDays.Text, "[^0-9]"))
+            {
+                f1.ErrorMessage("Task Scheduler Stop Task after day value is invalid");
+                return;
+            }
+
             if (this.textBoxTaskSchedulerStopTaskAfterDays.Text != Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays.ToString())
             {
                 settingChanged.TaskSchedulerSettingsChanged = true;
@@ -243,9 +249,10 @@ namespace Internet_Check
                 {
                     Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays = Int32.Parse(this.textBoxTaskSchedulerStopTaskAfterDays.Text);
                 }
-                catch
+                catch (Exception e)
                 {
                     Properties.Settings.Default.SettingTextBoxTaskSchedulerStopTaskAfterDays = 5;
+                    f1.ErrorMessage(e.Message);
                 }
             }
         }
@@ -299,7 +306,7 @@ namespace Internet_Check
                 {
                     caughtError = true;
                     this.labelUserMessage.Visible = true;
-                    this.labelUserMessage.Text = $"There was an Error with adding the Task Scheduler.\nPlease contact the developer here: https://github.com/Rllyyy/Internet-Check/issues with a screenshot of the following message:\n {e}";
+                    this.labelUserMessage.Text = $"There was an Error with adding the Task Scheduler.\nPlease contact the developer here: https://github.com/Rllyyy/Internet-Check/issues with a screenshot of the following message:\n {e.Message}";
                     this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
                 }
             }
@@ -327,7 +334,7 @@ namespace Internet_Check
                 {
                     caughtError = true;
                     this.labelUserMessage.Visible = true;
-                    MessageBox.Show($"You may need to remove the task manually. Click the windows key and type Task Scheduler. Right click on Internet-Check in the Task Scheduler Settings and delete the task. Please also contact the developer here: https://github.com/Rllyyy/Internet-Check/issues with a screenshot of the following message:\n {e}");
+                    MessageBox.Show($"You may need to remove the task manually. Search for Task Scheduler. Right click on Internet-Check in the Task Scheduler Settings and delete the task. Please also contact the developer here: https://github.com/Rllyyy/Internet-Check/issues with a screenshot of the following message:\n {e.Message}");
                     this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
                 }
             }
@@ -408,11 +415,15 @@ namespace Internet_Check
         private void AddOrRemoveTaskScheduler()
         {
             //Check if was active and task Scheduler settings changed then remove it
-            if (settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked)
+            if (settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && Properties.Settings.Default.SettingWindowsStart)
             {
                 removeTaskScheduler();
                 addTaskScheduler();
 
+            } 
+            else if (settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && !Properties.Settings.Default.SettingWindowsStart)
+            {
+                addTaskScheduler();
             }
             else if (!settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
             {
@@ -482,6 +493,7 @@ namespace Internet_Check
                 if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
                 {
                     this.checkBoxUseCustomServers.Checked = false;
+                    this.comboBoxDoubleCheckServer.SelectedItem = "Next";
                     customServersGoogleError();
                 }
             }
@@ -498,7 +510,7 @@ namespace Internet_Check
             //Check if using custom servers
             if (this.checkBoxUseCustomServers.Checked && this.checkBoxUseAlternativePingMethod.Checked)
             {
-                this.checkBoxUseAlternativePingMethod.Checked = false;
+                this.checkBoxUseAlternativePingMethod.Checked = Properties.Settings.Default.SettingUseAlternativePingMethod;
                 alternativePingCustomServersError();
             }
         }
@@ -508,7 +520,7 @@ namespace Internet_Check
             if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google" || this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Next")
             {
                 alternativePingSelectedDoubleCheckError();
-                this.checkBoxUseAlternativePingMethod.Checked = false;
+                this.checkBoxUseAlternativePingMethod.Checked = Properties.Settings.Default.SettingUseAlternativePingMethod;
             }
         }
 
@@ -545,19 +557,19 @@ namespace Internet_Check
                 if (this.checkBoxUseAlternativePingMethod.Checked)
                 {
                     alternativePingSelectedDoubleCheckError();
-                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
+                    this.comboBoxDoubleCheckServer.SelectedItem = Properties.Settings.Default.SettingDoubleCheckServer;
                     return;
                 }
 
                 if (!Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
                 {
                     customServersGoogleError();
-                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
+                    this.comboBoxDoubleCheckServer.SelectedItem = Properties.Settings.Default.SettingDoubleCheckServer;
 
                 } else if (Properties.Settings.Default.SettingUseCustomServers && !this.checkBoxUseCustomServers.Checked)
                 {
                     customServersGoogleError();
-                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
+                    this.comboBoxDoubleCheckServer.SelectedItem = Properties.Settings.Default.SettingDoubleCheckServer;
                 }
             }
             else if (comboBoxDoubleCheckServer.SelectedItem.ToString() == "Next")
@@ -565,7 +577,7 @@ namespace Internet_Check
                 if (this.checkBoxUseAlternativePingMethod.Checked)
                 {
                     alternativePingSelectedDoubleCheckError();
-                    this.comboBoxDoubleCheckServer.SelectedItem = "None";
+                    this.comboBoxDoubleCheckServer.SelectedItem = Properties.Settings.Default.SettingDoubleCheckServer;
                 }
             }
         }
