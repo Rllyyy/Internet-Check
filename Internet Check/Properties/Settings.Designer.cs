@@ -50,36 +50,12 @@ namespace Internet_Check.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SettingWindowsStart {
-            get {
-                return ((bool)(this["SettingWindowsStart"]));
-            }
-            set {
-                this["SettingWindowsStart"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool SettingHideWhenMin {
             get {
                 return ((bool)(this["SettingHideWhenMin"]));
             }
             set {
                 this["SettingHideWhenMin"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string SettingTask {
-            get {
-                return ((string)(this["SettingTask"]));
-            }
-            set {
-                this["SettingTask"] = value;
             }
         }
         

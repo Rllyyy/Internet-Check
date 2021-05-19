@@ -8,14 +8,8 @@
     <Setting Name="SettingDarkmode" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SettingWindowsStart" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="SettingHideWhenMin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="SettingTask" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SettingDoubleCheckServer" Type="System.String" Scope="User">
       <Value Profile="(Default)">Next</Value>

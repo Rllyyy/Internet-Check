@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
@@ -84,7 +85,7 @@ namespace Internet_Check
             this.checkBoxDarkmode.Checked = Properties.Settings.Default.SettingDarkmode;
             this.checkBoxHideWhenMin.Checked = Properties.Settings.Default.SettingHideWhenMin;
             this.checkBoxShowMinimizedInfo.Checked = Properties.Settings.Default.SettingCheckBoxShowMinimizedInfo;
-            this.checkBoxStartWithWindows.Checked = Properties.Settings.Default.SettingWindowsStart;
+            this.checkBoxStartWithWindows.Checked = searchTaskSchedulerForTask();
             this.checkBoxConnectionNotification.Checked = Properties.Settings.Default.SettingConnectionNotification;
             this.checkBoxDisableUpdateNotifications.Checked = Properties.Settings.Default.SettingDisableUpdateNotifications;
 
@@ -277,10 +278,6 @@ namespace Internet_Check
 
         private void addTaskScheduler()
         {
-            bool caughtError = false;
-
-            //Check if already exit? is this a problem??
-
             using (TaskService ts = new TaskService())
             {
                 try
@@ -304,45 +301,28 @@ namespace Internet_Check
                 }
                 catch (Exception e)
                 {
-                    caughtError = true;
                     this.labelUserMessage.Visible = true;
                     this.labelUserMessage.Text = $"There was an Error with adding the Task Scheduler.\nPlease contact the developer here: https://github.com/Rllyyy/Internet-Check/issues with a screenshot of the following message:\n {e.Message}";
                     this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
                 }
             }
-
-            if (!caughtError)
-            {
-                //If everything is ok
-                Properties.Settings.Default.SettingTask = "Internet-Check";
-                Properties.Settings.Default.SettingWindowsStart = true;
-            }
         }
 
         private void removeTaskScheduler()
         {
-            bool caughtError = false;
-
             //TaskSceduler by https://github.com/dahall/TaskScheduler
             using (TaskService ts = new TaskService())
             {
                 try
                 {
-                    ts.RootFolder.DeleteTask(Properties.Settings.Default.SettingTask);
+                    ts.RootFolder.DeleteTask("Internet-Check");
                 }
                 catch (Exception e)
                 {
-                    caughtError = true;
                     this.labelUserMessage.Visible = true;
                     MessageBox.Show($"You may need to remove the task manually. Search for Task Scheduler. Right click on Internet-Check in the Task Scheduler Settings and delete the task. Please also contact the developer here: https://github.com/Rllyyy/Internet-Check/issues with a screenshot of the following message:\n {e.Message}");
                     this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
                 }
-            }
-
-            if (!caughtError)
-            {
-                Properties.Settings.Default.SettingWindowsStart = false;
-                Properties.Settings.Default.SettingTask = "";
             }
         }
 
@@ -362,7 +342,7 @@ namespace Internet_Check
             {
                 missingAdministratorError(sender as CheckBox);
                 //Reset the Checkbox to the original state
-                this.checkBoxStartWithWindows.Checked = Properties.Settings.Default.SettingWindowsStart;
+                this.checkBoxStartWithWindows.Checked = searchTaskSchedulerForTask();
                 return;
             }
             
@@ -421,21 +401,21 @@ namespace Internet_Check
         private void AddOrRemoveTaskScheduler()
         {
             //Check if was active and task Scheduler settings changed then remove it
-            if (settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && Properties.Settings.Default.SettingWindowsStart)
+            if (settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && searchTaskSchedulerForTask())
             {
                 removeTaskScheduler();
                 addTaskScheduler();
 
             } 
-            else if (settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && !Properties.Settings.Default.SettingWindowsStart)
+            else if (settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && !searchTaskSchedulerForTask())
             {
                 addTaskScheduler();
             }
-            else if (!settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
+            else if (!settingChanged.TaskSchedulerSettingsChanged && this.checkBoxStartWithWindows.Checked && this.checkBoxStartWithWindows.Checked != searchTaskSchedulerForTask())
             {
                 addTaskScheduler();
             }
-            else if (!this.checkBoxStartWithWindows.Checked && this.checkBoxStartWithWindows.Checked != Properties.Settings.Default.SettingWindowsStart)
+            else if (!this.checkBoxStartWithWindows.Checked && this.checkBoxStartWithWindows.Checked != searchTaskSchedulerForTask())
             {
                 removeTaskScheduler();
             }
@@ -780,6 +760,16 @@ namespace Internet_Check
                     { }
                 }).Start();
                 return;
+            }
+        }
+
+        private bool searchTaskSchedulerForTask()
+        {
+            //Task Scheduler by Dahall: https://github.com/dahall/TaskScheduler
+            using (TaskService service = new TaskService())
+            {
+                if (service.RootFolder.AllTasks.Any(t => t.Name == "Internet-Check")) return true;
+                else return false;
             }
         }
     }
