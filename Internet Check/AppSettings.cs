@@ -357,10 +357,12 @@ namespace Internet_Check
 
         private void checkBoxStartWithWindows_Click(object sender, EventArgs e)
         {
-            //Guard
+            //Guard to prevent user from changing the setting if he has no admin rights
             if (!isAdministrator()) 
             {
-                missingAdministratorError();
+                missingAdministratorError(sender as CheckBox);
+                //Reset the Checkbox to the original state
+                this.checkBoxStartWithWindows.Checked = Properties.Settings.Default.SettingWindowsStart;
                 return;
             }
             
@@ -369,21 +371,25 @@ namespace Internet_Check
             {
                 startWithWindowsAndHideWhenMinActive();
             }
+        }
 
-            //Enable or disable task scheduler settings for the user
-            if (this.checkBoxStartWithWindows.Checked)
+        //Show Error if user doesn't have Admin privileges
+        private void checkBoxDisallowStartIfOnBatteries_Click(object sender, EventArgs e)
+        {
+            if (!isAdministrator())
             {
-                //Activate settings
-                this.textBoxTaskSchedulerStopTaskAfterDays.Enabled = true;
-                this.checkBoxDisallowStartIfOnBatteries.Enabled = true;
-                this.checkBoxStopIfGoingOnBatteries.Enabled = true;
-                this.labelTaskSchedulerStopTaskAfterDays.Enabled = true;
-            } else
+                missingAdministratorError(sender as CheckBox);
+                this.checkBoxDisallowStartIfOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxDisallowStartIfOnBatteries;
+            }
+        }
+
+        //Show Error if user doesn't have Admin privileges
+        private void checkBoxStopIfGoingOnBatteries_Click(object sender, EventArgs e)
+        {
+            if (!isAdministrator())
             {
-                //Disable settings
-                this.textBoxTaskSchedulerStopTaskAfterDays.Enabled = false;
-                this.checkBoxDisallowStartIfOnBatteries.Enabled = false;
-                this.checkBoxStopIfGoingOnBatteries.Enabled = false;
+                missingAdministratorError(sender as CheckBox);
+                this.checkBoxStopIfGoingOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries;
             }
         }
 
@@ -643,17 +649,15 @@ namespace Internet_Check
         }
 
         //Custom Errors
-        private void missingAdministratorError()
+        private void missingAdministratorError(CheckBox box)
         {
-            //Reset the Checkbox to the original state
-            this.checkBoxStartWithWindows.Checked = !this.checkBoxStartWithWindows.Checked;
             //Show User message and highlight checkBox on thread for 18 seconds
             new Thread(() =>
             {
                 //Set UI elements for message
                 this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
                 this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = "Please restart the application with Admin privileges"; });
-                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.redDark; });
+                this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { box.ForeColor = customColors.redDark; });
 
                 //Pause the thread for 18 seconds to show the message
                 Thread.Sleep(18000);
@@ -662,7 +666,7 @@ namespace Internet_Check
                 try
                 {
                     //Reset the colors
-                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.checkBoxStartWithWindows.ForeColor = customColors.text; });
+                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { box.ForeColor = customColors.text; });
                     this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
                 }
                 catch
@@ -748,6 +752,35 @@ namespace Internet_Check
                 catch
                 { }
             }).Start();
+        }
+
+        private void textBoxTaskSchedulerStopTaskAfterDays_Enter(object sender, EventArgs e)
+        {
+            if (!isAdministrator())
+            {
+                this.textBoxTaskSchedulerStopTaskAfterDays.ReadOnly = true;
+                new Thread(() =>
+                {
+                    //Set UI elements for message
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = true; });
+                    this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Text = $"Please restart the application with Admin privileges"; });
+                    this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelTaskSchedulerStopTaskAfterDays.ForeColor = customColors.redDark; });
+
+                    //Pause the thread for 18 seconds to show the message
+                    Thread.Sleep(18000);
+
+                    //Catch Error if the user closes the form before thread returned from sleep
+                    try
+                    {
+                        //Hide the userMessage error
+                        this.checkBoxStartWithWindows.BeginInvoke((MethodInvoker)delegate () { this.labelTaskSchedulerStopTaskAfterDays.ForeColor = customColors.text; });
+                        this.labelUserMessage.BeginInvoke((MethodInvoker)delegate () { this.labelUserMessage.Visible = false; });
+                    }
+                    catch
+                    { }
+                }).Start();
+                return;
+            }
         }
     }
 }

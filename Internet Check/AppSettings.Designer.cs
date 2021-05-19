@@ -293,6 +293,7 @@
             this.textBoxTaskSchedulerStopTaskAfterDays.Size = new System.Drawing.Size(43, 26);
             this.textBoxTaskSchedulerStopTaskAfterDays.TabIndex = 20;
             this.textBoxTaskSchedulerStopTaskAfterDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBoxTaskSchedulerStopTaskAfterDays.Enter += new System.EventHandler(this.textBoxTaskSchedulerStopTaskAfterDays_Enter);
             // 
             // checkBoxDisallowStartIfOnBatteries
             // 
@@ -308,6 +309,7 @@
             this.checkBoxDisallowStartIfOnBatteries.TabIndex = 21;
             this.checkBoxDisallowStartIfOnBatteries.Text = "Task Scheduler disallow Start if on Batteries";
             this.checkBoxDisallowStartIfOnBatteries.UseVisualStyleBackColor = true;
+            this.checkBoxDisallowStartIfOnBatteries.Click += new System.EventHandler(this.checkBoxDisallowStartIfOnBatteries_Click);
             // 
             // checkBoxStopIfGoingOnBatteries
             // 
@@ -323,6 +325,7 @@
             this.checkBoxStopIfGoingOnBatteries.TabIndex = 22;
             this.checkBoxStopIfGoingOnBatteries.Text = "Task Scheduler Stop if going on Batteries";
             this.checkBoxStopIfGoingOnBatteries.UseVisualStyleBackColor = true;
+            this.checkBoxStopIfGoingOnBatteries.Click += new System.EventHandler(this.checkBoxStopIfGoingOnBatteries_Click);
             // 
             // tableLayoutPanel1
             // 
