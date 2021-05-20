@@ -326,8 +326,11 @@ namespace Internet_Check
             }
         }
 
+        //Click Events
+
         private void checkBoxHideWhenMin_Click(object sender, EventArgs e)
         {
+            resetErrorColorOnClick((Control)sender);
             //Show Warning if booth hide when minimized and start with windows are checked
             if (this.checkBoxHideWhenMin.Checked && this.checkBoxStartWithWindows.Checked)
             {
@@ -337,6 +340,7 @@ namespace Internet_Check
 
         private void checkBoxStartWithWindows_Click(object sender, EventArgs e)
         {
+            resetErrorColorOnClick((Control)sender);
             //Guard to prevent user from changing the setting if he has no admin rights
             if (!isAdministrator()) 
             {
@@ -356,6 +360,7 @@ namespace Internet_Check
         //Show Error if user doesn't have Admin privileges
         private void checkBoxDisallowStartIfOnBatteries_Click(object sender, EventArgs e)
         {
+            resetErrorColorOnClick((Control)sender);
             if (!isAdministrator())
             {
                 missingAdministratorError(sender as CheckBox);
@@ -366,11 +371,61 @@ namespace Internet_Check
         //Show Error if user doesn't have Admin privileges
         private void checkBoxStopIfGoingOnBatteries_Click(object sender, EventArgs e)
         {
+            resetErrorColorOnClick((Control)sender);
             if (!isAdministrator())
             {
                 missingAdministratorError(sender as CheckBox);
                 this.checkBoxStopIfGoingOnBatteries.Checked = Properties.Settings.Default.SettingCheckBoxStopIfGoingOnBatteries;
             }
+        }
+
+        private void checkBoxUseCustomServers_Click(object sender, EventArgs e)
+        {
+            resetErrorColorOnClick((Control)sender);
+            if (this.checkBoxUseAlternativePingMethod.Checked)
+            {
+                this.checkBoxUseCustomServers.Checked = false;
+                alternativePingCustomServersError();
+                return;
+            }
+
+            if (checkBoxUseCustomServers.Checked)
+            {
+                this.buttonEditServers.Visible = true;
+            }
+            else
+            {
+                this.buttonEditServers.Visible = false;
+                if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
+                {
+                    this.checkBoxUseCustomServers.Checked = false;
+                    this.comboBoxDoubleCheckServer.SelectedItem = "Next";
+                    customServersGoogleError();
+                }
+            }
+        }
+
+        private void checkBoxUseAlternativePingMethod_Click(object sender, EventArgs e)
+        {
+            resetErrorColorOnClick((Control)sender);
+            //Check if next Next or "Google"
+            if (this.checkBoxUseAlternativePingMethod.Checked)
+            {
+                checkIfUsingGoogleOrNext();
+            }
+
+            //Check if using custom servers
+            if (this.checkBoxUseCustomServers.Checked && this.checkBoxUseAlternativePingMethod.Checked)
+            {
+                this.checkBoxUseAlternativePingMethod.Checked = Properties.Settings.Default.SettingUseAlternativePingMethod;
+                alternativePingCustomServersError();
+            }
+        }
+
+        private void buttonEditServers_Click(object sender, EventArgs e)
+        {
+            FormEditServers f3 = new FormEditServers(f1);
+            f3.ShowDialog();
         }
 
         private void startWithWindowsAndHideWhenMinActive()
@@ -459,47 +514,6 @@ namespace Internet_Check
             customColors.text = Color.FromArgb(233, 233, 233);
             customColors.redDark = Color.IndianRed;
         }
-        private void checkBoxUseCustomServers_Click(object sender, EventArgs e)
-        {
-
-            if (this.checkBoxUseAlternativePingMethod.Checked)
-            {
-                this.checkBoxUseCustomServers.Checked = false;
-                alternativePingCustomServersError();
-                return;
-            }
-
-            if (checkBoxUseCustomServers.Checked)
-            {
-                this.buttonEditServers.Visible = true;
-            }
-            else
-            {
-                this.buttonEditServers.Visible = false;
-                if (this.comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
-                {
-                    this.checkBoxUseCustomServers.Checked = false;
-                    this.comboBoxDoubleCheckServer.SelectedItem = "Next";
-                    customServersGoogleError();
-                }
-            }
-        }
-
-        private void checkBoxUseAlternativePingMethod_Click(object sender, EventArgs e)
-        {
-            //Check if next Next or "Google"
-            if (this.checkBoxUseAlternativePingMethod.Checked)
-            {
-                checkIfUsingGoogleOrNext();
-            }
-
-            //Check if using custom servers
-            if (this.checkBoxUseCustomServers.Checked && this.checkBoxUseAlternativePingMethod.Checked)
-            {
-                this.checkBoxUseAlternativePingMethod.Checked = Properties.Settings.Default.SettingUseAlternativePingMethod;
-                alternativePingCustomServersError();
-            }
-        }
 
         private void checkIfUsingGoogleOrNext()
         {
@@ -508,12 +522,6 @@ namespace Internet_Check
                 alternativePingSelectedDoubleCheckError();
                 this.checkBoxUseAlternativePingMethod.Checked = Properties.Settings.Default.SettingUseAlternativePingMethod;
             }
-        }
-
-        private void buttonEditServers_Click(object sender, EventArgs e)
-        {
-            FormEditServers f3 = new FormEditServers(f1);
-            f3.ShowDialog();
         }
 
         /// <summary>
@@ -538,6 +546,7 @@ namespace Internet_Check
         /// <param name="e"></param>
         private void comboBoxDoubleCheckServer_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            resetErrorColorOnClick((Control)sender);
             if (comboBoxDoubleCheckServer.SelectedItem.ToString() == "Google")
             {
                 if (this.checkBoxUseAlternativePingMethod.Checked)
@@ -770,6 +779,18 @@ namespace Internet_Check
             {
                 if (service.RootFolder.AllTasks.Any(t => t.Name == "Internet-Check")) return true;
                 else return false;
+            }
+        }
+
+        //Reset the colors when the user clicks the error control again
+        private void resetErrorColorOnClick(Control control)
+        {
+            if (control is CheckBox && control.ForeColor == customColors.redDark)
+            {
+                control.ForeColor = customColors.text;
+            } else if (control is ComboBox && control.Name == "comboBoxDoubleCheckServer" && this.labelDoubleCheckServer.ForeColor == customColors.redDark)
+            {
+                this.labelDoubleCheckServer.ForeColor = customColors.text;
             }
         }
     }
