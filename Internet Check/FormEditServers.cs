@@ -27,20 +27,12 @@ namespace Internet_Check
             //Default Colors
             customColors.hightlightColor = Color.FromArgb(51, 144, 255);
             customColors.backColor = Color.White;
-
-            //Default settings Changed
-            //settingsChanged.serversChanged = false;
         }
 
         public static class customColors
         {
             public static Color hightlightColor;
             public static Color backColor;
-        }
-
-        public static class settingsChanged
-        {
-            //public static bool serversChanged;
         }
 
         public bool serversChanged = false;
@@ -71,18 +63,22 @@ namespace Internet_Check
         {
             foreach (string serverName in Properties.Settings.Default.SettingCustomServersCollection)
             {
-                tableLayoutPanelServers.Height += 30;
-                this.Height += 30;
-                this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
-                tableLayoutPanelServers.RowCount++;
-                tableLayoutPanelServers.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
-                tableLayoutPanelServers.Controls.Add(customLabel(serverName), 0, tableLayoutPanelServers.RowCount - 2);
-                tableLayoutPanelServers.SetRow(textBoxEnterServer, tableLayoutPanelServers.RowCount - 1);
-                this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
+                addServerAndChangeForm(serverName);
             }
         }
 
-        public static int i = 1;
+        private void addServerAndChangeForm(string serverName)
+        {
+            //fillServerList
+            tableLayoutPanelServers.Height += 30;
+            this.Height += 30;
+            this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
+            tableLayoutPanelServers.RowCount++;
+            tableLayoutPanelServers.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
+            tableLayoutPanelServers.Controls.Add(customLabel(serverName), 0, tableLayoutPanelServers.RowCount - 2);
+            tableLayoutPanelServers.SetRow(textBoxEnterServer, tableLayoutPanelServers.RowCount - 1);
+            this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
+        }
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
@@ -108,17 +104,11 @@ namespace Internet_Check
             if (textBoxEnterServer.Text == "") return;
 
             //Adjust UI and add new server
-            tableLayoutPanelServers.Height += 30;
-            this.Height += 30;
-            this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
-            tableLayoutPanelServers.RowCount++;
-            tableLayoutPanelServers.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
-            tableLayoutPanelServers.Controls.Add(customLabel(textBoxEnterServer.Text), 0, tableLayoutPanelServers.RowCount - 2);
-            tableLayoutPanelServers.SetRow(textBoxEnterServer, tableLayoutPanelServers.RowCount - 1);
+            addServerAndChangeForm(textBoxEnterServer.Text);
 
+            //Reset label to empty
             textBoxEnterServer.Text = "";
 
-            this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
             serversChanged = true;
             this.textBoxEnterServer.Select();
             this.textBoxEnterServer.Focus();
@@ -159,15 +149,40 @@ namespace Internet_Check
         private Label customLabel(string serverName)
         {
             Label lbl = new Label();
-            lbl.Name = $"labelServer{i}";
+            lbl.Name = getUniqueServerLabel();
             lbl.Height = 30;
             lbl.Dock = DockStyle.Fill;
             lbl.Text = serverName;
             lbl.TextAlign = ContentAlignment.MiddleCenter;
             lbl.Font = new Font("Century Gothic", 11, FontStyle.Regular);
             lbl.Click += new EventHandler(lbl_Click);
-            i++;
             return lbl;
+        }
+
+        /// <summary>
+        /// Return a unique serverLabel.Name
+        /// </summary>
+        /// <returns></returns>
+        private string getUniqueServerLabel()
+        {
+            bool unique = false;
+            int i = 1;
+
+            while (!unique)
+            {
+                Control[] tbxs = tableLayoutPanelServers.Controls.Find($"labelServer{i}", false);
+                if (tbxs != null && tbxs.Length > 0)
+                {
+                    //Increment if Control is found
+                    i++;
+
+                } else
+                {
+                    //Exit if control is found
+                    break;
+                }
+            }
+            return $"labelServer{i}";
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -208,14 +223,7 @@ namespace Internet_Check
             //Add all items form the serverList to the tablelayout 
             foreach (string serverName in serverList)
             {
-                tableLayoutPanelServers.Height += 30;
-                this.Height += 30;
-                this.MinimumSize = new Size(this.MinimumSize.Width, this.MinimumSize.Height + 30);
-                tableLayoutPanelServers.RowCount++;
-                tableLayoutPanelServers.RowStyles.Add(new RowStyle(SizeType.Absolute, 30f));
-                tableLayoutPanelServers.Controls.Add(customLabel(serverName), 0, tableLayoutPanelServers.RowCount - 2);
-                tableLayoutPanelServers.SetRow(textBoxEnterServer, tableLayoutPanelServers.RowCount - 1);
-                this.Location = new System.Drawing.Point(this.Location.X, this.Location.Y - 15);
+                addServerAndChangeForm(serverName);
             }
             serversChanged = true;
             this.textBoxEnterServer.Select();
