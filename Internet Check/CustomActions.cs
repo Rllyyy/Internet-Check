@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Security.Permissions;
 using System.IO;
 using System.Windows;
+using Microsoft.Win32.TaskScheduler;
+using System.Windows.Forms;
 
 namespace Internet_Check
 {
@@ -24,6 +26,7 @@ namespace Internet_Check
         {
             base.Commit(savedState);
             System.Diagnostics.Process.Start(Context.Parameters["TARGETDIR"].ToString() + "Internet Check.exe");
+            removeTaskScheduler();
             //Remove temp files
             base.Dispose();
         }
@@ -72,8 +75,34 @@ namespace Internet_Check
                     process.Kill();
                 }
                 catch
-                {}               
-                   
+                {}                
+            }
+        }
+
+        private void removeTaskScheduler()
+        {
+            if (isRegistered())
+            {
+                //TaskSceduler by https://github.com/dahall/TaskScheduler
+                using (TaskService ts = new TaskService())
+                {
+                    try
+                    {
+                        ts.RootFolder.DeleteTask("Internet-Check", false);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+
+        private bool isRegistered()
+        {
+            using (TaskService service = new TaskService())
+            {
+                if (service.RootFolder.AllTasks.Any(t => t.Name == "Internet-Check")) return true;
+                else return false;
             }
         }
     }
