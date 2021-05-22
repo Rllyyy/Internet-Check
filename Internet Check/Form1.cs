@@ -351,7 +351,7 @@ namespace Internet_Check
                 this.notifyIcon1.Icon = Properties.Resources.InternetSymbolGreenSVG;
                 if (Properties.Settings.Default.SettingConnectionNotification)
                 {
-                    this.notifyIcon1.ShowBalloonTip(10000, "Connection established", " ", ToolTipIcon.None);
+                    this.notifyIcon1.ShowBalloonTip(12000, "Connection established", " ", ToolTipIcon.None);
                 }
             }
         }
@@ -569,6 +569,7 @@ namespace Internet_Check
                 {
                     timer.Dispose();
                     watcher.Dispose();
+                    this.notifyIcon1.Dispose();
                 }
                 catch
                 {}
