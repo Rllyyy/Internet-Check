@@ -344,7 +344,7 @@ namespace Internet_Check
                 this.notifyIcon1.Icon = Properties.Resources.InternetSymbolRedSVG;
                 if (Properties.Settings.Default.SettingConnectionNotification)
                 {
-                    this.notifyIcon1.ShowBalloonTip(12000, "Lost Connection", " ", ToolTipIcon.None);
+                    this.notifyIcon1.ShowBalloonTip(12000, "Connection lost", " ", ToolTipIcon.None);
                 }
             } else if (serverAnswered && !globalHadInternet)
             {

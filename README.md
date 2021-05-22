@@ -9,25 +9,22 @@
 <div class="Badges">
   <p align="center">
       <a href="https://github.com/Rllyyy/Internet-Check/releases/latest">
-          <img src="https://img.shields.io/github/downloads/Rllyyy/Internet-Check/total?color=%232C974B&label=Downloads&style=flat-square" alt="GitHub All Releases">
+          <img src="https://img.shields.io/github/downloads/Rllyyy/Internet-Check/total?color=%232C974B&label=Downloads&style=flat-square" alt="Downloads">
        </a>
       <a href="https://github.com/Rllyyy/Internet-Check/releases/latest">
-          <img src="https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square" alt="GitHub All Releases">
+          <img src="https://img.shields.io/github/v/release/rllyyy/Internet-Check?color=%232C974B&label=Release&style=flat-square" alt="Latest Releases">
       </a>
       <a href="https://github.com/Rllyyy/Internet-Check/blob/master/LICENSE" target="_blank">
           <img src="https://img.shields.io/github/license/rllyyy/Internet-Check?color=%232C974B&label=License&style=flat-square" alt="GitHub License">
       </a>
       <a href="https://github.com/Rllyyy/Internet-Check/issues" target="_blank">
-          <img src="https://img.shields.io/github/issues-raw/rllyyy/Internet-Check?label=Open%20Issues%2FFeature%20Requests&style=flat-square" alt="GitHub issues">
+          <img src="https://img.shields.io/github/issues-raw/rllyyy/Internet-Check?label=Open%20Issues%2FFeature%20Requests&style=flat-square" alt="Open issues">
       </a>
       <a href="https://github.com/Rllyyy/Internet-Check/issues?q=is%3Aissue+is%3Aclosed" target="_blank">
-          <img src="https://img.shields.io/github/issues-closed-raw/Rllyyy/Internet-Check?color=%232C974B&label=Closed%20Issues%2FImplemented%20Features&style=flat-square"                 alt="GitHub issues">
+          <img src="https://img.shields.io/github/issues-closed-raw/Rllyyy/Internet-Check?color=%232C974B&label=Closed%20Issues%2FImplemented%20Features&style=flat-square"  alt="Fixed issues">
       </a>   
       <a href="https://github.com/Rllyyy/Internet-Check/commits/master" target="_blank">
-          <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/rllyyy/Internet-Check?color=%232C974B&label=Last%20Commit&style=flat-square">
-      </a>
-      <a href="https://github.com/Rllyyy/Internet-Check/commits/master" target="_blank">
-          <img alt="GitHub commits since latest release (by date)" src="https://img.shields.io/github/commits-since/rllyyy/internet-check/latest?color=%232C974B&label=Commits%20Since%20Last%20Release&style=flat-square">
+          <img alt="Commits since last release" src="https://img.shields.io/github/commits-since/rllyyy/internet-check/latest?color=%232C974B&label=Commits%20Since%20Last%20Release&style=flat-square">
        </a>
    </p>
 </div>
@@ -52,15 +49,15 @@
 2. Start the Setup
 3. If the message "Windows protected your PC" pops up, click on "More info" and then "Run Anyway"
 4. Follow the instructions in the Setup
-5. Start InternetCheck.exe from either the Desktop or the appData folder.
+5. Start InternetCheck.exe from either the Desktop or navigate to <i>Program Files (x86)\4PointsInteractive\InternetCheck.exe </i>
 
 <details>
   <summary><b><i>View System Requirements</i></b></summary>
   <p>
   <ul>
   <li><b>.NET Framework 4.7.2</b> (included in <b>Windows 10</b> April 2018 Update) but should also work on Windows 7+ or Windows Server 2008 R2+ </li>
-  <li>Memory: 20 MB RAM</li>
-  <li>Storage: 800 KB available space</li>
+  <li>Memory: 30 MB RAM</li>
+  <li>Storage: 5 MB available space</li>
 </ul>
   </p>
 </details>
@@ -89,6 +86,17 @@
   </span>
 </details>
 
+<!--Show Minimized Info-->
+<details>
+  <summary><b>Show Ballon tip when minimized</b></summary>
+  <p>
+  Set this value to false if the balloon item that shows up if the application is minimized to the system tray should not be displayed. Make sure that the focus assist is off.
+  </p>
+  <p>
+  <img src=".\.github\balloonTip.png" alt="Ballon Tip">
+  </p>
+</details>
+
 <!--Windows-Start-->
 <details>
   <summary><b>Start with Windows (Task Scheduler)</b></summary>
@@ -98,6 +106,17 @@
   </ol>
   <span><i><b>Warning:</b></i> If both "Start with Windows" and "Show only in System Tray" are ticked the program is not directly visible to the user and will run in the background. It can still be accessed through the System Tray or by running the .exe again.
   </span>
+</details>
+
+<!--Connection lost/established Notification-->
+<details>
+  <summary><b>Connection lost/established Notification</b></summary>
+  <p>
+  Set this value to false if the balloon item that shows up if the connection is lost or re-established should not be displayed. Make sure that the focus assist is off.
+  </p>
+  <p>
+  <img src="./.github/connectionLostEstablished.png" alt="Connection lost/established Ballon Tip">
+  </p>
 </details>
 
 <!--Update Notifications-->
@@ -124,7 +143,7 @@
   </span>
 </details>
 
-<!--Alternative Ping Methods-->
+<!--Alternative Ping Method-->
 <details>
   <summary><b>Use alternative Ping Method</b></summary>
   <span>
@@ -139,17 +158,6 @@
   <span>
   If this value is set to true both successful and unsuccessful pings will be noted. If set to false (default) only unsuccessful pings are recorded.
   </span>
-</details>
-
-<!--Show Minimized Info-->
-<details>
-  <summary><b>Show Ballon tip when minimized</b></summary>
-  <p>
-  Set this value to false if the balloon item that shows up if the application is minimized to the system tray should not be displayed.
-  </p>
-  <p>
-  <img src=".\.github\balloonTip.png" alt="BallonTip">
-  </p>
 </details>
 
 <!--Use Custom Servers-->
@@ -185,6 +193,16 @@
   </span>
 </details>
 
+### Update
+
+<!--Download Updates-->
+<details>
+  <summary><b>Download and Install Updates</b></summary>
+  <span>
+  New Updates can be installed from the application. If there is a new Update you can click the link to install it.
+  </span>
+</details>
+
 # FAQ
 
 <details>
@@ -211,9 +229,16 @@
 </details>
 <details>
   <summary><b>Where are the program files saved?</b></summary>
-  <span>The program files live in Users\[userName]\AppData\Local\4PointsInteractive\Internet-Check.
-  To make the setup work we sadly had to save the application inside the users appData folder which is not visible by default.
-  <a href="https://cybertext.wordpress.com/2012/05/29/cant-see-the-appdata-folder/">Here</a> is a guide to make the appData folder visible.
+  <span>
+  <ul>
+    <li><b>Main Files:</b> <i>C:\Program Files (x86)\4PointsInteractive\Internet-Check</i></li>
+    <li><b>connection_issues.txt:</b> <i>C:\Users\UserName\Documents\Internet-Check</i></li>
+    <li><b>Updates:</b> <i>C:\Users\UserName\Documents\Internet-Check\Updates</i></li>
+    <li><b>User Config:</b> <i>C:\Users\UserName\AppData\Local\4PointsInteractive\Internet_Check.exe_Url_{Hash}\1.0.0.0\user.config</i></li>
+  </ul>
+  <p>
+  Some of these files won't be deleted after an uninstall (.txt, Updates and config).
+  </p>
   </span>
 </details>
 
@@ -226,9 +251,13 @@ For any programmers we advice against increasing the buffer size in the ping met
 The author is not liable for any claim, damages or other liability whether in an action of contract, tort or otherwise, arising from,
 out of or in connection with the software or the use or other dealings in the software. Read the whole license [here](https://github.com/Rllyyy/Internet-Check/blob/master/LICENSE).
 
-# Libraries and other external Software (no need to download them)
+# Libraries and other external Software
 
-- TaskScheduler from https://github.com/dahall/TaskScheduler
+The following libraries and packages are used (no need to download them):
+
+- Core.System.Configuration.Install from https://github.com/flamencist/Core.System.Configuration.Install
+- Newtonsoft.Json from https://github.com/JamesNK/Newtonsoft.Json
 - Octokit.net (GitHub API client library) from https://github.com/octokit/octokit.net
+- TaskScheduler from https://github.com/dahall/TaskScheduler
 
       Bugs, feature request or code changes can be submitted to GitHub under the "Issues" tab.
