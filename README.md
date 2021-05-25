@@ -45,7 +45,7 @@
 
 # Install Guide & System Requirements
 
-1. <b>[Visit the Download page](https://github.com/Rllyyy/Internet-Check/releases/latest)</b> and <b>Download <i>Internet-Check.Setup.msi</i></b> or <b>[Download the latest version directly](https://github.com/Rllyyy/Internet-Check/releases/download/v1.6.3/Internet-Check.Setup.msi)</b>
+1. <b>[Visit the Download page](https://github.com/Rllyyy/Internet-Check/releases/latest)</b> and <b>Download <i>Internet-Check.Setup.msi</i></b> or <b>[Download the latest version directly](https://github.com/Rllyyy/Internet-Check/releases/download/v1.6.4/Internet-Check-v1.6.4.Setup.msi)</b>
 2. Start the Setup
 3. If the message "Windows protected your PC" pops up, click on "More info" and then "Run Anyway"
 4. Follow the instructions in the Setup
